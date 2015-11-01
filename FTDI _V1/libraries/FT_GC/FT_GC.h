@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include "../../../arduino/Arduino.h"
+#include <avr/pgmspace.h>
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))

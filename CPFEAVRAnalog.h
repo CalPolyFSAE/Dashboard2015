@@ -9,6 +9,7 @@
 #define CPFEAVRANALOG_H_
 
 #include <stdint.h>
+#include <avr/io.h>
 #include "arduino/Arduino.h"
 
 class CPFEAVRAnalog {

@@ -13,26 +13,26 @@ public:
 //  - Does not support infinities or NaN
 //  - Few, partially pipelinable, non-branching instructions,
 //  - Core opreations ~6 clock cycles on modern x86-64
-   static void toFloat32(volatile float * out, uint16_t in) {
-      uint32_t t1;
-      uint32_t t2;
-      uint32_t t3;
+	static void toFloat32(float * out, uint16_t in) {
+		uint32_t t1;
+		uint32_t t2;
+		uint32_t t3;
 
-      t1 = in & 0x7fff;                       // Non-sign bits
-      t2 = in & 0x8000;                       // Sign bit
-      t3 = in & 0x7c00;                       // Exponent
+		t1 = in & 0x7fff;                       // Non-sign bits
+		t2 = in & 0x8000;                       // Sign bit
+		t3 = in & 0x7c00;                       // Exponent
 
-      t1 <<= 13;                              // Align mantissa on MSB
-      t2 <<= 16;                              // Shift sign bit into position
+		t1 <<= 13;                              // Align mantissa on MSB
+		t2 <<= 16;                              // Shift sign bit into position
 
-      t1 += 0x38000000;                       // Adjust bias
+		t1 += 0x38000000;                       // Adjust bias
 
-      t1 = (t3 == 0 ? 0 : t1);                // Denormals-as-zero
+		t1 = (t3 == 0 ? 0 : t1);                // Denormals-as-zero
 
-      t1 |= t2;                               // Re-insert sign bit
+		t1 |= t2;                               // Re-insert sign bit
 
-      *((uint32_t*) out) = t1;
-   }
+		*((uint32_t*) out) = t1;
+	}
 
 // float16
 // Martin Kallman

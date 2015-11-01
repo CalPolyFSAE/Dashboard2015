@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <avr/pgmspace.h>
+#include <avr/interrupt.h>
 #include "arduino/Arduino.h"
 
 #define BIT0 0x01
