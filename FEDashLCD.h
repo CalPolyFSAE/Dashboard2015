@@ -418,9 +418,11 @@ protected:
 		float16::toFloat32(&TCellMin, swap(dashCAN1->charging.TCellMin));
 		float16::toFloat32(&VCellMax, swap(dashCAN1->charging.VCellMax));
 		float16::toFloat32(&VCellMin, swap(dashCAN1->charging.VCellMin));
+
 		float16::toFloat32(&TCellMean, swap(dashCAN2->charging.TCellMean));
 		float16::toFloat32(&VCellMean, swap(dashCAN2->charging.VCellMean));
 		float16::toFloat32(&VTotal, swap(dashCAN2->charging.VTotal));
+
 		float16::toFloat32(&VChargerSetpoint, swap(dashCAN3->charging.VChargerSetpoint));
 		float16::toFloat32(&IChargerSetpoint, swap(dashCAN3->charging.IChargerSetpoint));
 		float16::toFloat32(&VChargerActual, swap(dashCAN3->charging.VChargerActual));
