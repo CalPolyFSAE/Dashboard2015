@@ -92,7 +92,7 @@ public:
 
 	};
 
-
+		//Because I got rid of the Unions, how do I recieve CAN Messages through this struct
 	typedef struct DashCAN1Driving {//0x190
 		uint16_t EngineTemp;
 		uint16_t RPM;
@@ -109,7 +109,9 @@ public:
 		uint16_t ThrottlePOS;
 	};
 
-	typedef struct DashCAN2Engine {//0x192
+	//Add Additional CAN Messages below later
+
+	/*typedef struct DashCAN2Engine {//0x192
 		uint16_t WaterTemp;
 	};
 
@@ -145,7 +147,7 @@ public:
 
 	typedef union DashCAN4 { //0xF4
 		uint8_t data[8];
-	};
+	};*/
 
 	DashCAN1 *dashCAN1 = (DashCAN1 *) dashCAN1Data;
 	DashCAN2 *dashCAN2 = (DashCAN2 *) dashCAN2Data;
@@ -159,7 +161,7 @@ public:
 	}
 
 	void updateDashboard() {
-		dashPage->NDashPage = warningCAN->NDashPage;
+		dashPage->NDashPage = warningCAN->NDashPage; //Forgot, What do I do with the NDashPage again?
 
 
 		switch (dashPage->dashPage) {
@@ -289,49 +291,28 @@ protected:
 	}
 
 	void driving() {
-		float TMC, TMotor, TCellMax, rBrakeBalLast, vCar, tCurrentDelta, VCellMin;
-		char ShutdownStateDesc[STATE_MAX_DESC_LENGTH];
-		char MCControlStateDesc[STATE_MAX_DESC_LENGTH];
-
-		strncpy_P(ShutdownStateDesc, (PGM_P) pgm_read_word(&(ShutdownStateStringTable[(uint8_t) dashCAN2->driving.eShutdownState])), STATE_MAX_DESC_LENGTH);
-		strncpy_P(MCControlStateDesc, (PGM_P) pgm_read_word(&(MCStateStringTable[(uint8_t) dashCAN2->driving.eMCControlState])), STATE_MAX_DESC_LENGTH);
-
-		float16::toFloat32(&TMC, swap(dashCAN1->driving.TMC));
-		float16::toFloat32(&TMotor, swap(dashCAN1->driving.TMotor));
-		float16::toFloat32(&TCellMax, swap(dashCAN1->driving.TCellMax));
-		float16::toFloat32(&rBrakeBalLast, swap(dashCAN1->driving.rBrakeBalLast));
-		float16::toFloat32(&vCar, swap(dashCAN2->driving.vCar));
-		float16::toFloat32(&tCurrentDelta, swap(dashCAN2->driving.tCurrentDelta));
-		float16::toFloat32(&VCellMin, swap(dashCAN2->driving.VCellMin));
+		float EngineTemp, RPM, Gear, Speed;
+		//Pretty Sure I'm not doing this correctly
+		float16::toFloat32(&EngineTemp, swap(dashCAN1->dashCAN1Driving.EngineTemp));
+		float16::toFloat32(&RPM, swap(dashCAN1->dashCAN1Driving.RPM));
+		float16::toFloat32(&Gear, swap(dashCAN1->dashCAN1Driving.Gear));
+		float16::toFloat32(&Speed, swap(dashCAN1->dashCAN1Driving.Speed));
 
 		LCD.DLStart();
 
 		LCD.ColorRGB(0x00, 0xFF, 0xFF);
-		LCD.PrintText(5, 0, 28, 0, "TMC: %.2f", TMC);
-		LCD.PrintText(5, 25, 28, 0, "TMotor: %.2f", TMotor);
-		LCD.PrintText(5, 50, 28, 0, "TCellMax: %.2f", TCellMax);
-		LCD.PrintText(5, 75, 28, 0, "rBrakeBalLast: %.2f", rBrakeBalLast);
-		LCD.PrintText(5, 100, 28, 0, "vCar: %.2f", vCar);
-		LCD.PrintText(5, 125, 28, 0, "VCellMin: %.2f", VCellMin);
-		LCD.PrintText(5, 150, 28, 0, "eMCControlState: %s", MCControlStateDesc);
-		LCD.PrintText(5, 175, 28, 0, "eShutdownState: %s", ShutdownStateDesc);
+		LCD.PrintText(5, 0, 28, 0, "ET: %.2f", EngineTemp);
+		LCD.PrintText(5, 25, 28, 0, "RPM: %.2f", RPM);
+		LCD.PrintText(5, 50, 28, 0, "Gear: %.2f", Gear);
+		LCD.PrintText(5, 75, 28, 0, "Speed: %.2f", Speed);
 
-		LCD.ColorRGB(0xFFFFFF);
-		LCD.PrintText(5, 200, 30, 0, "%.1f", tCurrentDelta);
 
 		LCD.ColorRGB(0xFFFFFF);
 		LCD.Cmd_FGColor(0xFF0000);
 		LCD.Cmd_BGColor(0xFF0000);
-		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 30, 20, 20, 180, 0, 100 - (uint16_t) TMotor, 100);
+		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 30, 20, 20, 180, 0, 100 - (uint16_t) EngineTemp, 100);
 		LCD.ColorRGB(0xFF0000);
-		LCD.PrintText(FT_DISPLAYWIDTH - 20, 240, 31, FT_OPT_CENTER, "M");
 
-		LCD.ColorRGB(0xFFFFFF);
-		LCD.Cmd_FGColor(0xFF0000);
-		LCD.Cmd_BGColor(0xFF0000);
-		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 90, 20, 20, 180, 0, 100 - (uint16_t) TMC, 100);
-		LCD.ColorRGB(0xFF0000);
-		LCD.PrintText(FT_DISPLAYWIDTH - 80, 240, 31, FT_OPT_CENTER, "C");
 
 		LCD.DLEnd();
 		LCD.Finish();
