@@ -93,7 +93,7 @@ public:
 	};
 
 		//Because I got rid of the Unions, how do I recieve CAN Messages through this struct
-	typedef struct DashCAN1Driving {//0x190
+	typedef struct DashCAN1 {//0x190
 		uint16_t EngineTemp;
 		uint16_t RPM;
 		uint16_t Gear;
@@ -102,7 +102,7 @@ public:
 
 
 
-	typedef struct DashCAN1Engine {//0x191
+	typedef struct DashCAN2 {//0x191
 		uint16_t Lambda;
 		uint16_t OilTemp;
 		uint16_t MAP;
@@ -151,10 +151,9 @@ public:
 
 	DashCAN1 *dashCAN1 = (DashCAN1 *) dashCAN1Data;
 	DashCAN2 *dashCAN2 = (DashCAN2 *) dashCAN2Data;
-	DashCAN3 *dashCAN3 = (DashCAN3 *) dashCAN3Data;
-	DashCAN4 *dashCAN4 = (DashCAN4 *) dashCAN4Data;
-	WarningCANMessage *warningCAN = (WarningCANMessage *) warningCANData;
-	DashPage *dashPage = (DashPage *) &DashboardData.NDashPage;
+//	DashCAN3 *dashCAN3 = (DashCAN3 *) dashCAN3Data;
+//	DashCAN4 *dashCAN4 = (DashCAN4 *) dashCAN4Data;
+//	WarningCANMessage *warningCAN = (WarningCANMessage *) warningCANData;
 
 	virtual ~FSAEDashLCD() {
 		return;
