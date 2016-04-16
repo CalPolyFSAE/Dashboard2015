@@ -362,9 +362,6 @@ public:
 		} else {
 			updateDashboard();
 		}
-
-		_delay_ms(2.0);
-
 	}
 
 	void CAN_RX_Int(CPFECANLib::MSG *msg, uint8_t mobNum) {
