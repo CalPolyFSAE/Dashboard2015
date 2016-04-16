@@ -9,10 +9,9 @@
 #include "CPFERotarySwitch.h"
 
 uint8_t CPFERotarySwitch::positionCount;
-int8_t CPFERotarySwitch::currentPositionRetrieval;
-bool CPFERotarySwitch::pendingRetrievalRequest;
+volatile int8_t CPFERotarySwitch::currentRotaryADCConversion;
+volatile uint8_t CPFERotarySwitch::positions[NUM_ROTARYS];
 CPFEAVRAnalog CPFERotarySwitch::analogPins[NUM_ROTARYS];
-uint8_t CPFERotarySwitch::positions[NUM_ROTARYS];
 
 void rotarySwitchResultHandler(uint16_t result, void *info) {
    CPFERotarySwitch::resultHandler(result, info);
