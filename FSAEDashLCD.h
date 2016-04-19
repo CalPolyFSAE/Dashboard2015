@@ -160,10 +160,10 @@ public:
 	}
 
 	void updateDashboard() {
-		dashPage->NDashPage = warningCAN->NDashPage; //Forgot, What do I do with the NDashPage again?
+		//dashPage->NDashPage = warningCAN->NDashPage; //Forgot, What do I do with the NDashPage again?
+		driving(); //temporarily bypass rotary for page select
 
-
-		switch (dashPage->dashPage) {
+		/*switch (dashPage->dashPage) {
 		case DashPages::Brakes:
 			brakes();
 			break;
@@ -194,7 +194,7 @@ public:
 		default:
 			waitingForCAN();
 			break;
-		}
+		}*/
 	}
 
 protected:
@@ -292,10 +292,10 @@ protected:
 	void driving() {
 		float EngineTemp, RPM, Gear, Speed;
 		//Pretty Sure I'm not doing this correctly
-		float16::toFloat32(&EngineTemp, swap(dashCAN1->dashCAN1Driving.EngineTemp));
-		float16::toFloat32(&RPM, swap(dashCAN1->dashCAN1Driving.RPM));
-		float16::toFloat32(&Gear, swap(dashCAN1->dashCAN1Driving.Gear));
-		float16::toFloat32(&Speed, swap(dashCAN1->dashCAN1Driving.Speed));
+		float16::toFloat32(&EngineTemp, swap(dashCAN1->DashCAN1.EngineTemp));
+		float16::toFloat32(&RPM, swap(dashCAN1->DashCAN1.RPM));
+		float16::toFloat32(&Gear, swap(dashCAN1->DashCAN1.Gear));
+		float16::toFloat32(&Speed, swap(dashCAN1->DashCAN1.Speed));
 
 		LCD.DLStart();
 
