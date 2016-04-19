@@ -291,11 +291,11 @@ protected:
 
 	void driving() {
 		float EngineTemp, RPM, Gear, Speed;
-		//Pretty Sure I'm not doing this correctly
-		float16::toFloat32(&EngineTemp, swap(dashCAN1->DashCAN1.EngineTemp));
-		float16::toFloat32(&RPM, swap(dashCAN1->DashCAN1.RPM));
-		float16::toFloat32(&Gear, swap(dashCAN1->DashCAN1.Gear));
-		float16::toFloat32(&Speed, swap(dashCAN1->DashCAN1.Speed));
+
+		EngineTemp = (float)(swap(dashCAN1->EngineTemp))/100;
+		RPM = (float)(swap(dashCAN1->RPM))/100;
+		Gear = (float)(swap(dashCAN1->Gear))/100;
+		Speed = (float)(swap(dashCAN1->Speed))/100;
 
 		LCD.DLStart();
 
