@@ -10,7 +10,7 @@
 
 #include <AVRLibrary/arduino/Arduino.h>
 
-#define TEAM FE //Other: FSAE
+#define TEAM FSAE //Other: FSAE
 
 #if TEAM==FE
 #include "FEDashLCD.h"
