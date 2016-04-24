@@ -158,6 +158,7 @@ public:
 	void SetDisplayEnablePin(uint8_t GpioBit);	//FT_GC gpio bit for display enable/disable
 	void SetAudioEnablePin(uint8_t GpioBit);	//FT_GC gpio bit for audio enable/disable
 	void DisplayOn(void);/* Apis to enable/disable backlight */
+	void DisplayOn(uint8_t dutyCycle);
 	void DisplayOff(void);
 	void AudioOn(void);
 	void AudioOff(void);
@@ -431,6 +432,14 @@ void FT_GC<FT_Trans>::DisplayOn(void) {
 	/* switch on the display, 1 means enable and 0 means disable */
 	FT_Trans::Write(REG_GPIO, (1 << DispGpioPin) | FT_Trans::Read(REG_GPIO));
 
+}
+
+template<class FT_Trans>
+/* Apis to enable/disable backlight */
+void FT_GC<FT_Trans>::DisplayOn(uint8_t dutyCycle) {
+	DisplayOn();
+	uint8_t dutyCycleScaled = (float)dutyCycle * 1.28;
+	FT_Trans::Write(REG_PWM_DUTY, dutyCycleScaled);
 }
 template<class FT_Trans>
 void FT_GC<FT_Trans>::DisplayOff(void) {
