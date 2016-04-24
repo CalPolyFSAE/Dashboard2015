@@ -92,8 +92,7 @@ public:
 
 	};
 
-		//Because I got rid of the Unions, how do I recieve CAN Messages through this struct
-	typedef struct DashCAN1 {//0x190
+	typedef struct DashCAN1 {//0x0E0
 		uint16_t EngineTemp;
 		uint16_t RPM;
 		uint16_t Gear;
@@ -102,7 +101,7 @@ public:
 
 
 
-	typedef struct DashCAN2 {//0x191
+	typedef struct DashCAN2 {//0x0E1
 		uint16_t Lambda;
 		uint16_t OilTemp;
 		uint16_t MAP;

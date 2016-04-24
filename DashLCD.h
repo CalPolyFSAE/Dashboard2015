@@ -190,12 +190,12 @@ static const uint8_t PROGMEM CPRacingLogo[] = {120, 156, 237, 91, 45, 116, 234,
 	137, 206, 18, 69, 178, 79, 147, 118, 76, 245, 86, 34, 72, 22, 213, 214,
 	97, 182, 92, 253, 158, 188, 255, 1, 225, 234, 151, 168};
 
-static constexpr uint8_t WarningCANMessageID = 0x10;
-static constexpr uint8_t DashCAN1ID = 0x11;
-static constexpr uint8_t DashCAN2ID = 0x12;
-static constexpr uint8_t DashCAN3ID = 0x13;
-static constexpr uint8_t DashCAN4ID = 0x14;
-static constexpr uint8_t DashCANInputID = 0x15;
+//static constexpr uint8_t WarningCANMessageID = 0x10;
+static constexpr uint8_t DashCAN1ID = 0x0E0; //0x11;
+static constexpr uint8_t DashCAN2ID = 0x0E1;//0x12;
+//static constexpr uint8_t DashCAN3ID = 0x13;
+//static constexpr uint8_t DashCAN4ID = 0x14;
+//static constexpr uint8_t DashCANInputID = 0x15;
 
 static const CPFECANLib::MSG PROGMEM DashCAN1MSG =
 {	{	DashCAN1ID}, 8, 0, 0, 0};
