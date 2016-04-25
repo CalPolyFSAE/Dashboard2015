@@ -19,6 +19,7 @@ static const char PROGMEM WarningMessage_OilPressure[] =
 "Oil Pressure: %.2fC";
 static const char PROGMEM WarningMessage_BatteryLow[] =
 "Battery Low: %.2fC";
+static const char PROGMEM WarningMessage_Invalid[] = "Invalid Warning Msg.";
 
 
 static const char PROGMEM RotaryRed1[] = "MC Off";
@@ -97,7 +98,7 @@ public:
 		uint16_t RPM;
 		uint16_t Gear;
 		uint16_t Speed;
-	};
+	} DashCAN1;
 
 
 
@@ -106,7 +107,7 @@ public:
 		uint16_t OilTemp;
 		uint16_t MAP;
 		uint16_t ThrottlePOS;
-	};
+	} DashCAN2;
 
 	//Add Additional CAN Messages below later
 
@@ -228,64 +229,64 @@ protected:
 	}
 
 	void warning() {
-		bool displayBoxes;
-		const char *severityText;
-		uint32_t color = 0x00000;
-
-		switch (warningCAN->warningSeverity) {
-		case WarningSeverity::ShortWarning:
-		case WarningSeverity::LongWarning:
-			displayBoxes = millis() % 500 > 250;
-			severityText = "WARNING!";
-			color = 0xFFFF00;
-			break;
-		case WarningSeverity::Error:
-			displayBoxes = millis() % 500 > 250;
-			severityText = "ERROR!";
-			color = 0xFF0000;
-			break;
-		case WarningSeverity::Danger:
-			displayBoxes = true;
-			severityText = "DANGER!";
-			if (millis() % 600 > 450)
-				color = 0xFFFF00;
-			else if (millis() % 600 > 300)
-				color = 0x00FF00;
-			else if (millis() % 600 > 150)
-				color = 0x000000;
-			else
-				color = 0xFF0000;
-			break;
-		case WarningSeverity::ReturnToPits:
-			displayBoxes = true;
-			severityText = "Return to Pits";
-			color = 0xFFFF00;
-			break;
-		default:
-			displayBoxes = true;
-			severityText = "Unknown Severity";
-		}
-
-		LCD.DLStart();
-
-		LCD.ClearColorRGB(0xFFFFFF);
-		LCD.Clear(1, 1, 1);
-
-		LCD.ColorRGB(0x000000);
-		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 4, 31, FT_OPT_CENTER, severityText);
-		LCD.PrintTextFlash(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT - 100, 29, FT_OPT_CENTER, warningMessageToString(warningCAN->warningMessage), warningCAN->associatedValue);
-
-		if (displayBoxes) {
-			LCD.ClearColorRGB(color);
-			LCD.ScissorSize(75, FT_DISPLAYHEIGHT);
-			LCD.ScissorXY(0, 0);
-			LCD.Clear(1, 1, 1);
-			LCD.ScissorXY(FT_DISPLAYWIDTH - 75, 0);
-			LCD.Clear(1, 1, 1);
-		}
-
-		LCD.DLEnd();
-		LCD.Finish();
+//		bool displayBoxes;
+//		const char *severityText;
+//		uint32_t color = 0x00000;
+//
+//		switch (warningCAN->warningSeverity) {
+//		case WarningSeverity::ShortWarning:
+//		case WarningSeverity::LongWarning:
+//			displayBoxes = millis() % 500 > 250;
+//			severityText = "WARNING!";
+//			color = 0xFFFF00;
+//			break;
+//		case WarningSeverity::Error:
+//			displayBoxes = millis() % 500 > 250;
+//			severityText = "ERROR!";
+//			color = 0xFF0000;
+//			break;
+//		case WarningSeverity::Danger:
+//			displayBoxes = true;
+//			severityText = "DANGER!";
+//			if (millis() % 600 > 450)
+//				color = 0xFFFF00;
+//			else if (millis() % 600 > 300)
+//				color = 0x00FF00;
+//			else if (millis() % 600 > 150)
+//				color = 0x000000;
+//			else
+//				color = 0xFF0000;
+//			break;
+//		case WarningSeverity::ReturnToPits:
+//			displayBoxes = true;
+//			severityText = "Return to Pits";
+//			color = 0xFFFF00;
+//			break;
+//		default:
+//			displayBoxes = true;
+//			severityText = "Unknown Severity";
+//		}
+//
+//		LCD.DLStart();
+//
+//		LCD.ClearColorRGB(0xFFFFFF);
+//		LCD.Clear(1, 1, 1);
+//
+//		LCD.ColorRGB(0x000000);
+//		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 4, 31, FT_OPT_CENTER, severityText);
+//		LCD.PrintTextFlash(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT - 100, 29, FT_OPT_CENTER, warningMessageToString(warningCAN->warningMessage), warningCAN->associatedValue);
+//
+//		if (displayBoxes) {
+//			LCD.ClearColorRGB(color);
+//			LCD.ScissorSize(75, FT_DISPLAYHEIGHT);
+//			LCD.ScissorXY(0, 0);
+//			LCD.Clear(1, 1, 1);
+//			LCD.ScissorXY(FT_DISPLAYWIDTH - 75, 0);
+//			LCD.Clear(1, 1, 1);
+//		}
+//
+//		LCD.DLEnd();
+//		LCD.Finish();
 	}
 
 	void driving() {
@@ -317,29 +318,29 @@ protected:
 	}
 
 	void lapTrigger() {
-		uint32_t time = dashCAN1->trig.tLastLap;
-		int32_t delta = dashCAN1->trig.tLastLapDelta;
-
-		uint8_t lMin = time / 60000;
-		time -= lMin * 60000;
-		uint8_t lSec = time / 1000;
-		time -= lSec * 1000;
-
-		int8_t dMin = delta / 60000;
-		delta -= dMin * 60000;
-		int8_t dSec = delta / 1000;
-		delta -= dSec * 1000;
-
-		LCD.DLStart();
-		LCD.ClearColorRGB(0xFFFFFF);
-		LCD.Clear(1, 1, 1);
-
-		LCD.ColorRGB(0x000000);
-		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 4, 31, FT_OPT_CENTER, "tLastLap: %02d:%02d.%03d", lMin, lSec, time);
-		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT * 3 / 4, 31, FT_OPT_CENTER, "tLastLapDelta: %02d:%02d.%03d", dMin, dSec, delta);
-
-		LCD.DLEnd();
-		LCD.Finish();
+//		uint32_t time = dashCAN1->trig.tLastLap;
+//		int32_t delta = dashCAN1->trig.tLastLapDelta;
+//
+//		uint8_t lMin = time / 60000;
+//		time -= lMin * 60000;
+//		uint8_t lSec = time / 1000;
+//		time -= lSec * 1000;
+//
+//		int8_t dMin = delta / 60000;
+//		delta -= dMin * 60000;
+//		int8_t dSec = delta / 1000;
+//		delta -= dSec * 1000;
+//
+//		LCD.DLStart();
+//		LCD.ClearColorRGB(0xFFFFFF);
+//		LCD.Clear(1, 1, 1);
+//
+//		LCD.ColorRGB(0x000000);
+//		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 4, 31, FT_OPT_CENTER, "tLastLap: %02d:%02d.%03d", lMin, lSec, time);
+//		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT * 3 / 4, 31, FT_OPT_CENTER, "tLastLapDelta: %02d:%02d.%03d", dMin, dSec, delta);
+//
+//		LCD.DLEnd();
+//		LCD.Finish();
 	}
 
 	const char * PROGMEM warningMessageToString(WarningMessage warning) {
@@ -360,4 +361,4 @@ protected:
 };
 
 #endif /* FEDASHLCD_H_ */
- *
+
