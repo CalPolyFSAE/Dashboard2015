@@ -358,7 +358,7 @@ protected:
 		LCD.DLStart();
 		LCD.BitmapHandle(1);
 		LCD.BitmapSource(-371948);
-		LCD.BitmapLayout(FT_L4, 68, 114);
+		LCD.BitmapLayout(FT_L8, 68, 114);
 		LCD.BitmapSize(FT_NEAREST, FT_BORDER, FT_BORDER, 68, 114);
 		LCD.Cmd_SetFont(0, 0);
 		LCD.DLEnd();
