@@ -339,12 +339,12 @@ protected:
 	}
 
 	void uploadLogoToController() {
-		LCD.Cmd_Inflate(100924);
+		LCD.Cmd_Inflate(108676);
 		LCD.WriteCmdfromflash(CPRacingLogo, sizeof(CPRacingLogo));
 		LCD.Finish();
 		LCD.DLStart();
 		LCD.BitmapHandle(0);
-		LCD.BitmapSource(100924);
+		LCD.BitmapSource(108676);
 		LCD.BitmapLayout(FT_ARGB1555, 500, 49);
 		LCD.BitmapSize(FT_BILINEAR, FT_BORDER, FT_BORDER, 250, 49);
 		LCD.DLEnd();
@@ -357,7 +357,7 @@ protected:
 		LCD.Finish();
 		LCD.DLStart();
 		LCD.BitmapHandle(1);
-		LCD.BitmapSource(-371948);
+		LCD.BitmapSource(-340940);
 		LCD.BitmapLayout(FT_L8, 68, 114);
 		LCD.BitmapSize(FT_NEAREST, FT_BORDER, FT_BORDER, 68, 114);
 		LCD.Cmd_SetFont(0, 0);
