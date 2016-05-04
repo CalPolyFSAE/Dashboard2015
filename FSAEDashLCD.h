@@ -5,22 +5,16 @@
  *      Author: Daniel Baron
  */
 
-
 #ifndef FEDASHLCD_H_
 #define FEDASHLCD_H_
 
 #include "DashLCD.h"
 
-static const char PROGMEM WarningMessage_EngineTemperature[] =
-"Engine Hot: %.2fC";
-static const char PROGMEM WarningMessage_OilTemperature[]=
-"Oil Temperature: %.2fC";
-static const char PROGMEM WarningMessage_OilPressure[] =
-"Oil Pressure: %.2fC";
-static const char PROGMEM WarningMessage_BatteryLow[] =
-"Battery Low: %.2fC";
+static const char PROGMEM WarningMessage_EngineTemperature[] = "Engine Hot: %.1fC";
+static const char PROGMEM WarningMessage_OilTemperature[] = "Oil Temperature: %.1fC";
+static const char PROGMEM WarningMessage_OilPressure[] = "Oil Pressure: %.1f psi";
+static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Low: %.1fC";
 static const char PROGMEM WarningMessage_Invalid[] = "Invalid Warning Msg.";
-
 
 static const char PROGMEM RotaryRed1[] = "MC Off";
 static const char PROGMEM RotaryRed2[] = "120Nm";
@@ -52,14 +46,14 @@ PGM_P const RotaryYellowStringTable[] PROGMEM = {RotaryYellow1, RotaryYellow2,
 	RotaryYellow8, RotaryYellowUnused, RotaryYellowUnused, RotaryYellowUnused,
 	RotaryYellowUnused};
 
-static const char PROGMEM RotaryBlack1[] = "Driver1";
-static const char PROGMEM RotaryBlack2[] = "Driver2";
-static const char PROGMEM RotaryBlack3[] = "Pit";
-static const char PROGMEM RotaryBlack4[] = "Engine";
-static const char PROGMEM RotaryBlack5[] = "Brake";
-static const char PROGMEM RotaryBlack6[] = "Suspension";
-static const char PROGMEM RotaryBlack7[] = "Track";
-static const char PROGMEM RotaryBlack8[] = "Invalid";
+static const char PROGMEM RotaryBlack1[] = "Auto";
+static const char PROGMEM RotaryBlack2[] = "Driving";
+static const char PROGMEM RotaryBlack3[] = "Auto";
+static const char PROGMEM RotaryBlack4[] = "Auto";
+static const char PROGMEM RotaryBlack5[] = "Auto";
+static const char PROGMEM RotaryBlack6[] = "Auto";
+static const char PROGMEM RotaryBlack7[] = "Auto";
+static const char PROGMEM RotaryBlack8[] = "Auto";
 static const char PROGMEM RotaryBlackUnused[] = "Invalid";
 
 PGM_P const RotaryBlackStringTable[] PROGMEM =
@@ -69,15 +63,12 @@ PGM_P const RotaryBlackStringTable[] PROGMEM =
 
 static const size_t STATE_MAX_DESC_LENGTH = 30;
 
-
-
 class FSAEDashLCD: public DashLCD {
-public:
+protected:
 	enum class DashPages
 		: uint8_t {
-			WaitingForCAN, Driving, LapTrigger, Warning, Systems, Brakes, Electrical, Suspension, Drivetrain, Performance,
+			WaitingForCAN, Driving, Warning
 	};
-
 
 	enum class WarningSeverity
 		: uint8_t {
@@ -86,115 +77,62 @@ public:
 
 	enum class WarningMessage
 		: uint8_t {
-			EngineTemperature,
-			OilTemperature,
-			OilPressure,
-			BatteryLow
+			EngineTemperature, OilTemperature, OilPressure, BatteryLow
 
 	};
 
-	typedef struct DashCAN1 {//0x0E0
+	typedef struct WarningData {
+		WarningSeverity severity;
+		WarningMessage message;
+		float associatedValue;
+	};
+
+	typedef struct DashCAN1 { // 0x0E0
 		uint16_t EngineTemp;
 		uint16_t RPM;
 		uint16_t Gear;
 		uint16_t Speed;
 	} DashCAN1;
 
-
-
-	typedef struct DashCAN2 {//0x0E1
+	typedef struct DashCAN2 { // 0x0E1
 		uint16_t Lambda;
 		uint16_t OilTemp;
 		uint16_t MAP;
 		uint16_t ThrottlePOS;
 	} DashCAN2;
 
-	//Add Additional CAN Messages below later
-
-	/*typedef struct DashCAN2Engine {//0x192
-		uint16_t WaterTemp;
+	typedef struct DashCAN3 { // 0x0E2
+		uint16_t BatteryVoltage;
+		uint16_t Unused1;
+		uint16_t Unused2;
+		uint16_t Unused3;
 	};
-
-	typedef struct DashCAN1Brakes {//0x193
-		uint16_t pBrakeF;
-		uint16_t pBrakeR;
-	};
-//Continue here
-	typedef struct DashCAN2Brakes {
-		uint16_t pBrakeRMax;
-		uint16_t rBrakeBalMin;
-		uint16_t rBrakeBalmax;
-	};
-
-	typedef union DashCAN1 { //0xF0
-		uint8_t data[8];
-		DashCAN1Driving driving;
-		DashCAN1Trig trig;
-		DashCAN1Systems systems;
-		DashCAN1Brakes brakes;
-	};
-
-	typedef union DashCAN2 { //0xF2
-		uint8_t data[8];
-		DashCAN2Driving driving;
-		DashCAN2Systems systems;
-		DashCAN2Brakes brakes;
-	};
-
-	typedef union DashCAN3 { //0xF3
-		uint8_t data[8];
-	};
-
-	typedef union DashCAN4 { //0xF4
-		uint8_t data[8];
-	};*/
 
 	DashCAN1 *dashCAN1 = (DashCAN1 *) dashCAN1Data;
 	DashCAN2 *dashCAN2 = (DashCAN2 *) dashCAN2Data;
-//	DashCAN3 *dashCAN3 = (DashCAN3 *) dashCAN3Data;
+	DashCAN3 *dashCAN3 = (DashCAN3 *) dashCAN3Data;
 //	DashCAN4 *dashCAN4 = (DashCAN4 *) dashCAN4Data;
 //	WarningCANMessage *warningCAN = (WarningCANMessage *) warningCANData;
+
+	WarningData warningData;
+public:
 
 	virtual ~FSAEDashLCD() {
 		return;
 	}
 
 	void updateDashboard() {
-		//dashPage->NDashPage = warningCAN->NDashPage; //Forgot, What do I do with the NDashPage again?
-		driving(); //temporarily bypass rotary for page select
-
-		/*switch (dashPage->dashPage) {
-		case DashPages::Brakes:
-			brakes();
-			break;
-		case DashPages::Drivetrain:
-			drivetrain();
-			break;
-		case DashPages::Driving:
+		switch (CPFERotarySwitch::getPosition(CPFERotarySwitch::RotarySwitches::BLACK)) {
+		case 1:  // Driving
 			driving();
 			break;
-		case DashPages::Electrical:
-			electrical();
-			break;
-		case DashPages::LapTrigger:
-			lapTrigger();
-			break;
-		case DashPages::Performance:
-			performance();
-			break;
-		case DashPages::Systems:
-			systems();
-			break;
-		case DashPages::WaitingForCAN:
-			waitingForCAN();
-			break;
-		case DashPages::Warning:
-			warning();
-			break;
 		default:
-			waitingForCAN();
-			break;
-		}*/
+			if (warningOverride()) {
+				warning();
+			} else {
+				driving();
+			}
+		}
 	}
 
 protected:
@@ -208,110 +146,121 @@ protected:
 		return (PGM_P) pgm_read_word(&(RotaryRedStringTable[position]));
 	}
 
-	void brakes() {
-
+	float motecToFloat(uint16_t value, float scaler=100.0) {
+		return (float)swap(value) / scaler;
 	}
 
-	void drivetrain() {
+	bool warningOverride() {
+		bool warningActive = false;
 
-	}
+		const float EngineReturnToPitTemp = 205.0;
+		const float EngineDangerTemp = 212.0;
 
-	void electrical() {
+		const float BatteryReturnToPitVoltage = 12.0;
 
-	}
+		if (dashCAN1->EngineTemp > EngineReturnToPitTemp) {
+			warningActive = true;
+			warningData.associatedValue = dashCAN1->EngineTemp;
+			warningData.severity = dashCAN1->EngineTemp > EngineDangerTemp ? WarningSeverity::Danger : WarningSeverity::ReturnToPits;
+			warningData.message = WarningMessage::EngineTemperature;
+		}
+		else if (dashCAN3->BatteryVoltage) {
+			warningActive = true;
+			warningData.associatedValue = dashCAN3->BatteryVoltage;
+			warningData.severity = WarningSeverity::ReturnToPits;
+			warningData.message = WarningMessage::BatteryLow;
+		}
 
-	void performance() {
-
-	}
-
-	void systems() {
-
+		return warningActive;
 	}
 
 	void warning() {
-//		bool displayBoxes;
-//		const char *severityText;
-//		uint32_t color = 0x00000;
-//
-//		switch (warningCAN->warningSeverity) {
-//		case WarningSeverity::ShortWarning:
-//		case WarningSeverity::LongWarning:
-//			displayBoxes = millis() % 500 > 250;
-//			severityText = "WARNING!";
-//			color = 0xFFFF00;
-//			break;
-//		case WarningSeverity::Error:
-//			displayBoxes = millis() % 500 > 250;
-//			severityText = "ERROR!";
-//			color = 0xFF0000;
-//			break;
-//		case WarningSeverity::Danger:
-//			displayBoxes = true;
-//			severityText = "DANGER!";
-//			if (millis() % 600 > 450)
-//				color = 0xFFFF00;
-//			else if (millis() % 600 > 300)
-//				color = 0x00FF00;
-//			else if (millis() % 600 > 150)
-//				color = 0x000000;
-//			else
-//				color = 0xFF0000;
-//			break;
-//		case WarningSeverity::ReturnToPits:
-//			displayBoxes = true;
-//			severityText = "Return to Pits";
-//			color = 0xFFFF00;
-//			break;
-//		default:
-//			displayBoxes = true;
-//			severityText = "Unknown Severity";
-//		}
-//
-//		LCD.DLStart();
-//
-//		LCD.ClearColorRGB(0xFFFFFF);
-//		LCD.Clear(1, 1, 1);
-//
-//		LCD.ColorRGB(0x000000);
-//		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 4, 31, FT_OPT_CENTER, severityText);
-//		LCD.PrintTextFlash(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT - 100, 29, FT_OPT_CENTER, warningMessageToString(warningCAN->warningMessage), warningCAN->associatedValue);
-//
-//		if (displayBoxes) {
-//			LCD.ClearColorRGB(color);
-//			LCD.ScissorSize(75, FT_DISPLAYHEIGHT);
-//			LCD.ScissorXY(0, 0);
-//			LCD.Clear(1, 1, 1);
-//			LCD.ScissorXY(FT_DISPLAYWIDTH - 75, 0);
-//			LCD.Clear(1, 1, 1);
-//		}
-//
-//		LCD.DLEnd();
-//		LCD.Finish();
+		bool displayBoxes;
+		const char *severityText;
+		uint32_t color = 0x00000;
+
+		switch (warningData.severity) {
+			case WarningSeverity::ShortWarning:
+			case WarningSeverity::LongWarning:
+			displayBoxes = millis() % 500 > 250;
+			severityText = "WARNING!";
+			color = 0xFFFF00;
+			break;
+			case WarningSeverity::Error:
+			displayBoxes = millis() % 500 > 250;
+			severityText = "ERROR!";
+			color = 0xFF0000;
+			break;
+			case WarningSeverity::Danger:
+			displayBoxes = true;
+			severityText = "DANGER!";
+			if (millis() % 600 > 450)
+			color = 0xFFFF00;
+			else if (millis() % 600 > 300)
+			color = 0x00FF00;
+			else if (millis() % 600 > 150)
+			color = 0x000000;
+			else
+			color = 0xFF0000;
+			break;
+			case WarningSeverity::ReturnToPits:
+			displayBoxes = true;
+			severityText = "Return to Pits";
+			color = 0xFFFF00;
+			break;
+			default:
+			displayBoxes = true;
+			severityText = "Unknown Severity";
+		}
+
+		LCD.DLStart();
+
+		LCD.ClearColorRGB(0xFFFFFF);
+		LCD.Clear(1, 1, 1);
+
+		LCD.ColorRGB(0x000000);
+		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 4, 31, FT_OPT_CENTER, severityText);
+		LCD.PrintTextFlash(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT - 100, 29, FT_OPT_CENTER, warningMessageToString(warningData.message), warningData.associatedValue);
+
+		if (displayBoxes) {
+			LCD.ClearColorRGB(color);
+			LCD.ScissorSize(75, FT_DISPLAYHEIGHT);
+			LCD.ScissorXY(0, 0);
+			LCD.Clear(1, 1, 1);
+			LCD.ScissorXY(FT_DISPLAYWIDTH - 75, 0);
+			LCD.Clear(1, 1, 1);
+		}
+
+		LCD.DLEnd();
+		LCD.Finish();
 	}
 
 	void driving() {
 		float EngineTemp, RPM, Gear, Speed;
 
-		EngineTemp = (float)(swap(dashCAN1->EngineTemp))/100;
-		RPM = (float)(swap(dashCAN1->RPM))/100;
-		Gear = (float)(swap(dashCAN1->Gear))/100;
-		Speed = (float)(swap(dashCAN1->Speed))/100;
+		EngineTemp = motecToFloat(dashCAN1->EngineTemp);
+		RPM = motecToFloat(dashCAN1->RPM);
+		Gear = motecToFloat(dashCAN1->Gear);
+		Speed = motecToFloat(dashCAN1->Speed);
 
 		LCD.DLStart();
 
 		LCD.ColorRGB(0x00, 0xFF, 0xFF);
-		LCD.PrintText(5, 0, 28, 0, "ET: %.2f", EngineTemp);
-		LCD.PrintText(5, 25, 28, 0, "RPM: %.2f", RPM);
-		LCD.PrintText(5, 50, 28, 0, "Gear: %.2f", Gear);
-		LCD.PrintText(5, 75, 28, 0, "Speed: %.2f", Speed);
+		LCD.PrintText(5, 0, 28, 0, "ET: %.1", EngineTemp);
+		LCD.PrintText(5, 25, 28, 0, "RPM: %.0f", RPM);
+		LCD.PrintText(5, 50, 28, 0, "Speed: %.1f", Speed);
 
+		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 2, 1, FT_OPT_CENTER, "%d", Gear);
 
 		LCD.ColorRGB(0xFFFFFF);
 		LCD.Cmd_FGColor(0xFF0000);
 		LCD.Cmd_BGColor(0xFF0000);
-		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 30, 20, 20, 180, 0, 100 - (uint16_t) EngineTemp, 100);
-		LCD.ColorRGB(0xFF0000);
+		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 30, 20, 20, 180, 0, 220 - (uint16_t) EngineTemp, 220);
 
+		LCD.ColorRGB(0xFFFFFF);
+		LCD.Cmd_FGColor(0xFF0000);
+		LCD.Cmd_BGColor(0xFF0000);
+		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 80, 20, 20, 180, 0, 10000 - (uint16_t) RPM, 10000);
 
 		LCD.DLEnd();
 		LCD.Finish();
@@ -353,7 +302,6 @@ protected:
 			return WarningMessage_OilPressure;
 			case WarningMessage::OilTemperature:
 			return WarningMessage_OilTemperature;
-
 
 		}
 		return WarningMessage_Invalid;
