@@ -156,6 +156,8 @@ public:
 		DDRF = 0x00;
 	}
 
+	virtual void sub_init();
+
 	void updateDisplay() {
 		CPFERotarySwitch::runTasks();
 

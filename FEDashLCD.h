@@ -357,6 +357,10 @@ public:
 		return;
 	}
 
+	void sub_init() {
+		return;
+	}
+
 	void updateDashboard() {
 		switch (dashPage->dashPage) {
 		case DashPages::Brakes:
