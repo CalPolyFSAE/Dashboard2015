@@ -16,11 +16,11 @@ static const char PROGMEM WarningMessage_OilPressure[] = "Oil Pressure: %.1f psi
 static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Low: %.1fC";
 static const char PROGMEM WarningMessage_Invalid[] = "Invalid Warning Msg.";
 
-static const char PROGMEM RotaryRed1[] = "MC Off";
-static const char PROGMEM RotaryRed2[] = "120Nm";
-static const char PROGMEM RotaryRed3[] = "120Nm";
-static const char PROGMEM RotaryRed4[] = "120Nm";
-static const char PROGMEM RotaryRed5[] = "120Nm";
+static const char PROGMEM RotaryRed1[] = "LC - Default";
+static const char PROGMEM RotaryRed2[] = "LC - -250rpm";
+static const char PROGMEM RotaryRed3[] = "LC - +250rpm";
+static const char PROGMEM RotaryRed4[] = "LC - -500rpm";
+static const char PROGMEM RotaryRed5[] = "LC - +500rpm";
 static const char PROGMEM RotaryRed6[] = "Invalid";
 static const char PROGMEM RotaryRed7[] = "Invalid";
 static const char PROGMEM RotaryRed8[] = "Invalid";
@@ -31,10 +31,10 @@ PGM_P const RotaryRedStringTable[] PROGMEM =
 	RotaryRed1, RotaryRed2, RotaryRed3, RotaryRed4, RotaryRed5, RotaryRed6, RotaryRed7, RotaryRed8, RotaryRedUnused, RotaryRedUnused, RotaryRedUnused, RotaryRedUnused
 };
 
-static const char PROGMEM RotaryYellow1[] = "CLK DIV 8";
-static const char PROGMEM RotaryYellow2[] = "CLK DIV 4";
-static const char PROGMEM RotaryYellow3[] = "CLK DIV 2";
-static const char PROGMEM RotaryYellow4[] = "CLK DIV 0";
+static const char PROGMEM RotaryYellow1[] = "Brightness: 25%";
+static const char PROGMEM RotaryYellow2[] = "Brightness: 50%";
+static const char PROGMEM RotaryYellow3[] = "Brightness: 75%";
+static const char PROGMEM RotaryYellow4[] = "Brightness: 100%";
 static const char PROGMEM RotaryYellow5[] = "Invalid";
 static const char PROGMEM RotaryYellow6[] = "Invalid";
 static const char PROGMEM RotaryYellow7[] = "Invalid";
@@ -46,14 +46,14 @@ PGM_P const RotaryYellowStringTable[] PROGMEM = {RotaryYellow1, RotaryYellow2,
 	RotaryYellow8, RotaryYellowUnused, RotaryYellowUnused, RotaryYellowUnused,
 	RotaryYellowUnused};
 
-static const char PROGMEM RotaryBlack1[] = "Auto";
-static const char PROGMEM RotaryBlack2[] = "Driving";
-static const char PROGMEM RotaryBlack3[] = "Auto";
-static const char PROGMEM RotaryBlack4[] = "Auto";
-static const char PROGMEM RotaryBlack5[] = "Auto";
-static const char PROGMEM RotaryBlack6[] = "Auto";
-static const char PROGMEM RotaryBlack7[] = "Auto";
-static const char PROGMEM RotaryBlack8[] = "Auto";
+static const char PROGMEM RotaryBlack1[] = "Page - Auto";
+static const char PROGMEM RotaryBlack2[] = "Page - Driving";
+static const char PROGMEM RotaryBlack3[] = "Invalid";
+static const char PROGMEM RotaryBlack4[] = "Invalid";
+static const char PROGMEM RotaryBlack5[] = "Invalid";
+static const char PROGMEM RotaryBlack6[] = "Invalid";
+static const char PROGMEM RotaryBlack7[] = "Invalid";
+static const char PROGMEM RotaryBlack8[] = "Invalid";
 static const char PROGMEM RotaryBlackUnused[] = "Invalid";
 
 PGM_P const RotaryBlackStringTable[] PROGMEM =
@@ -85,7 +85,7 @@ protected:
 		WarningSeverity severity;
 		WarningMessage message;
 		float associatedValue;
-	};
+	} WarningData;
 
 	typedef struct DashCAN1 { // 0x0E0
 		uint16_t EngineTemp;
@@ -106,7 +106,7 @@ protected:
 		uint16_t Unused1;
 		uint16_t Unused2;
 		uint16_t Unused3;
-	};
+	} DashCAN3;
 
 	DashCAN1 *dashCAN1 = (DashCAN1 *) dashCAN1Data;
 	DashCAN2 *dashCAN2 = (DashCAN2 *) dashCAN2Data;
@@ -126,7 +126,7 @@ public:
 		case 1:  // Driving
 			driving();
 			break;
-		default:
+		default: // Auto mode
 			if (warningOverride()) {
 				warning();
 			} else {
