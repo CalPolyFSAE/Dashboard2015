@@ -105,7 +105,7 @@ protected:
 		uint16_t BatteryVoltage;
 		uint16_t OilPressure;
 		uint16_t IAT;
-		uint16_t Unused3;
+		uint8_t Brightness;
 	} DashCAN3;
 
 	DashCAN1 *dashCAN1 = (DashCAN1 *) dashCAN1Data;
@@ -115,13 +115,24 @@ protected:
 //	WarningCANMessage *warningCAN = (WarningCANMessage *) warningCANData;
 
 	WarningData warningData;
+	uint8_t previousBrightness;
+
 public:
 
 	virtual ~FSAEDashLCD() {
 		return;
 	}
 
+	void sub_init() {
+		previousBrightness = dashCAN3->Brightness = 100;
+	}
+
 	void updateDashboard() {
+		if (previousBrightness != dashCAN3->Brightness) {
+			previousBrightness = dashCAN3->Brightness;
+			LCD.DisplayOn(previousBrightness);
+		}
+
 		switch (CPFERotarySwitch::getPosition(CPFERotarySwitch::RotarySwitches::BLACK)) {
 		case 1:  // Driving
 			driving();
