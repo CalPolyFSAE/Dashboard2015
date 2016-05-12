@@ -17,10 +17,10 @@ static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Low: %.1fC";
 static const char PROGMEM WarningMessage_Invalid[] = "Invalid Warning Msg.";
 
 static const char PROGMEM RotaryRed1[] = "LC - Default";
-static const char PROGMEM RotaryRed2[] = "LC - -250rpm";
-static const char PROGMEM RotaryRed3[] = "LC - +250rpm";
-static const char PROGMEM RotaryRed4[] = "LC - -500rpm";
-static const char PROGMEM RotaryRed5[] = "LC - +500rpm";
+static const char PROGMEM RotaryRed2[] = "LC - -100rpm";
+static const char PROGMEM RotaryRed3[] = "LC - +100rpm";
+static const char PROGMEM RotaryRed4[] = "LC - -250rpm";
+static const char PROGMEM RotaryRed5[] = "LC - +250rpm";
 static const char PROGMEM RotaryRed6[] = "Invalid";
 static const char PROGMEM RotaryRed7[] = "Invalid";
 static const char PROGMEM RotaryRed8[] = "Invalid";
@@ -48,7 +48,7 @@ PGM_P const RotaryYellowStringTable[] PROGMEM = {RotaryYellow1, RotaryYellow2,
 
 static const char PROGMEM RotaryBlack1[] = "Page - Auto";
 static const char PROGMEM RotaryBlack2[] = "Page - Driving";
-static const char PROGMEM RotaryBlack3[] = "Invalid";
+static const char PROGMEM RotaryBlack3[] = "Page - Sensors";
 static const char PROGMEM RotaryBlack4[] = "Invalid";
 static const char PROGMEM RotaryBlack5[] = "Invalid";
 static const char PROGMEM RotaryBlack6[] = "Invalid";
@@ -67,7 +67,7 @@ class FSAEDashLCD: public DashLCD {
 protected:
 	enum class DashPages
 		: uint8_t {
-			WaitingForCAN, Driving, Warning
+			WaitingForCAN, Driving, Warning, Sensors
 	};
 
 	enum class WarningSeverity
@@ -103,8 +103,8 @@ protected:
 
 	typedef struct DashCAN3 { // 0x0E2
 		uint16_t BatteryVoltage;
-		uint16_t Unused1;
-		uint16_t Unused2;
+		uint16_t OilPressure;
+		uint16_t IAT;
 		uint16_t Unused3;
 	} DashCAN3;
 
@@ -125,6 +125,9 @@ public:
 		switch (CPFERotarySwitch::getPosition(CPFERotarySwitch::RotarySwitches::BLACK)) {
 		case 1:  // Driving
 			driving();
+			break;
+		case 3:  // Sensors
+			sensors();
 			break;
 		default: // Auto mode
 			if (warningOverride()) {
@@ -157,16 +160,36 @@ protected:
 		const float EngineDangerTemp = 212.0;
 
 		const float BatteryReturnToPitVoltage = 12.0;
+		const float OilPressureWarning = 5.0;
+		const float OilTempThreshold = 210.0;
 
-		if (dashCAN1->EngineTemp > EngineReturnToPitTemp) {
+		float EngineTemp, OilPressure, OilTemp, BatteryVoltage;
+		EngineTemp = motecToFloat(dashCAN1->EngineTemp);
+		OilPressure = motecToFloat(dashCAN3->OilPressure);
+		OilTemp = motecToFloat(dashCAN2->OilTemp);
+		BatteryVoltage = motecToFloat(dashCAN3->BatteryVoltage);
+
+		if (EngineTemp > EngineReturnToPitTemp) {
 			warningActive = true;
-			warningData.associatedValue = dashCAN1->EngineTemp;
-			warningData.severity = dashCAN1->EngineTemp > EngineDangerTemp ? WarningSeverity::Danger : WarningSeverity::ReturnToPits;
+			warningData.associatedValue = EngineTemp;
+			warningData.severity = EngineTemp > EngineDangerTemp ? WarningSeverity::Danger : WarningSeverity::ReturnToPits;
 			warningData.message = WarningMessage::EngineTemperature;
 		}
-		else if (dashCAN3->BatteryVoltage) {
+		else if (OilPressure < OilPressureWarning) {
 			warningActive = true;
-			warningData.associatedValue = dashCAN3->BatteryVoltage;
+			warningData.associatedValue = OilPressure;
+			warningData.severity = WarningSeverity::LongWarning;
+			warningData.message = WarningMessage::OilPressure;
+		}
+		else if (OilTemp < OilTempThreshold) {
+			warningActive = true;
+			warningData.associatedValue = OilTemp;
+			warningData.severity = WarningSeverity::LongWarning;
+			warningData.message = WarningMessage::OilTemperature;
+		}
+		else if (BatteryVoltage < BatteryReturnToPitVoltage) {
+			warningActive = true;
+			warningData.associatedValue = BatteryVoltage;
 			warningData.severity = WarningSeverity::ReturnToPits;
 			warningData.message = WarningMessage::BatteryLow;
 		}
@@ -236,12 +259,16 @@ protected:
 	}
 
 	void driving() {
-		float EngineTemp, RPM, Gear, Speed;
+		float EngineTemp, RPM, Gear, Speed, OilTemp, OilPressure, BatteryVoltage, Lambda;
 
 		EngineTemp = motecToFloat(dashCAN1->EngineTemp);
 		RPM = motecToFloat(dashCAN1->RPM);
 		Gear = motecToFloat(dashCAN1->Gear);
 		Speed = motecToFloat(dashCAN1->Speed);
+		OilTemp = motecToFloat(dashCAN2->OilTemp);
+		OilPressure = motecToFloat(dashCAN3->OilPressure);
+		BatteryVoltage = motecToFloat(dashCAN3->BatteryVoltage);
+		Lambda = motecToFloat(dashCAN2->Lambda);
 
 		LCD.DLStart();
 
@@ -249,6 +276,10 @@ protected:
 		LCD.PrintText(5, 0, 28, 0, "ET: %.1", EngineTemp);
 		LCD.PrintText(5, 25, 28, 0, "RPM: %.0f", RPM);
 		LCD.PrintText(5, 50, 28, 0, "Speed: %.1f", Speed);
+		LCD.PrintText(5, 75, 28, 0, "Oil Temp: %.1f", OilTemp);
+		LCD.PrintText(5, 75, 28, 0, "Oil Pres.: %.1fpsi", OilPressure);
+		LCD.PrintText(5, 100, 28, 0, "Battery: %.1fV", BatteryVoltage);
+		LCD.PrintText(5, 125, 28, 0, "Lambda: %.2f", Lambda);
 
 		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 2, 1, FT_OPT_CENTER, "%d", Gear);
 
@@ -290,6 +321,20 @@ protected:
 //
 //		LCD.DLEnd();
 //		LCD.Finish();
+	}
+
+	void sensors() {
+		float TPS = motecToFloat(dashCAN2->ThrottlePOS), MAP = motecToFloat(dashCAN2->MAP), IAT = motecToFloat(dashCAN3->IAT);
+
+		LCD.DLStart();
+
+		LCD.ColorRGB(0x00, 0xFF, 0xFF);
+		LCD.PrintText(5, 0, 28, 0, "TPS: %.1%", TPS);
+		LCD.PrintText(5, 25, 28, 0, "MAP: %.2fpsi", MAP);
+		LCD.PrintText(5, 50, 28, 0, "IAT: %.1F", IAT);
+
+		LCD.DLEnd();
+		LCD.Finish();
 	}
 
 	const char * PROGMEM warningMessageToString(WarningMessage warning) {
