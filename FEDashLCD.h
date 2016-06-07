@@ -243,9 +243,11 @@ public:
 	typedef struct WarningCANMessage { //0xF1
 		uint8_t NDashPage; //Required
 		WarningSeverity warningSeverity;
-		float associatedValue;
+		uint16_t associatedValue; // Half-Precision
 		WarningMessage warningMessage;
 		uint8_t notOK;
+		uint8_t ledOutputs; // Bit-array: Green=0, Yellow=1, Red=2
+		uint8_t unused;
 	} WarningCANMessage;
 
 	typedef struct DashCAN1Driving {
@@ -362,6 +364,11 @@ public:
 	}
 
 	void updateDashboard() {
+		DashboardData.greenLED = warningCAN->ledOutputs & BIT0 ? OutputState::On : OutputState::Off;
+		DashboardData.yellowLED = warningCAN->ledOutputs & BIT1 ? OutputState::On : OutputState::Off;
+		DashboardData.redLED = warningCAN->ledOutputs & BIT2 ? OutputState::On : OutputState::Off;
+
+
 		switch (dashPage->dashPage) {
 		case DashPages::Brakes:
 			brakes();
@@ -478,7 +485,7 @@ protected:
 		uint32_t color = 0x00000;
 		float associatedValue;
 
-		associatedValue = swap(warningCAN->associatedValue);
+		float16::toFloat32(&associatedValue, swap(warningCAN->associatedValue));
 
 		switch (warningCAN->warningSeverity) {
 			case WarningSeverity::ShortWarning:
