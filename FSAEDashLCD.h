@@ -10,10 +10,10 @@
 
 #include "DashLCD.h"
 
-static const char PROGMEM WarningMessage_EngineTemperature[] = "Engine Hot: %.1fC";
-static const char PROGMEM WarningMessage_OilTemperature[] = "Oil Temperature: %.1fC";
+static const char PROGMEM WarningMessage_EngineTemperature[] = "Engine Hot: %.1fF";
+static const char PROGMEM WarningMessage_OilTemperature[] = "Oil Temperature: %.1fF";
 static const char PROGMEM WarningMessage_OilPressure[] = "Oil Pressure: %.1f psi";
-static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Low: %.1fC";
+static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Low: %.1fF";
 static const char PROGMEM WarningMessage_Invalid[] = "Invalid Warning Msg.";
 
 static const char PROGMEM RotaryRed1[] = "LC - Default";
@@ -137,7 +137,7 @@ public:
 		case 1:  // Driving
 			driving();
 			break;
-		case 3:  // Sensors
+		case 2:  // Sensors
 			sensors();
 			break;
 		default: // Auto mode
@@ -273,7 +273,7 @@ protected:
 		float EngineTemp, RPM, Gear, Speed, OilTemp, OilPressure, BatteryVoltage, Lambda;
 
 		EngineTemp = motecToFloat(dashCAN1->EngineTemp);
-		RPM = motecToFloat(dashCAN1->RPM);
+		RPM = motecToFloat(dashCAN1->RPM, 1.0);
 		Gear = motecToFloat(dashCAN1->Gear);
 		Speed = motecToFloat(dashCAN1->Speed);
 		OilTemp = motecToFloat(dashCAN2->OilTemp);
@@ -284,25 +284,28 @@ protected:
 		LCD.DLStart();
 
 		LCD.ColorRGB(0x00, 0xFF, 0xFF);
-		LCD.PrintText(5, 0, 28, 0, "ET: %.1", EngineTemp);
-		LCD.PrintText(5, 25, 28, 0, "RPM: %.0f", RPM);
-		LCD.PrintText(5, 50, 28, 0, "Speed: %.1f", Speed);
-		LCD.PrintText(5, 75, 28, 0, "Oil Temp: %.1f", OilTemp);
-		LCD.PrintText(5, 75, 28, 0, "Oil Pres.: %.1fpsi", OilPressure);
-		LCD.PrintText(5, 100, 28, 0, "Battery: %.1fV", BatteryVoltage);
-		LCD.PrintText(5, 125, 28, 0, "Lambda: %.2f", Lambda);
+		LCD.PrintText(5, 0, 28, 0, "ET: %.1f F", EngineTemp);
+		LCD.PrintText(5, 25, 28, 0, "RPM: %.0f rpm", RPM);
+		LCD.PrintText(5, 50, 28, 0, "Speed: %.1f mph", Speed);
+		LCD.PrintText(5, 75, 28, 0, "Oil Temp: %.1f F", OilTemp);
+		LCD.PrintText(5, 100, 28, 0, "Oil Pres.: %.1f psi", OilPressure);
+		LCD.PrintText(5, 125, 28, 0, "Battery: %.1f V", BatteryVoltage);
+		LCD.PrintText(5, 150, 28, 0, "Lambda: %.2f", Lambda);
 
-		LCD.PrintText(FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 2, 1, FT_OPT_CENTER, "%d", Gear);
+		LCD.PrintText(350, 50, 1, FT_OPT_CENTER, "%d", Gear);
 
 		LCD.ColorRGB(0xFFFFFF);
 		LCD.Cmd_FGColor(0xFF0000);
 		LCD.Cmd_BGColor(0xFF0000);
 		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 30, 20, 20, 180, 0, 220 - (uint16_t) EngineTemp, 220);
+		LCD.PrintText(445, 230, 29, 0, "ET");
+
 
 		LCD.ColorRGB(0xFFFFFF);
 		LCD.Cmd_FGColor(0xFF0000);
 		LCD.Cmd_BGColor(0xFF0000);
 		LCD.Cmd_Slider(FT_DISPLAYWIDTH - 80, 20, 20, 180, 0, 10000 - (uint16_t) RPM, 10000);
+		LCD.PrintText(385, 230, 29, 0, "RPM");
 
 		LCD.DLEnd();
 		LCD.Finish();
@@ -340,9 +343,9 @@ protected:
 		LCD.DLStart();
 
 		LCD.ColorRGB(0x00, 0xFF, 0xFF);
-		LCD.PrintText(5, 0, 28, 0, "TPS: %.1%", TPS);
-		LCD.PrintText(5, 25, 28, 0, "MAP: %.2fpsi", MAP);
-		LCD.PrintText(5, 50, 28, 0, "IAT: %.1F", IAT);
+		LCD.PrintText(5, 0, 28, 0, "TPS: %.1f%%", TPS);
+		LCD.PrintText(5, 25, 28, 0, "MAP: %.2f psi", MAP);
+		LCD.PrintText(5, 50, 28, 0, "IAT: %.1f F", IAT);
 
 		LCD.DLEnd();
 		LCD.Finish();

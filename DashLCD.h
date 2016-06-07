@@ -184,7 +184,7 @@ public:
 			PORTB &= ~BIT5;
 		}
 
-		if (false){// False for rotary disable//(DashboardData.rotaryOverride) {
+		if (DashboardData.rotaryOverride){// False for rotary disable//(DashboardData.rotaryOverride) {
 			rotaryOverride();
 		} else if (DashboardData.waitingForCANOverride) {
 			waitingForCAN();
