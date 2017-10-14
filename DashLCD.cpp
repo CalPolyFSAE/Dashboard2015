@@ -1,12 +1,54 @@
 /*
  * FEDashLCD.cpp
-
-
  *
  *  Created on: May 21, 2015
  *      Author: thomaswillson
  */
 #include "DashLCD.h"
+
+static const uint8_t PROGMEM CPRacingLogo[] = {
+	#include "GraphicsAssets/CPRacingLogo.h"
+};
+
+static const uint8_t PROGMEM ArialBlackNumberFont[] = {
+	#include "GraphicsAssets/ArialBlackNumberFont.h"
+};
+
+//CAN message IDs
+static constexpr uint8_t WarningCANMessageID = 0x10;
+static constexpr uint8_t DashCAN1ID = 0x0E0; //0x11;
+static constexpr uint8_t DashCAN2ID = 0x0E1;//0x12;
+static constexpr uint8_t DashCAN3ID = 0x13;
+static constexpr uint8_t DashCAN4ID = 0x14;
+static constexpr uint8_t DashCANInputID = 0x15;
+
+static const CPFECANLib::MSG PROGMEM DashCAN1MSG =
+	{	{DashCAN1ID}, 8, 0, 0, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN1Mask = { {0xFFF}, 8, 1, 1, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN2MSG =
+	{	{DashCAN2ID}, 8, 0, 0, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN2Mask = { {0xFFF}, 8, 1, 1, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN3MSG =
+	{	{DashCAN3ID}, 8, 0, 0, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN3Mask = { {0xFFF}, 8, 1, 1, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN4MSG =
+	{	{DashCAN4ID}, 8, 0, 0, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCAN4Mask = { {0xFFF}, 8, 1, 1, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCANWarningMSG = 
+	{	{WarningCANMessageID}, 8, 0, 0, 0};
+
+static const CPFECANLib::MSG PROGMEM DashCANWarningMask = { {0xFFF}, 8, 1, 1,
+	0};
+
+static const uint8_t ROTARY_MAX_DESC_LENGTH = 32;
 
 ///////PUBLIC////////
 
@@ -192,6 +234,33 @@ void DashLCD::transmitDashboardInfo() {
 	CPFERotarySwitch::requestUpdatedPositions();
 }
 
+//Enables or diables interrupts for certain CAN messages / MOBs
+void DashLCD::RX_DashCAN1(bool interruptMode) {
+	CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN1Mob, &DashCAN1MSG, &DashCAN1Mask, interruptMode);
+}
+
+void DashLCD::RX_DashCAN2(bool interruptMode) {
+	CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN2Mob, &DashCAN2MSG, &DashCAN2Mask, interruptMode);
+}
+
+void DashLCD::RX_DashCAN3(bool interruptMode) {
+	CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN3Mob, &DashCAN3MSG, &DashCAN3Mask, interruptMode);
+}
+
+void DashLCD::RX_DashCAN4(bool interruptMode) {
+	CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN4Mob, &DashCAN4MSG, &DashCAN4Mask, interruptMode);
+}
+
+void DashLCD::RX_WarningCAN(bool interruptMode) {
+	CPFECANLib::enableMOBAsRX_PROGMEM(WarningCANMob, &DashCANWarningMSG, &DashCANWarningMask, interruptMode);
+}
+
+//set up LCD
+int16_t DashLCD::bootupConfigure() {
+	LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
+	return 0;
+}
+
 //upload logo to LCD controller
 void DashLCD::uploadLogoToController() {
 	LCD.Cmd_Inflate(108676);
@@ -306,3 +375,4 @@ uint16_t DashLCD::swap(uint16_t d) {
 	dst[1] = src[0];
 	return a;
 }
+

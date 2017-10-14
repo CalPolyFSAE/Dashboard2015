@@ -8,52 +8,9 @@
 #include <AVRLibrary/arduino/Arduino.h>
 #include "CPFERotarySwitch.h"
 
-//variables should not be declared in header files
+//variables should not be defined in header files
 //use extern... then define in DashLCD.cpp if they need to be used by other files
-
-static const uint8_t PROGMEM CPRacingLogo[] = {
-	#include "GraphicsAssets/CPRacingLogo.h"
-};
-
-static const uint8_t PROGMEM ArialBlackNumberFont[] = {
-	#include "GraphicsAssets/ArialBlackNumberFont.h"
-};
-
-//CAN message IDs
-static constexpr uint8_t WarningCANMessageID = 0x10;
-static constexpr uint8_t DashCAN1ID = 0x0E0; //0x11;
-static constexpr uint8_t DashCAN2ID = 0x0E1;//0x12;
-static constexpr uint8_t DashCAN3ID = 0x13;
-static constexpr uint8_t DashCAN4ID = 0x14;
-static constexpr uint8_t DashCANInputID = 0x15;
-
-static const CPFECANLib::MSG PROGMEM DashCAN1MSG =
-	{	{DashCAN1ID}, 8, 0, 0, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN1Mask = { {0xFFF}, 8, 1, 1, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN2MSG =
-	{	{DashCAN2ID}, 8, 0, 0, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN2Mask = { {0xFFF}, 8, 1, 1, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN3MSG =
-	{	{DashCAN3ID}, 8, 0, 0, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN3Mask = { {0xFFF}, 8, 1, 1, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN4MSG =
-	{	{DashCAN4ID}, 8, 0, 0, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCAN4Mask = { {0xFFF}, 8, 1, 1, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCANWarningMSG = 
-	{	{WarningCANMessageID}, 8, 0, 0, 0};
-
-static const CPFECANLib::MSG PROGMEM DashCANWarningMask = { {0xFFF}, 8, 1, 1,
-	0};
-
-static const uint8_t ROTARY_MAX_DESC_LENGTH = 32;
+// using static in header has the potential to create multiple copies of these variables
 
 class DashLCD {
 public:
@@ -96,7 +53,7 @@ public:
 	//called by main loop
 	void updateDisplay();
 
-	//can recieve interrupt function
+	//CAN recieve interrupt function
 	void CAN_RX_Int(CPFECANLib::MSG *msg, uint8_t mobNum);
 
 protected:
@@ -144,7 +101,8 @@ protected:
 	virtual PGM_P redRotaryString(int position) {
 		return 0;
 	}
-
+	
+	//disables all CAN RX interrupts
 	void initCAN_RX() {
 		RX_DashCAN1(false);
 		RX_DashCAN2(false);
@@ -156,31 +114,15 @@ protected:
 	//sends switch positions over CAN
 	void transmitDashboardInfo();
 
-	//Enables or diables interrupts for certain CAN messages(based on ID)?
-	void RX_DashCAN1(bool interruptMode) {
-		CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN1Mob, &DashCAN1MSG, &DashCAN1Mask, interruptMode);
-	}
+	//Enables or diables interrupts for certain CAN messages / MOBs
+	void RX_DashCAN1(bool interruptMode);
+	void RX_DashCAN2(bool interruptMode);
+	void RX_DashCAN3(bool interruptMode);
+	void RX_DashCAN4(bool interruptMode);
+	void RX_WarningCAN(bool interruptMode);
 
-	void RX_DashCAN2(bool interruptMode) {
-		CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN2Mob, &DashCAN2MSG, &DashCAN2Mask, interruptMode);
-	}
-
-	void RX_DashCAN3(bool interruptMode) {
-		CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN3Mob, &DashCAN3MSG, &DashCAN3Mask, interruptMode);
-	}
-
-	void RX_DashCAN4(bool interruptMode) {
-		CPFECANLib::enableMOBAsRX_PROGMEM(DashCAN4Mob, &DashCAN4MSG, &DashCAN4Mask, interruptMode);
-	}
-
-	void RX_WarningCAN(bool interruptMode) {
-		CPFECANLib::enableMOBAsRX_PROGMEM(WarningCANMob, &DashCANWarningMSG, &DashCANWarningMask, interruptMode);
-	}
-
-	int16_t bootupConfigure() {
-		LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
-		return 0;
-	}
+	//set up LCD
+	int16_t bootupConfigure();
 
 	//upload logo to LCD controller
 	void uploadLogoToController();
