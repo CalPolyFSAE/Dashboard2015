@@ -10,6 +10,8 @@
 
 #include "DashLCD.h"
 
+
+//these static variables are probably wasting memory
 static const char PROGMEM WarningMessage_ControllerTemperature[] = "CONTROLLER WARM: %.2fC";
 static const char PROGMEM WarningMessage_MotorTemperature[] = "MOTOR WARM: %.2fC";
 static const char PROGMEM WarningMessage_BatteryTemperature[] = "BATTERY WARM: %.2fC";
@@ -348,6 +350,8 @@ public:
 		DashCAN4Charging charging;
 	} DashCAN4;
 
+	//casting CAN data to a known structure
+	//Data from DashLCD.h
 	DashCAN1 *dashCAN1 = (DashCAN1 *) dashCAN1Data;
 	DashCAN2 *dashCAN2 = (DashCAN2 *) dashCAN2Data;
 	DashCAN3 *dashCAN3 = (DashCAN3 *) dashCAN3Data;
@@ -355,6 +359,8 @@ public:
 	WarningCANMessage *warningCAN = (WarningCANMessage *) warningCANData;
 	DashPage *dashPage = (DashPage *) &DashboardData.NDashPage;
 
+	//virtual destructor and sub_init. Should either both have vrtual keyword, or neither 
+	//because they both mean the same thing
 	virtual ~FEDashLCD() {
 		return;
 	}
@@ -424,7 +430,8 @@ protected:
 
 	void charging() {
 		float TCellMax, TCellMin, VCellMax, VCellMin, TCellMean, VCellMean, VTotal, VChargerSetpoint, IChargerSetpoint, VChargerActual, IChargerActual;
-
+		
+		//cast half precicion floats to full
 		float16::toFloat32(&TCellMax, swap(dashCAN1->charging.TCellMax));
 		float16::toFloat32(&TCellMin, swap(dashCAN1->charging.TCellMin));
 		float16::toFloat32(&VCellMax, swap(dashCAN1->charging.VCellMax));
@@ -442,7 +449,8 @@ protected:
 
 		char BMSChargingState[BMS_CHARGING_STATE_MAX_LENGTH];
 		char BMSChargingError[BMS_CHARGING_ERROR_MAX_LENGTH];
-
+		
+		//get the chargingstate and error strings out of program memory
 		strncpy_P(BMSChargingState, (PGM_P) pgm_read_word(&(BMSChargingStateStringTable[(uint8_t) dashCAN2->charging.chargingState])), BMS_CHARGING_STATE_MAX_LENGTH);
 		strncpy_P(BMSChargingError, (PGM_P) pgm_read_word(&(BMSChargingErrorStringTable[(uint8_t) dashCAN2->charging.chargeError])), BMS_CHARGING_ERROR_MAX_LENGTH);
 
