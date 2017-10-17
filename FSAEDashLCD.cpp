@@ -86,6 +86,7 @@ void FSAEDashLCD::updateDashboard() {
 
 /////////PROTECTED/////////
 
+//read string label from flash memory
 PGM_P FSAEDashLCD::blackRotaryString(int position) {
 	return (PGM_P) pgm_read_word(&(RotaryBlackStringTable[position]));
 }
@@ -149,35 +150,35 @@ void FSAEDashLCD::warning() {
 	switch (warningData.severity) {
 		case WarningSeverity::ShortWarning:
 		case WarningSeverity::LongWarning:
-		displayBoxes = millis() % 500 > 250;
-		severityText = "WARNING!";
-		color = 0xFFFF00;
-		break;
+			displayBoxes = millis() % 500 > 250;
+			severityText = "WARNING!";
+			color = 0xFFFF00;
+			break;
 		case WarningSeverity::Error:
-		displayBoxes = millis() % 500 > 250;
-		severityText = "ERROR!";
-		color = 0xFF0000;
-		break;
+			displayBoxes = millis() % 500 > 250;
+			severityText = "ERROR!";
+			color = 0xFF0000;
+			break;
 		case WarningSeverity::Danger:
-		displayBoxes = true;
-		severityText = "DANGER!";
-		if (millis() % 600 > 450)
-		color = 0xFFFF00;
-		else if (millis() % 600 > 300)
-		color = 0x00FF00;
-		else if (millis() % 600 > 150)
-		color = 0x000000;
-		else
-		color = 0xFF0000;
-		break;
+			displayBoxes = true;
+			severityText = "DANGER!";
+			if (millis() % 600 > 450)
+				color = 0xFFFF00;
+			else if (millis() % 600 > 300)
+				color = 0x00FF00;
+			else if (millis() % 600 > 150)
+				color = 0x000000;
+			else
+				color = 0xFF0000;
+			break;
 		case WarningSeverity::ReturnToPits:
-		displayBoxes = true;
-		severityText = "Return to Pits";
-		color = 0xFFFF00;
-		break;
+			displayBoxes = true;
+			severityText = "Return to Pits";
+			color = 0xFFFF00;
+			break;
 		default:
-		displayBoxes = true;
-		severityText = "Unknown Severity";
+			displayBoxes = true;
+			severityText = "Unknown Severity";
 	}
 
 	LCD.DLStart();
@@ -271,7 +272,9 @@ void FSAEDashLCD::lapTrigger() {
 }
 
 void FSAEDashLCD::sensors() {
-	float TPS = motecToFloat(dashCAN2->ThrottlePOS), MAP = motecToFloat(dashCAN2->MAP), IAT = motecToFloat(dashCAN3->IAT);
+	float TPS = motecToFloat(dashCAN2->ThrottlePOS),
+			MAP = motecToFloat(dashCAN2->MAP),
+			IAT = motecToFloat(dashCAN3->IAT);
 
 	LCD.DLStart();
 
@@ -284,16 +287,17 @@ void FSAEDashLCD::sensors() {
 	LCD.Finish();
 }
 
+//get warning message string
 const char * PROGMEM FSAEDashLCD::warningMessageToString(WarningMessage warning) {
 	switch (warning) {
 		case WarningMessage::EngineTemperature:
-		return WarningMessage_EngineTemperature;
+			return WarningMessage_EngineTemperature;
 		case WarningMessage::BatteryLow:
-		return WarningMessage_BatteryLow;
+			return WarningMessage_BatteryLow;
 		case WarningMessage::OilPressure:
-		return WarningMessage_OilPressure;
+			return WarningMessage_OilPressure;
 		case WarningMessage::OilTemperature:
-		return WarningMessage_OilTemperature;
+			return WarningMessage_OilTemperature;
 
 	}
 	return WarningMessage_Invalid;

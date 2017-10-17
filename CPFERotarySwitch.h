@@ -4,6 +4,7 @@
 #include <AVRLibrary/arduino/Arduino.h>
 #include <AVRLibrary/CPFEAVRAnalog.h>
 
+//handling function for ADC results
 void rotarySwitchResultHandler(uint16_t result, void *info);
 
 class CPFERotarySwitch {
@@ -38,6 +39,7 @@ public:
 	}
 
 	static void requestUpdatedPositions() {
+		//working with variable that is used in an interrupt routine
 		ATOMIC_BLOCK(ATOMIC_FORCEON) {
 			if (currentRotaryADCConversion < 0) { // If previous set of conversions finished, start a new round
 				currentRotaryADCConversion = 0;

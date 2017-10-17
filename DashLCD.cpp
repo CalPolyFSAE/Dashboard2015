@@ -42,7 +42,7 @@ static const CPFECANLib::MSG PROGMEM DashCAN4MSG =
 
 static const CPFECANLib::MSG PROGMEM DashCAN4Mask = { {0xFFF}, 8, 1, 1, 0};
 
-static const CPFECANLib::MSG PROGMEM DashCANWarningMSG = 
+static const CPFECANLib::MSG PROGMEM DashCANWarningMSG =
 	{	{WarningCANMessageID}, 8, 0, 0, 0};
 
 static const CPFECANLib::MSG PROGMEM DashCANWarningMask = { {0xFFF}, 8, 1, 1,

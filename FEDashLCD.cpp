@@ -160,36 +160,36 @@ void FEDashLCD::updateDashboard() {
 
 
 	switch (dashPage->dashPage) {
-	case DashPages::Brakes:
-		brakes();
-		break;
-	case DashPages::Drivetrain:
-		drivetrain();
-		break;
-	case DashPages::Driving:
-		driving();
-		break;
-	case DashPages::Charging:
-		charging();
-		break;
-	case DashPages::LapTrigger:
-		lapTrigger();
-		break;
-	case DashPages::Performance:
-		performance();
-		break;
-	case DashPages::Systems:
-		systems();
-		break;
-	case DashPages::WaitingForCAN:
-		waitingForCAN();
-		break;
-	case DashPages::Warning:
-		warning();
-		break;
-	default:
-		waitingForCAN();
-		break;
+		case DashPages::Brakes:
+			brakes();
+			break;
+		case DashPages::Drivetrain:
+			drivetrain();
+			break;
+		case DashPages::Driving:
+			driving();
+			break;
+		case DashPages::Charging:
+			charging();
+			break;
+		case DashPages::LapTrigger:
+			lapTrigger();
+			break;
+		case DashPages::Performance:
+			performance();
+			break;
+		case DashPages::Systems:
+			systems();
+			break;
+		case DashPages::WaitingForCAN:
+			waitingForCAN();
+			break;
+		case DashPages::Warning:
+			warning();
+			break;
+		default:
+			waitingForCAN();
+			break;
 	}
 }
 
@@ -208,7 +208,7 @@ PGM_P FEDashLCD::redRotaryString(int position) {
 void FEDashLCD::charging() {
 	float TCellMax, TCellMin, VCellMax, VCellMin, TCellMean, VCellMean, VTotal, VChargerSetpoint, IChargerSetpoint, VChargerActual, IChargerActual;
 	
-	//cast half precicion floats to full
+	//cast half precision floats to full
 	float16::toFloat32(&TCellMax, swap(dashCAN1->charging.TCellMax));
 	float16::toFloat32(&TCellMin, swap(dashCAN1->charging.TCellMin));
 	float16::toFloat32(&VCellMax, swap(dashCAN1->charging.VCellMax));
@@ -227,7 +227,7 @@ void FEDashLCD::charging() {
 	char BMSChargingState[BMS_CHARGING_STATE_MAX_LENGTH];
 	char BMSChargingError[BMS_CHARGING_ERROR_MAX_LENGTH];
 	
-	//get the chargingstate and error strings out of program memory
+	//get the charging state and error strings out of program memory
 	strncpy_P(BMSChargingState, (PGM_P) pgm_read_word(&(BMSChargingStateStringTable[(uint8_t) dashCAN2->charging.chargingState])), BMS_CHARGING_STATE_MAX_LENGTH);
 	strncpy_P(BMSChargingError, (PGM_P) pgm_read_word(&(BMSChargingErrorStringTable[(uint8_t) dashCAN2->charging.chargeError])), BMS_CHARGING_ERROR_MAX_LENGTH);
 
@@ -262,40 +262,41 @@ void FEDashLCD::warning() {
 	uint32_t color = 0x00000;
 	float associatedValue;
 
+	//cast half precision floats to full
 	float16::toFloat32(&associatedValue, swap(warningCAN->associatedValue));
 
 	switch (warningCAN->warningSeverity) {
 		case WarningSeverity::ShortWarning:
 		case WarningSeverity::LongWarning:
-		displayBoxes = millis() % 500 > 250;
-		severityText = "WARNING!";
-		color = 0xFFFF00;
-		break;
+			displayBoxes = millis() % 500 > 250;
+			severityText = "WARNING!";
+			color = 0xFFFF00;
+			break;
 		case WarningSeverity::Error:
-		displayBoxes = millis() % 500 > 250;
-		severityText = "ERROR!";
-		color = 0xFF0000;
-		break;
+			displayBoxes = millis() % 500 > 250;
+			severityText = "ERROR!";
+			color = 0xFF0000;
+			break;
 		case WarningSeverity::Danger:
-		displayBoxes = true;
-		severityText = "DANGER!";
-		if (millis() % 600 > 450)
-		color = 0xFFFF00;
-		else if (millis() % 600 > 300)
-		color = 0x00FF00;
-		else if (millis() % 600 > 150)
-		color = 0x000000;
-		else
-		color = 0xFF0000;
-		break;
+			displayBoxes = true;
+			severityText = "DANGER!";
+			if (millis() % 600 > 450)
+				color = 0xFFFF00;
+			else if (millis() % 600 > 300)
+				color = 0x00FF00;
+			else if (millis() % 600 > 150)
+				color = 0x000000;
+			else
+				color = 0xFF0000;
+			break;
 		case WarningSeverity::ReturnToPits:
-		displayBoxes = true;
-		severityText = "Return to Pits";
-		color = 0xFFFF00;
-		break;
+			displayBoxes = true;
+			severityText = "Return to Pits";
+			color = 0xFFFF00;
+			break;
 		default:
-		displayBoxes = true;
-		severityText = "Unknown Severity";
+			displayBoxes = true;
+			severityText = "Unknown Severity";
 	}
 
 	LCD.DLStart();
@@ -398,75 +399,75 @@ void FEDashLCD::lapTrigger() {
 const char * PROGMEM FEDashLCD::warningMessageToString(WarningMessage warning) {
 	switch (warning) {
 		case WarningMessage::BatteryLowVoltage:
-		return WarningMessage_BatteryLowVoltage;
+			return WarningMessage_BatteryLowVoltage;
 		case WarningMessage::BatteryTemperature:
-		return WarningMessage_BatteryTemperature;
+			return WarningMessage_BatteryTemperature;
 		case WarningMessage::ControllerTemperature:
-		return WarningMessage_ControllerTemperature;
+			return WarningMessage_ControllerTemperature;
 		case WarningMessage::LVBattery:
-		return WarningMessage_LVBattery;
+			return WarningMessage_LVBattery;
 		case WarningMessage::MotorTemperature:
-		return WarningMessage_MotorTemperature;
+			return WarningMessage_MotorTemperature;
 		case WarningMessage::Precharge:
-		return WarningMessage_Precharge;
+			return WarningMessage_Precharge;
 		case WarningMessage::sbRIOTemperature:
-		return WarningMessage_sbRIOTemperature;
+			return WarningMessage_sbRIOTemperature;
 		case WarningMessage::IMD:
-		return WarningMessage_IMD;
+			return WarningMessage_IMD;
 		case WarningMessage::BSPD:
-		return WarningMessage_BSPD;
+			return WarningMessage_BSPD;
 		case WarningMessage::RemoteReturnToPits:
-		return WarningMessage_RemotePit;
+			return WarningMessage_RemotePit;
 		case WarningMessage::EStopInterrupted:
-		return WarningMessage_EStop;
+			return WarningMessage_EStop;
 		case WarningMessage::NoCellComms:
-		return WarningMessage_NoCellComms;
+			return WarningMessage_NoCellComms;
 		case WarningMessage::MCOverSpeed:
-		return WarningMessage_MCOverSpeed;
+			return WarningMessage_MCOverSpeed;
 		case WarningMessage::MCOverCurrent:
-		return WarningMessage_MCOverCurrent;
+			return WarningMessage_MCOverCurrent;
 		case WarningMessage::MCOverVoltage:
-		return WarningMessage_MCOverVoltage;
+			return WarningMessage_MCOverVoltage;
 		case WarningMessage::MCOverTemp:
-		return WarningMessage_MCOverTemp;
+			return WarningMessage_MCOverTemp;
 		case WarningMessage::MCDirectionCommand:
-		return WarningMessage_MCDirectionCommand;
+			return WarningMessage_MCDirectionCommand;
 		case WarningMessage::MCInverterResponseTimeout:
-		return WarningMessage_MCInverterResponseTimeout;
+			return WarningMessage_MCInverterResponseTimeout;
 		case WarningMessage::MCDesatFault:
-		return WarningMessage_MCDesatFault;
+			return WarningMessage_MCDesatFault;
 		case WarningMessage::MCHardwareOverCurrentFault:
-		return WarningMessage_MCHardwareOverCurrentFault;
+			return WarningMessage_MCHardwareOverCurrentFault;
 		case WarningMessage::MCUnderVoltage:
-		return WarningMessage_MCUnderVoltage;
+			return WarningMessage_MCUnderVoltage;
 		case WarningMessage::MCCommandMessageLost:
-		return WarningMessage_MCCommandMessageLost;
+			return WarningMessage_MCCommandMessageLost;
 		case WarningMessage::MCMotorOverTemp:
-		return WarningMessage_MCMotorOverTemp;
+			return WarningMessage_MCMotorOverTemp;
 		case WarningMessage::MCModAOverTemp:
-		return WarningMessage_MCModAOverTemp;
+			return WarningMessage_MCModAOverTemp;
 		case WarningMessage::MCModBOverTem:
-		return WarningMessage_MCModBOverTemp;
+			return WarningMessage_MCModBOverTemp;
 		case WarningMessage::MCModCOverTemp:
-		return WarningMessage_MCModCOverTemp;
+			return WarningMessage_MCModCOverTemp;
 		case WarningMessage::MCPCBOverTemp:
-		return WarningMessage_MCPCBOverTemp;
+			return WarningMessage_MCPCBOverTemp;
 		case WarningMessage::MCGateDrv1OverTemp:
-		return WarningMessage_MCGateDrv1OverTemp;
+			return WarningMessage_MCGateDrv1OverTemp;
 		case WarningMessage::MCGateDrv2OverTemp:
-		return WarningMessage_MCGateDrv2OverTemp;
+			return WarningMessage_MCGateDrv2OverTemp;
 		case WarningMessage::MCDateDrv3OverTemp:
-		return WarningMessage_MCGateDrv3OverTemp;
+			return WarningMessage_MCGateDrv3OverTemp;
 		case WarningMessage::MCCurrentSensorFault:
-		return WarningMessage_MCCurrentSensorFault;
+			return WarningMessage_MCCurrentSensorFault;
 		case WarningMessage::MCResolverNotConnected:
-		return WarningMessage_MCResolverNotConnected;
+			return WarningMessage_MCResolverNotConnected;
 		case WarningMessage::ShutdownLatchTripped:
-		return WarningMessage_ShutdownLatchTripped;
+			return WarningMessage_ShutdownLatchTripped;
 		case WarningMessage::UnknownBMS:
-		return WarningMessage_UnknownBMS;
+			return WarningMessage_UnknownBMS;
 		case WarningMessage::RemoteEmergency:
-		return WarningMessage_RemoteEmergency;
+			return WarningMessage_RemoteEmergency;
 	}
 	return WarningMessage_Invalid;
 }
