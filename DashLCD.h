@@ -10,7 +10,7 @@
 
 //variables should not be defined in header files
 //use extern... then define in DashLCD.cpp if they need to be used by other files
-// using static in header has the potential to create multiple copies of these variables
+// using static in header files will create multiple copies of these variables
 
 class DashLCD {
 public:
