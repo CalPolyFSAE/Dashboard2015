@@ -39,7 +39,7 @@ public:
 
 	enum class eBMSLastChargeError
 		: uint8_t {
-			NoError,
+		NoError,
 		NoCellCommunication,
 		NoCellCommunicationNoCAN,
 		ChargeDurationExceeded,
@@ -54,7 +54,7 @@ public:
 
 	enum class WarningMessage
 		: uint8_t {
-			ControllerTemperature,
+		ControllerTemperature,
 		MotorTemperature,
 		BatteryTemperature,
 		BatteryLowVoltage,

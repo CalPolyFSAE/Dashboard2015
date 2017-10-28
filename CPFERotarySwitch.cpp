@@ -13,6 +13,6 @@ volatile int8_t CPFERotarySwitch::currentRotaryADCConversion;
 volatile uint8_t CPFERotarySwitch::positions[NUM_ROTARYS];
 CPFEAVRAnalog CPFERotarySwitch::analogPins[NUM_ROTARYS];
 
-void rotarySwitchResultHandler(uint16_t result, void *info) {
-   CPFERotarySwitch::resultHandler(result, info);
+void rotarySwitchResultHandler( uint16_t result, void *info ) {
+    CPFERotarySwitch::resultHandler (result, info);
 }

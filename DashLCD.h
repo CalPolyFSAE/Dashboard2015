@@ -53,7 +53,7 @@ public:
 	//called by main loop
 	void updateDisplay();
 
-	//CAN recieve interrupt function
+	//CAN receive interrupt function
 	void CAN_RX_Int(CPFECANLib::MSG *msg, uint8_t mobNum);
 
 protected:
