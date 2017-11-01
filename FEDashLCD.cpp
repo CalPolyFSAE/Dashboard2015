@@ -205,6 +205,22 @@ PGM_P FEDashLCD::redRotaryString(int position) {
 	return (PGM_P) pgm_read_word(&(RotaryRedStringTable[position]));
 }
 
+//could put these draw functions into their own classes
+//This would allow common pages to be shared across the two cars
+//Also move the CAN Data structures into Dash Page classes
+//Page specific strings can be moved into same classes (contained within cpp file)
+//      or Page strings could be private static parts of Class definition in header
+//      then initialized in cpp file
+//
+//Only problem here would be the differing CAN data structures between the
+//two cars
+//      Could have a DashCharging class with Draw function and all data
+//      all data associated
+//      Then include some virtual functions for CAN Data extraction
+//      These are implemented in DashChargingFE and DashChargingFSAE (not used by FSAE)
+//
+//      DashCharging.h
+//Let the dash display code worry about the structure of the CAN data
 void FEDashLCD::charging() {
 	float TCellMax, TCellMin, VCellMax, VCellMin, TCellMean, VCellMean, VTotal, VChargerSetpoint, IChargerSetpoint, VChargerActual, IChargerActual;
 	

@@ -21,13 +21,12 @@ FSAEDashLCD dashLCD;
 #endif
 
 //interrupt for CAN timeout
-//fired by timer2, not CAN controller
 //63/sec
 SIGNAL(TIMER2_OVF_vect) {
 	dashLCD.TIMER2_OVF_INT();
 }
 
-//interrupt for CAN data recieved
+//interrupt for CAN data received
 void canRxIntFunc(CPFECANLib::MSG *msg, uint8_t mobNum) {
 	dashLCD.CAN_RX_Int(msg, mobNum);
 }
