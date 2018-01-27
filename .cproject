@@ -49,7 +49,7 @@
 							<tool id="de.innot.avreclipse.tool.linker.winavr.app.debug.2080967385" name="AVR C Linker" superClass="de.innot.avreclipse.tool.linker.winavr.app.debug"/>
 							<tool id="de.innot.avreclipse.tool.cpplinker.app.debug.114364297" name="AVR C++ Linker" superClass="de.innot.avreclipse.tool.cpplinker.app.debug">
 								<option id="de.innot.avreclipse.cpplinker.option.otherlinkargs.1530148396" name="Other Arguments" superClass="de.innot.avreclipse.cpplinker.option.otherlinkargs" value="-Wl,-u,vfprintf -lprintf_flt -lm" valueType="string"/>
-								<option id="de.innot.avreclipse.cpplinker.option.libs.72767793" name="Libraries (-l)" superClass="de.innot.avreclipse.cpplinker.option.libs" valueType="libs">
+								<option id="de.innot.avreclipse.cpplinker.option.libs.72767793" name="Libraries (-l)" superClass="de.innot.avreclipse.cpplinker.option.libs" useByScannerDiscovery="false" valueType="libs">
 									<listOptionValue builtIn="false" value="AVRLibrary"/>
 								</option>
 								<option id="de.innot.avreclipse.cpplinker.option.libpath.224704024" name="Libraries Path (-L)" superClass="de.innot.avreclipse.cpplinker.option.libpath" valueType="stringList">
