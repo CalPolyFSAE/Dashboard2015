@@ -77,26 +77,14 @@ public:
     virtual ~Subsystem() {}
 
     // get ref to singleton class of type T
-    static T& StaticClass()
-    {
-        // intentionally leak this object(not really important here)
-        // dynamic initialization (this will happen after static initialization)
-        static T* inst = new T{ };
-        return *inst;
-    }
+    static T& StaticClass();
 
 protected:
     //called to Initialize hardware
-    virtual void Init()
-    {
-        //do nothing
-    }
+    virtual void Init();
 
     // Update
-    virtual void Update()
-    {
-        //do nothing
-    }
+    virtual void Update();
 
     //variables
 public:
