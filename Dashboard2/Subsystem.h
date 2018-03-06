@@ -42,7 +42,6 @@ private:
     // have the subsystems been initialized
     bool bHaveSubInit = false;
 };
-extern SubsystemControl& Core;
 
 
 // type of all subsystems
@@ -71,7 +70,7 @@ public:
     {
         //keep track of all created subsystems
         // TODO: might want to replace this with SubsystemControl::StaticClass().RegisterSubsystem(*this)
-        Core.RegisterSubsystem(*this);
+        SubsystemControl::StaticClass().RegisterSubsystem(*this);
     }
 
     virtual ~Subsystem() {}

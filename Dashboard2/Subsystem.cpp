@@ -49,7 +49,7 @@ void SubsystemControl::InitSubsystems()
 SubsystemControl& SubsystemControl::StaticClass()
 {
     // dynamic initialization
-    static SubsystemControl* SC = new SubsystemControl{};
+    static SubsystemControl SC {};
     return *SC;
 }
 
