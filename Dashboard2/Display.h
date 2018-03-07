@@ -16,8 +16,8 @@ class DrawableScreen
 public:
     virtual ~DrawableScreen() {}
 
-    virtual void Draw() = 0;
-    virtual void UpdateDisplay() = 0;
+    virtual void Construct() = 0;
+    virtual void Update() = 0;
 };
 
 // Display Subsystem
