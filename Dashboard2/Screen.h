@@ -5,8 +5,8 @@
  *      Author: root
  */
 
-#ifndef DASHBOARD2_DISPLAY_H_
-#define DASHBOARD2_DISPLAY_H_
+#ifndef DASHBOARD2_SCREEN_H_
+#define DASHBOARD2_SCREEN_H_
 
 #include "Subsystem.h"
 
@@ -21,13 +21,17 @@ public:
 };
 
 // Display Subsystem
-class Display : public Subsystem<Display>
+// logic differers between cars
+class Screen : public Subsystem<Screen>
 {
 public:
-    Display();
-    virtual ~Display() {}
+    Screen();
+    virtual ~Screen() {}
 
 protected:
+
+    class DrawableScreen* screens[];
+
     // startup
     virtual void Init() override;
     //
@@ -38,4 +42,4 @@ private:
 
 
 
-#endif /* DASHBOARD2_DISPLAY_H_ */
+#endif /* DASHBOARD2_SCREEN_H_ */

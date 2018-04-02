@@ -36,7 +36,7 @@ public:
 private:
     SubsystemControl();
 
-    // AbstractSubsystem allows there to be arrays of the typed objects
+    // all subsystems
     class AbstractSubsystem* systems[NUMSUBSYSTEMS];
 
     // have the subsystems been initialized
@@ -45,7 +45,7 @@ private:
 
 
 // type of all subsystems
-// generalization for typed subsystem class
+// generalization for typed subsystem class for updating
 class AbstractSubsystem
 {
 public:
@@ -66,19 +66,17 @@ public:
     // this class needs to be able to call Update() and init
     friend class SubsystemControl;
 
-    Subsystem()
-    {
-        //keep track of all created subsystems
-        // TODO: might want to replace this with SubsystemControl::StaticClass().RegisterSubsystem(*this)
-        SubsystemControl::StaticClass().RegisterSubsystem(*this);
-    }
-
     virtual ~Subsystem() {}
 
     // get ref to singleton class of type T
-    static T& StaticClass();
+    inline static T& StaticClass();
 
 protected:
+    Subsystem() {
+        //keep track of all created subsystems
+        SubsystemControl::StaticClass ().RegisterSubsystem (*this);
+    }
+
     //called to Initialize hardware
     virtual void Init();
 
@@ -89,6 +87,26 @@ protected:
 public:
 
 };
+
+/////////////////////////
+
+template<class T>
+T& Subsystem<T>::StaticClass() {
+    static T inst {};
+    return inst;
+}
+
+template<class T>
+void Subsystem<T>::Init()
+{
+    //do nothing
+}
+
+template<class T>
+void Subsystem<T>::Update()
+{
+    //do nothing
+}
 
 
 #endif /* DASHBOARD2_SUBSYSTEM_H_ */

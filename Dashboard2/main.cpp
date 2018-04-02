@@ -5,16 +5,17 @@
  *      Author: root
  */
 
+#include "Screen.h"
 #include "Subsystem.h"
-#include "Display.h"
 
+#include "Delegate.h"
 
 int main0()
 {
     // initialize Subsystems
-    Display& Screen = Display::StaticClass();
+    Screen& ScreenS = Screen::StaticClass();
 
-    Core.InitSubsystems();
+    //Core.InitSubsystems();
 
     return 0;
 }

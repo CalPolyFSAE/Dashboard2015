@@ -48,41 +48,19 @@ void SubsystemControl::InitSubsystems()
 //get instance
 SubsystemControl& SubsystemControl::StaticClass()
 {
-    // dynamic initialization
     static SubsystemControl SC {};
-    return *SC;
+    return SC;
 }
 
 // private
 
 SubsystemControl::SubsystemControl()
 {
-    //don't do anything with global variables here
+
 }
 
 ///////////////////////////////
 ///
 //////////////////////////////
-
-template<class T>
-T& Subsystem<T>::StaticClass() {
-    // intentionally leak this object(not really important here)
-    // dynamic initialization (this will happen after static initialization)
-    static T* inst = new T
-        { };
-    return *inst;
-}
-
-template<class T>
-void Subsystem<T>::Init()
-{
-    //do nothing
-}
-
-template<class T>
-void Subsystem<T>::Update()
-{
-    //do nothing
-}
 
 
