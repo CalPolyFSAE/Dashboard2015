@@ -12,6 +12,10 @@
 #include "Delegate.h"
 #include "stdint.h"
 
+// TODO merge with SubsystemControl
+// TODO make updates in Subsystems based on delegate events?
+// TODO add bDoTick to Subsystems to activate/deactivate timed update calls
+
 class RunStateControl
 {
 public:

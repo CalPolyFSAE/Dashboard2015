@@ -50,6 +50,8 @@ class AbstractSubsystem
 {
 public:
     virtual ~AbstractSubsystem() {} // virtual destructors always need definition
+
+protected:
     virtual void Update() = 0;
     virtual void Init() = 0;
 };
@@ -59,6 +61,7 @@ public:
 // allows for overriding of static methods
 // this is Curiously Recursive Template Pattern (CRTP)
 // https://stackoverflow.com/questions/34222703/how-to-override-static-method-of-template-class-in-derived-class
+// TODO Add variadic Init function
 template<class T>
 class Subsystem : public AbstractSubsystem
 {

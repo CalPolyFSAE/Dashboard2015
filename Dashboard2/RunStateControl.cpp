@@ -15,7 +15,13 @@ RunStateControl::RunStateControl() :
 
 void RunStateControl::MainLoop()
 {
-
+    for(uint8_t i = 0; i < CONFIG::RSCMAXJOBS; ++i)
+    {
+        if (TimeControl[i] != nullptr)
+        {
+            TimeControl[i]->Update ();
+        }
+    }
 }
 
 void RunStateControl::INT_CALL_TickAllTC()

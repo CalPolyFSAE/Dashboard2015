@@ -12,10 +12,6 @@
 #include <avr/interrupt.h>
 #include <util/atomic.h>
 
-
-/////////Template implementations//////////
-// these have to be in the header
-
 ADCManagerCallbackInterface* ADCManager::currentReadCallback = nullptr;
 
 uint8_t ADCManager::channel = 0;
