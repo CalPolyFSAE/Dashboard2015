@@ -25,12 +25,37 @@ uint8_t SubsystemControl::RegisterSubsystem(AbstractSubsystem& sys)
     return 1;
 }
 
-void SubsystemControl::UpdateSubsystems()
+void SubsystemControl::MainLoop()
 {
-    for (uint8_t i = 0; i < NUMSUBSYSTEMS; ++i)
+    for(uint8_t i = 0; i < CONFIG::RSCMAXJOBS; ++i)
     {
-        systems[i]->Update ();
+        if (TimeControl[i] != nullptr)
+        {
+            TimeControl[i]->Update ();
+        }
     }
+}
+
+void SubsystemControl::INT_CALL_TickAllTC()
+{
+    for (uint8_t i = 0; i < CONFIG::RSCMAXJOBS; ++i)
+    {
+        if (TimeControl[i] != nullptr)
+        {
+            TimeControl[i]->INT_Call_Tick();
+        }
+    }
+}
+
+int8_t SubsystemControl::RegisterEvent(delegate const& Event, uint16_t Interval)
+{
+    int8_t slot = getNextFreeTC();
+    if(slot >= 0)
+    {
+        TimeControl[slot] = new TC(Event, Interval);
+        return slot;
+    }else
+        return -1;
 }
 
 void SubsystemControl::InitSubsystems()
@@ -57,6 +82,18 @@ SubsystemControl& SubsystemControl::StaticClass()
 SubsystemControl::SubsystemControl()
 {
 
+}
+
+int8_t SubsystemControl::getNextFreeTC()
+{
+    for (uint8_t i = 0; i < CONFIG::RSCMAXJOBS; ++i)
+    {
+        if (TimeControl[i] == nullptr)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 ///////////////////////////////

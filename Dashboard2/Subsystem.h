@@ -9,6 +9,8 @@
 #define DASHBOARD2_SUBSYSTEM_H_
 
 #include <stdint.h>
+#include "Delegate.h"
+#include "Dashboard2.h"
 
 //number of subsystem slots available
 #define NUMSUBSYSTEMS 10
@@ -20,8 +22,17 @@ public:
     // register a subsystem for updating
     uint8_t RegisterSubsystem(class AbstractSubsystem&);
 
-    // updates the subsystems
-    void UpdateSubsystems();
+    void MainLoop();
+
+    // 1000 Hz timing tick
+    void INT_CALL_TickAllTC();
+
+    // registers an Event to run every Interval ms
+    // there is no task scheduling, so no gaurentee that event will fire
+    // at specified interval
+    int8_t RegisterEvent(delegate const& Event, uint16_t Interval);
+
+    //bool UnregisterEvent(int8_t Eventslot)
 
     // inits the subsystems
     void InitSubsystems();
@@ -41,6 +52,41 @@ private:
 
     // have the subsystems been initialized
     bool bHaveSubInit = false;
+
+    // private class for controlling timing
+    struct TC
+    {
+        TC( const delegate& f, uint16_t Interval ) :
+                func (f), Interval(Interval), ready(false), count(0){
+
+        }
+
+        inline void INT_Call_Tick() {
+            if(count == 0) {
+                count = Interval;
+                ready = true;
+            }else
+                --count;
+        }
+
+        inline void Update()
+        {
+            if(ready){
+                ready = false;
+                func(0);
+            }
+        }
+
+        delegate func;
+        uint16_t Interval;
+
+        volatile bool ready = false;
+        volatile uint16_t count;
+    };
+
+    TC* TimeControl[CONFIG::RSCMAXJOBS];
+
+    int8_t getNextFreeTC();
 };
 
 
@@ -49,6 +95,8 @@ private:
 class AbstractSubsystem
 {
 public:
+    friend class SubsystemControl;
+
     virtual ~AbstractSubsystem() {} // virtual destructors always need definition
 
 protected:
@@ -61,7 +109,6 @@ protected:
 // allows for overriding of static methods
 // this is Curiously Recursive Template Pattern (CRTP)
 // https://stackoverflow.com/questions/34222703/how-to-override-static-method-of-template-class-in-derived-class
-// TODO Add variadic Init function
 template<class T>
 class Subsystem : public AbstractSubsystem
 {
@@ -75,19 +122,20 @@ public:
     inline static T& StaticClass();
 
 protected:
-    Subsystem() {
-        //keep track of all created subsystems
-        SubsystemControl::StaticClass ().RegisterSubsystem (*this);
-    }
+
+    // has this subsystem been initialized
+    bool bDidInit = false;
+    // Interval that Update should run at (in ms)
+    const uint16_t Interval;
+
+    Subsystem(uint16_t Interval);
 
     //called to Initialize hardware
     virtual void Init();
 
     // Update
-    virtual void Update();
-
-    //variables
-public:
+    // TODO make Fdelegate template to match func of type void (T::*)(void)
+    virtual void Update(uint8_t);
 
 };
 
@@ -100,13 +148,25 @@ T& Subsystem<T>::StaticClass() {
 }
 
 template<class T>
-void Subsystem<T>::Init()
+Subsystem<T>::Subsystem(uint16_t Interval) :
+    Interval(Interval)
 {
-    //do nothing
+    //keep track of all created subsystems
+    SubsystemControl::StaticClass ().RegisterSubsystem (*this);
+    // create an event for Update if Interval is not zero
+    if(Interval > 0)
+        SubsystemControl::StaticClass().RegisterEvent(
+                delegate::from_method<Subsystem<T>, &Subsystem<T>::Update>(this), Interval);
 }
 
 template<class T>
-void Subsystem<T>::Update()
+void Subsystem<T>::Init()
+{
+    bDidInit = true;
+}
+
+template<class T>
+void Subsystem<T>::Update(uint8_t)
 {
     //do nothing
 }

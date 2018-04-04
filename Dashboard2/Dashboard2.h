@@ -13,8 +13,21 @@
 //TODO: config stuff
 namespace CONFIG
 {
-    // max number of jobs the RunStateControl Timing system can have
+    // max number of jobs the Timing system can have
     constexpr uint8_t RSCMAXJOBS = 15;
+
+    // input channels
+    constexpr uint8_t INPUT_BUTTON0 = 0;
+    constexpr uint8_t INPUTS[] =
+        {
+            INPUT_BUTTON0
+        };
+
+    constexpr uint8_t ADCINPUT0 = 0;
+    constexpr uint8_t ACDINPUTS[] =
+        {
+            ADCINPUT0
+        };
 }
 
 

@@ -8,7 +8,8 @@
 #ifndef DASHBOARD2_DELEGATE_H_
 #define DASHBOARD2_DELEGATE_H_
 
-/*
+#ifdef USE_FDELEGATE
+
 template<typename T, typename MemFunPtrType>
 class MemberFunctionCaller
 {
@@ -27,11 +28,37 @@ public:
     {
         return (Obj->*MemFunPtr)(Args...);
     }
-};*/
+};
+
+template<typename T>
+T&& Forward()
+{
+
+}
+
+
+template<class UserClass, typename RetType, typename... VarTypes>
+class Fdelegate
+{
+public:
+    typedef RetType (UserClass::* MemFuncPtr)(VarTypes...);
+
+    Fdelegate(UserClass* InObj, MemFuncPtr InFunc)
+    {
+
+    }
+
+    RetType operator()()
+
+};
+
+#endif // USE_FDELEGATE
 
 /* Use
- *     A a {};
-    MemberFunctionCaller<A, void (A::*)(int, int)> CC(&a, &A::foo);
+ *     A a {
+ *         foo(int, int)
+ *     };
+ *     MemberFunctionCaller<A, void (A::*)(int, int)> CC(&a, &A::foo);
     CC(1, 2);
  * */
 
@@ -44,14 +71,6 @@ public:
     delegate() :
             object_ptr (0), stub_ptr (0) {
     }
-
-    /* ADDITION TO FUNCTIONALITY
-    template<class T, void (T::* TMethod)( int )>
-        delegate(T* obj) :
-                object_ptr(obj), stub_ptr(&method_stub<T, TMethod>) {
-
-        }
-        */
 
     template<class T, void (T::*TMethod)( uint8_t )>
         static delegate from_method( T* object_ptr ) {

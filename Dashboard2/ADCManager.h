@@ -47,7 +47,9 @@ public:
     void INT_ADCFinished();
 
 private:
-    ADCManager() {}
+    ADCManager() :
+        Subsystem(0)// no update event
+    {}
 
     //setup registers for ADC
     virtual void Init() override;

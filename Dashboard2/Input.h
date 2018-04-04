@@ -10,14 +10,20 @@
 
 #include "Subsystem.h"
 #include "ADCManager.h"
+#include "Dashboard2.h"
 
+
+// TODO make ADCManagerCallbackInterface use delegates
 class Input : public Subsystem<Input>, ADCManagerCallbackInterface
 {
 public:
 
-    virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read
+    virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read on complete
 
 protected:
+    Input() :
+        Subsystem(10)
+    {}
 
     // TODO add list of ADC channels to read and corresponding input channel
 
