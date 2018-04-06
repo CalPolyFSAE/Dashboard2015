@@ -10,6 +10,13 @@
 
 #ifdef USE_FDELEGATE
 
+// wrapper for type of a Member function
+template<class UserClass, typename RetType, typename... VarTypes>
+struct WMemFuncPrtType
+{
+    typedef RetType (UserClass::* Type)(VarTypes...);
+};
+
 template<typename T, typename MemFunPtrType>
 class MemberFunctionCaller
 {
@@ -41,15 +48,28 @@ template<class UserClass, typename RetType, typename... VarTypes>
 class Fdelegate
 {
 public:
-    typedef RetType (UserClass::* MemFuncPtr)(VarTypes...);
+    typedef WMemFuncPtrType<UserClass, RetType, VarTypes> MemFuncPtr;
 
     Fdelegate(UserClass* InObj, MemFuncPtr InFunc)
     {
 
     }
 
-    RetType operator()()
+    RetType operator()()// TODO forward
 
+};
+
+template<typename RetType, typename... VarTypes>
+class LDelegate
+{
+public:
+    LDelegate()
+
+    template<class UserClass>
+    static d Create(Userclass Object, WMemFuncPtrType<UserClass, RetType, VarTypes...> InFunc)
+    {
+        ...
+    }
 };
 
 #endif // USE_FDELEGATE

@@ -16,18 +16,39 @@ namespace CONFIG
     // max number of jobs the Timing system can have
     constexpr uint8_t RSCMAXJOBS = 15;
 
-    // input channels
-    constexpr uint8_t INPUT_BUTTON0 = 0;
-    constexpr uint8_t INPUTS[] =
-        {
-            INPUT_BUTTON0
-        };
+    // timing interval for Input (ms)
+    constexpr uint8_t INPUTINTERVAL = 10;
 
-    constexpr uint8_t ADCINPUT0 = 0;
+    // input channels
+    constexpr uint8_t BUTTON0 = 0;
+    constexpr uint8_t BUTTON1 = 0;
+    constexpr uint8_t BUTTON2 = 0;
+    constexpr uint8_t BUTTON3 = 0;
+    constexpr uint8_t INPUTS[] =
+    {
+        BUTTON0,
+        BUTTON1,
+        BUTTON2,
+        BUTTON3
+    };
+    constexpr uint8_t INPUTS_SIZE = 4;
+
+
+    // rotary switch configs
+    constexpr uint8_t RED_ADC = 1;
+    constexpr uint8_t YELLOW_ADC = 0;
+    constexpr uint8_t BLACK_ADC = 2;
+
     constexpr uint8_t ACDINPUTS[] =
-        {
-            ADCINPUT0
-        };
+    {
+        RED_ADC,
+        YELLOW_ADC,
+        BLACK_ADC
+    };
+    constexpr uint8_t ADCINPUTS_SIZE = 3;
+
+    constexpr uint8_t ROTARYPOSITIONS = 12;
+
 }
 
 

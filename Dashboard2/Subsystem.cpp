@@ -12,6 +12,35 @@
 // SubsystemControl
 /////////////////////////////////////////////////
 
+struct SubsystemControl::TC
+{
+    TC( const delegate& f, uint16_t Interval ) :
+            func (f), Interval(Interval), ready(false), count(0){
+    }
+
+    inline void INT_Call_Tick() {
+        if(count == 0) {
+            count = Interval;
+            ready = true;
+        }else
+            --count;
+    }
+
+    inline void Update()
+    {
+        if(ready){
+            ready = false;
+            func(0);
+        }
+    }
+
+    delegate func;
+    uint16_t Interval;
+
+    volatile bool ready = false;
+    volatile uint16_t count;
+};
+
 uint8_t SubsystemControl::RegisterSubsystem(AbstractSubsystem& sys)
 {
     for(uint8_t i = 0; i < NUMSUBSYSTEMS; ++i)

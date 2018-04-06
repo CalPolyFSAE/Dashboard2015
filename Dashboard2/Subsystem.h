@@ -54,35 +54,7 @@ private:
     bool bHaveSubInit = false;
 
     // private class for controlling timing
-    struct TC
-    {
-        TC( const delegate& f, uint16_t Interval ) :
-                func (f), Interval(Interval), ready(false), count(0){
-
-        }
-
-        inline void INT_Call_Tick() {
-            if(count == 0) {
-                count = Interval;
-                ready = true;
-            }else
-                --count;
-        }
-
-        inline void Update()
-        {
-            if(ready){
-                ready = false;
-                func(0);
-            }
-        }
-
-        delegate func;
-        uint16_t Interval;
-
-        volatile bool ready = false;
-        volatile uint16_t count;
-    };
+    struct TC;
 
     TC* TimeControl[CONFIG::RSCMAXJOBS];
 
@@ -154,6 +126,7 @@ Subsystem<T>::Subsystem(uint16_t Interval) :
     //keep track of all created subsystems
     SubsystemControl::StaticClass ().RegisterSubsystem (*this);
     // create an event for Update if Interval is not zero
+    // this allows the update function to run on the same event structure that other timed events are using
     if(Interval > 0)
         SubsystemControl::StaticClass().RegisterEvent(
                 delegate::from_method<Subsystem<T>, &Subsystem<T>::Update>(this), Interval);
