@@ -8,6 +8,10 @@
 #ifndef DASHBOARD2_SUBSYSTEM_H_
 #define DASHBOARD2_SUBSYSTEM_H_
 
+// TODO TESTING
+#include "AVRLibrary/arduino/Arduino.h"
+///////////////
+
 #include <stdint.h>
 #include "Delegate.h"
 #include "Dashboard2.h"
@@ -136,6 +140,10 @@ template<class T>
 void Subsystem<T>::Init()
 {
     bDidInit = true;
+
+    Serial.print("Subsystem Init at: ");
+    Serial.print(Interval);
+    Serial.println(" ms.");
 }
 
 template<class T>

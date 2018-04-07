@@ -44,10 +44,14 @@ void Input::Update()
     }
 
     // TODO buttons array onChange
+    // start next read cycle
+    ADCManager::StaticClass().StartRead(this, CONFIG::ACDINPUTS[0]);
 }
 
 void Input::Init()
 {
+    Subsystem<Input>::Init();// important
+
     while(!ADCManager::StaticClass().ADCAvailable())
         ;// wait for ADCManager to be available
     ADCManager::StaticClass().StartRead(this, CONFIG::ACDINPUTS[0]);

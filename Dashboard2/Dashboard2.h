@@ -19,12 +19,17 @@ namespace CONFIG
     // timing interval for Input (ms)
     constexpr uint8_t INPUTINTERVAL = 10;
 
+
+    // INPUTS:
+    // port and pin is the register and bit position that should be read for
+    // pin state
+    #define BUTTON(port, pin) = port & _BV(pin)>>8
     // input channels
-    constexpr uint8_t BUTTON0 = 0;
-    constexpr uint8_t BUTTON1 = 0;
-    constexpr uint8_t BUTTON2 = 0;
-    constexpr uint8_t BUTTON3 = 0;
-    constexpr uint8_t INPUTS[] =
+    constexpr uint16_t BUTTON0 = 0x0000;
+    constexpr uint16_t BUTTON1 = 0x0000;
+    constexpr uint16_t BUTTON2 = 0x0000;
+    constexpr uint16_t BUTTON3 = 0x0000;
+    constexpr uint16_t INPUTS[] =
     {
         BUTTON0,
         BUTTON1,
