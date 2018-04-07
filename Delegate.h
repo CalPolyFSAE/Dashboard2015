@@ -85,6 +85,7 @@ public:
 //from
 // https://www.codeproject.com/Articles/13287/Fast-C-Delegate
 // TODO: Switch over to member function caller^^^
+// always check that the delegate is valid before executing it
 class delegate
 {
 public:
@@ -101,10 +102,12 @@ public:
             return d;
         }
 
+    // WARNING, this will return null functions
     inline void operator()( uint8_t a1 ) const {
         return (*stub_ptr) (object_ptr, a1);
     }
 
+    // only checks that this delegate is not default initialized
     static inline bool isValid(const delegate& d)
     {
         return (bool)(d.object_ptr);

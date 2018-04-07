@@ -26,7 +26,7 @@ struct SubsystemControl::TC
             --count;
     }
 
-    inline void Update()
+    inline void UpdateIfReady()
     {
         if(ready){
             ready = false;
@@ -60,7 +60,7 @@ void SubsystemControl::MainLoop()
     {
         if (TimeControl[i] != nullptr)
         {
-            TimeControl[i]->Update ();
+            TimeControl[i]->UpdateIfReady ();
         }
     }
 }
@@ -93,9 +93,11 @@ void SubsystemControl::InitSubsystems()
     {
         for (uint8_t i = 0; i < NUMSUBSYSTEMS; ++i)
         {
-            systems[i]->Init ();
+            if(systems[i] != nullptr)
+                systems[i]->Init ();
         }
         bHaveSubInit = true;
+        Serial.println(FSTR("InitSubsystems Completed"));
     }
 }
 

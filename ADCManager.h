@@ -36,6 +36,7 @@ protected:
 class ADCManager : public Subsystem<ADCManager>
 {
 public:
+    friend class Subsystem<ADCManager>;
 
     //start an ADC read
     bool StartRead(ADCManagerCallbackInterface* resultHandler, uint8_t channel);
@@ -46,7 +47,7 @@ public:
     //do not call. used to handle the ADC read result
     void INT_ADCFinished();
 
-private:
+protected:
     ADCManager() :
         Subsystem(0)// no update event
     {}

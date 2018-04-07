@@ -18,28 +18,36 @@
 class Input : public Subsystem<Input>, ADCManagerCallbackInterface
 {
 public:
+    friend class Subsystem<Input>;// this is necessary for StaticClass function
 
     virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read on complete
 
 protected:
 
+    // ADC states
     volatile uint16_t rotaryADCValues[CONFIG::ADCINPUTS_SIZE];// raw ADC values
     uint8_t rotaryPositions[CONFIG::ADCINPUTS_SIZE];// calculated positions
 
+    // last button states
+    bool buttonPositions[CONFIG::INPUTS_SIZE];
+
     // callbacks for bound input functions
     delegate rotaryOnChange[CONFIG::ADCINPUTS_SIZE];
+    delegate buttonOnChange[CONFIG::INPUTS_SIZE];
 
 
     Input() :
         Subsystem(CONFIG::INPUTINTERVAL),
         rotaryADCValues{},
         rotaryPositions{},
-        rotaryOnChange{}
+        buttonPositions{},
+        rotaryOnChange{},
+        buttonOnChange{}
     {}
 
     // TODO add list of ADC channels to read and corresponding input channel
 
-    virtual void Update() override;// start ADC read
+    virtual void Update(uint8_t) override;// start ADC read
     virtual void Init() override;
 
     // gets position from rawADC value

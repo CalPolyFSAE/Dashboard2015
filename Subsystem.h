@@ -76,7 +76,7 @@ public:
     virtual ~AbstractSubsystem() {} // virtual destructors always need definition
 
 protected:
-    virtual void Update() = 0;
+    virtual void Update(uint8_t) = 0;
     virtual void Init() = 0;
 };
 
@@ -107,11 +107,11 @@ protected:
     Subsystem(uint16_t Interval);
 
     //called to Initialize hardware
-    virtual void Init();
+    virtual void Init() override;
 
     // Update
     // TODO make Fdelegate template to match func of type void (T::*)(void)
-    virtual void Update(uint8_t);
+    virtual void Update(uint8_t) override;
 
 };
 
@@ -141,9 +141,9 @@ void Subsystem<T>::Init()
 {
     bDidInit = true;
 
-    Serial.print("Subsystem Init at: ");
+    Serial.print(FSTR("Subsystem Init: Interval "));
     Serial.print(Interval);
-    Serial.println(" ms.");
+    Serial.println(FSTR(" ms."));
 }
 
 template<class T>

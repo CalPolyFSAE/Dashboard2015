@@ -9,6 +9,18 @@
 #define DASHBOARD2_DASHBOARD2_H_
 
 #include "stdint.h"
+#include "avr/iocanxx.h"
+
+#define VERSION 002
+
+
+// a string helper that replaces the Arduino F macro and maintains const
+class __FlashStringHelper;
+#define FSTR(string_literal) (reinterpret_cast<const __FlashStringHelper*>(PSTR(string_literal)))
+
+// port and pin is the register and bit position that should be read for
+// pin state
+#define BUTTON(port, pin) {(uint16_t)(((uint8_t)&port)<<8 | _BV(pin))}
 
 //TODO: config stuff
 namespace CONFIG
@@ -16,19 +28,15 @@ namespace CONFIG
     // max number of jobs the Timing system can have
     constexpr uint8_t RSCMAXJOBS = 15;
 
+    // INPUTS:
     // timing interval for Input (ms)
     constexpr uint8_t INPUTINTERVAL = 10;
 
-
-    // INPUTS:
-    // port and pin is the register and bit position that should be read for
-    // pin state
-    #define BUTTON(port, pin) = port & _BV(pin)>>8
     // input channels
-    constexpr uint16_t BUTTON0 = 0x0000;
-    constexpr uint16_t BUTTON1 = 0x0000;
-    constexpr uint16_t BUTTON2 = 0x0000;
-    constexpr uint16_t BUTTON3 = 0x0000;
+    constexpr uint16_t BUTTON0 = BUTTON(PORTA, 0);
+    constexpr uint16_t BUTTON1 = BUTTON(PORTA, 1);
+    constexpr uint16_t BUTTON2 = BUTTON(PORTA, 2);
+    constexpr uint16_t BUTTON3 = BUTTON(PORTA, 3);
     constexpr uint16_t INPUTS[] =
     {
         BUTTON0,
@@ -55,6 +63,5 @@ namespace CONFIG
     constexpr uint8_t ROTARYPOSITIONS = 12;
 
 }
-
 
 #endif /* DASHBOARD2_DASHBOARD2_H_ */

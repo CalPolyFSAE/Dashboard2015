@@ -1,41 +1,53 @@
-/*
- * main.cpp
- *
- *  Created on: Apr 5, 2015
- *      Author: thomaswillson
- */
+
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 
-#include <AVRLibrary/arduino/Arduino.h>
+#include "AVRLibrary/arduino/Arduino.h"
+
+#include "Screen.h"
+#include "Subsystem.h"
+#include "Input.h"
+
+#include "Delegate.h"
 
 #define TEAM FSAE //Other: FSAE
 
-#if TEAM==FE
-#include "FEDashLCD.h"
-FEDashLCD dashLCD;
-#else
-#include "FSAEDashLCD.h"
-FSAEDashLCD dashLCD;
-#endif
+void timer1_init() {
+    TCCR1B |= (1 << WGM12) | (1 << CS11); //set timer 1 to CTC mode and prescaler 8
+    TCNT1 = 0; //initialize counter
+    OCR1A = 1999; //This sets interrupt to 1000Hz: [((16MHz/8)(0.001s))-1]
+    TIMSK1 |= (1 << OCIE1A); //enable compare interrupt
+}
+
+//interrupt function for timing
+ISR(TIMER1_COMPA_vect) {
+    SubsystemControl::StaticClass().INT_CALL_TickAllTC();
+}
 
 //interrupt for CAN timeout
 //63/sec
-SIGNAL(TIMER2_OVF_vect) {
-	dashLCD.TIMER2_OVF_INT();
-}
+//SIGNAL(TIMER2_OVF_vect) {
 
-//interrupt for CAN data received
-void canRxIntFunc(CPFECANLib::MSG *msg, uint8_t mobNum) {
-	dashLCD.CAN_RX_Int(msg, mobNum);
-}
+//}
+
 
 int main() {
-	init(); //Arduino Timer Initialization, uses Timer 0 for millis() and other timing functions.
-	dashLCD.init(&canRxIntFunc);
+    Serial.begin (9600);
+    Serial.println ("DASHBOARD");
+    Serial.print ("VERSION: ");
+    Serial.println (VERSION);
 
-	while (1) {
-		dashLCD.updateDisplay();
-	}
+    timer1_init();
+
+    // initialize Subsystems
+    //Screen& ScreenS = Screen::StaticClass();
+
+    Input& input = Input::StaticClass ();
+
+    SubsystemControl::StaticClass().InitSubsystems();
+
+    while(1)
+    {
+        SubsystemControl::StaticClass().MainLoop();
+    }
 }
