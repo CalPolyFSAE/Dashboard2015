@@ -20,6 +20,12 @@ class Input : public Subsystem<Input>, ADCManagerCallbackInterface
 public:
     friend class Subsystem<Input>;// this is necessary for StaticClass function
 
+    // attach callback to button
+    int8_t BindOnChangeButton(const delegate& func);
+
+    // attach callback to rotary
+    int8_t BindOnChangeRotary(const delegate& func);
+
     virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read on complete
 
 protected:

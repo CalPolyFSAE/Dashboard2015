@@ -13,6 +13,11 @@
 
 #define VERSION 002
 
+// uncomment to print version info through serial on startup
+#define PRINT_VERSION_INFO
+
+// uncomment to print extra information while running
+#define DEBUG_PRINT
 
 // a string helper that replaces the Arduino F macro and maintains const
 class __FlashStringHelper;

@@ -7,6 +7,7 @@
 #include "Screen.h"
 #include "Subsystem.h"
 #include "Input.h"
+#include "CANLib.h"
 
 #include "Delegate.h"
 
@@ -33,18 +34,27 @@ ISR(TIMER1_COMPA_vect) {
 
 int main() {
     Serial.begin (9600);
-    Serial.println ("DASHBOARD");
-    Serial.print ("VERSION: ");
+    Serial.println (FSTR("DASHBOARD"));
+#ifdef PRINT_VERSION_INFO
+    Serial.print (FSTR("VERSION: "));
     Serial.println (VERSION);
+    Serial.println(FSTR(__DATE__));
+#endif // PRINT_VERSION_INFO
+
+    cli();
 
     timer1_init();
 
-    // initialize Subsystems
-    //Screen& ScreenS = Screen::StaticClass();
+    CANRaw& CAN = CANRaw::StaticClass();// this is not a subsystem
+    CAN.Init(CANRaw::CAN_BAUDRATE::B1M);// set baudrate
 
+    // create Subsystems
+    Screen& screen = Screen::StaticClass ();
     Input& input = Input::StaticClass ();
 
     SubsystemControl::StaticClass().InitSubsystems();
+
+    sei();
 
     while(1)
     {

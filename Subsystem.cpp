@@ -94,10 +94,24 @@ void SubsystemControl::InitSubsystems()
         for (uint8_t i = 0; i < NUMSUBSYSTEMS; ++i)
         {
             if(systems[i] != nullptr)
+            {
                 systems[i]->Init ();
+#ifdef DEBUG_PRINT
+                if(!systems[i]->bDidInit)
+                {
+                    Serial.print(FSTR("[DEBUG]: "));
+                    Serial.print(__FILE__);
+                    Serial.print(FSTR(" at "));
+                    Serial.print(__LINE__);
+                    Serial.print(FSTR(": Subsystem failed to initialize"));
+                }
+#endif
+            }
         }
         bHaveSubInit = true;
+#ifdef DEBUG_PRINT
         Serial.println(FSTR("InitSubsystems Completed"));
+#endif // DEBUG_PRINT
     }
 }
 
