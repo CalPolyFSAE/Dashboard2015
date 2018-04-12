@@ -11,6 +11,8 @@
 #include "Subsystem.h"
 #include "CANLib.h"
 
+#include "FTDI _V1/FT_VM801P43_50.h"
+
 // what info gets drawn to the screen
 class DrawableScreen
 {
@@ -43,6 +45,14 @@ protected:
     // used for input OnChange callback
     virtual void OnButtonInputChange(int8_t) {}
 
+    // get copy of volatile FrameData
+    void GetHeaderData(CANRaw::CAN_FRAME_HEADER& outh);
+    // get copy of volatile Data
+    void GetData(CANRaw::CAN_DATA& outd);
+
+    // Lcd control
+    FT801IMPL_SPI LCD;
+
 private:
 
     // called on Can rx for Mob. Get received data with GetCANData()
@@ -55,9 +65,14 @@ private:
     void OnInputADC(uint8_t);
     void OnInputTOG(uint8_t);
 
+    // logo upload
+    void uploadLogoToController();
+
     // data from the last CAN frame
     volatile CANRaw::CAN_FRAME_HEADER header;
     volatile CANRaw::CAN_DATA data;
+
+    static const uint8_t PROGMEM CPRacingLogo[];
 
 };
 

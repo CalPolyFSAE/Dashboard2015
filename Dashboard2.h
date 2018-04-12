@@ -19,6 +19,9 @@
 // uncomment to print extra information while running
 #define DEBUG_PRINT
 
+// serial baudrate
+#define SERIAL_BAUD 9600
+
 // a string helper that replaces the Arduino F macro and maintains const
 class __FlashStringHelper;
 #define FSTR(string_literal) (reinterpret_cast<const __FlashStringHelper*>(PSTR(string_literal)))

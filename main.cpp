@@ -33,7 +33,7 @@ ISR(TIMER1_COMPA_vect) {
 
 
 int main() {
-    Serial.begin (9600);
+    Serial.begin (SERIAL_BAUD);
     Serial.println (FSTR("DASHBOARD"));
 #ifdef PRINT_VERSION_INFO
     Serial.print (FSTR("VERSION: "));

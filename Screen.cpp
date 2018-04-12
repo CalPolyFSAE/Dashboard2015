@@ -8,7 +8,6 @@
 #include "Screen.h"
 #include "Input.h"
 
-
 // PROTECTED
 Screen::Screen() :
     Subsystem<Screen>(16)// 16ms update interval
@@ -22,7 +21,8 @@ void Screen::Init()
     Subsystem<Screen>::Init();
 
     // set up graphics controller
-
+    LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
+    LCD.DisplayOn();
 
     // hook up callbacks
     Input::StaticClass().BindOnChangeButton(delegate::from_method<Screen, &Screen::OnInputTOG>(this));
@@ -36,7 +36,31 @@ void Screen::Update(uint8_t)
     Subsystem<Screen>::Update(0);
 }
 
+// get copy of volatile FrameData
+void Screen::GetHeaderData(CANRaw::CAN_FRAME_HEADER& outh)
+{
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        // const_cast will cast away volatility
+        outh = *const_cast<CANRaw::CAN_FRAME_HEADER*>(&header);
+    }
+}
+// get copy of volatile Data
+void Screen::GetData(CANRaw::CAN_DATA& outd)
+{
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        // what the fk
+        // const_cast will cast away volatility
+        outd = *const_cast<CANRaw::CAN_DATA*>(&data);
+    }
+}
+
 // PRIVATE
+
+const uint8_t PROGMEM Screen::CPRacingLogo[] = {
+#include "GraphicsAssets/CPRacingLogo.inc"
+};
 
 // called on Can rx for Mob. Get received data with GetCANData()
 // dlc is the data length code of the received message. It may be different
@@ -57,6 +81,19 @@ void Screen::OnInputADC(uint8_t pos)
 void Screen::OnInputTOG(uint8_t pos)
 {
     OnButtonInputChange(pos);
+}
+
+void Screen::uploadLogoToController() {
+    LCD.Cmd_Inflate (108676);
+    LCD.WriteCmdfromflash (CPRacingLogo, sizeof(CPRacingLogo));
+    LCD.Finish ();
+    LCD.DLStart ();
+    LCD.BitmapHandle (0);
+    LCD.BitmapSource (108676);
+    LCD.BitmapLayout (FT_ARGB1555, 500, 49);
+    LCD.BitmapSize (FT_BILINEAR, FT_BORDER, FT_BORDER, 250, 49);
+    LCD.DLEnd ();
+    LCD.Finish ();
 }
 
 
