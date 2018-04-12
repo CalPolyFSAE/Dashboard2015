@@ -1,3 +1,3 @@
-# Dashboard2015
+# Dashboard2
 
-Code for CPFE's 2015 AT90CAN128 & FT801 based Graphical LCD Dashboard.
+Code for 2018 AT90CAN128 & FT801 based Graphical LCD Dashboard.
