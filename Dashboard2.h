@@ -28,31 +28,30 @@ class __FlashStringHelper;
 
 // port and pin is the register and bit position that should be read for
 // pin state
-#define BUTTON(port, pin) {(uint16_t)(((uint8_t)&port)<<8 | _BV(pin))}
+#define BIT(addr, pin) {(uint16_t)(((uint8_t)&addr)<<8 | pin)}
 
 //TODO: config stuff
 namespace CONFIG
 {
+    // SUBSYSTEMS:
     // max number of jobs the Timing system can have
     constexpr uint8_t RSCMAXJOBS = 15;
 
-    // INPUTS:
+    // INPUT:
     // timing interval for Input (ms)
     constexpr uint8_t INPUTINTERVAL = 10;
 
     // input channels
-    constexpr uint16_t BUTTON0 = BUTTON(PORTA, 0);
-    constexpr uint16_t BUTTON1 = BUTTON(PORTA, 1);
-    constexpr uint16_t BUTTON2 = BUTTON(PORTA, 2);
-    constexpr uint16_t BUTTON3 = BUTTON(PORTA, 3);
+    // active low
+    // Note, these ports have to be configured in the pinConfig function in main.cpp
+    constexpr uint16_t BUTTON0 = BIT(PINC, PC0);// specify which bits to read for input
+    constexpr uint16_t BUTTON1 = BIT(PINC, PC1);
     constexpr uint16_t INPUTS[] =
     {
         BUTTON0,
-        BUTTON1,
-        BUTTON2,
-        BUTTON3
+        BUTTON1
     };
-    constexpr uint8_t INPUTS_SIZE = 4;
+    constexpr uint8_t INPUTS_SIZE = 2;
 
 
     // rotary switch configs
@@ -60,6 +59,7 @@ namespace CONFIG
     constexpr uint8_t YELLOW_ADC = 0;
     constexpr uint8_t BLACK_ADC = 2;
 
+    // this also dictates the indices to be used with Input::getRotaryPos function
     constexpr uint8_t ACDINPUTS[] =
     {
         RED_ADC,
@@ -70,6 +70,32 @@ namespace CONFIG
 
     constexpr uint8_t ROTARYPOSITIONS = 12;
 
+    // SCREEN:
+    // screen update Interval
+    constexpr uint8_t SCREENINTERVAL = 16;
+    // update cycles before OnNoCANData event
+    // will be about SCREENINTERVAL*MAXNOCANUPDATES ms
+    constexpr uint8_t MAXNOCANUPDATES = 3;
+
 }
+
+
+/* stuff for led outputs
+ * if (PORTB & BIT7)
+ PORTB &= ~(BIT7);
+ else
+ PORTB |= BIT7;
+ }
+ if (DashboardData.yellowLED == OutputState::Flashing) {
+ if (PORTB & BIT6)
+ PORTB &= ~(BIT6);
+ else
+ PORTB |= BIT6;
+ }
+ if (DashboardData.greenLED == OutputState::Flashing) {
+ if (PORTB & BIT5)
+ PORTB &= ~(BIT5);
+ else
+ PORTB |= BIT5;*/
 
 #endif /* DASHBOARD2_DASHBOARD2_H_ */

@@ -9,19 +9,11 @@
 #include "avr/interrupt.h"
 
 // attach callback to button
-int8_t Input::BindOnChangeButton(const delegate& func )
+int8_t Input::BindOnChangeButton( const delegate& func, uint8_t index )
 {
-    int8_t fIndex = -1;
-    for (uint8_t i = 0; i < CONFIG::INPUTS_SIZE; ++i)
+    if (index < CONFIG::INPUTS_SIZE)
     {
-        if (!delegate::isValid (buttonOnChange[i]))
-        {
-            fIndex = i;
-        }
-    }
-    if (fIndex >= 0)
-    {
-        buttonOnChange[fIndex] = func;
+        buttonOnChange[index] = func;
         return 0;
     }
     else
@@ -31,21 +23,14 @@ int8_t Input::BindOnChangeButton(const delegate& func )
 }
 
 // attach callback to rotary
-int8_t Input::BindOnChangeRotary(const delegate& func)
+int8_t Input::BindOnChangeRotary( const delegate& func, uint8_t index )
 {
-    int8_t fIndex = -1;
-    for (uint8_t i = 0; i < CONFIG::ADCINPUTS_SIZE; ++i)
+    if (index < CONFIG::ADCINPUTS_SIZE)
     {
-        if(!delegate::isValid(rotaryOnChange[i]))
-        {
-            fIndex = i;
-        }
-    }
-    if(fIndex >= 0)
-    {
-        rotaryOnChange[fIndex] = func;
+        rotaryOnChange[index] = func;
         return 0;
-    }else
+    }
+    else
     {
         return -1;
     }
@@ -76,8 +61,6 @@ void Input::INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel)
 
 void Input::Update(uint8_t)
 {
-    Subsystem<Input>::Update(0);
-
     // update positions while checking for change since last update
     for(uint8_t i = 0; i < CONFIG::ADCINPUTS_SIZE; ++i)
     {
@@ -91,11 +74,12 @@ void Input::Update(uint8_t)
             rotaryPositions[i] = newPos;// update the rotary positions array
 
 #ifdef DEBUG_PRINT
-            Serial.print(FSTR("[DEBUG]: "));
+            Serial.print(FSTR("[INFO]: "));
             Serial.print(__FILE__);
             Serial.print(FSTR(" at "));
             Serial.print(__LINE__);
-            Serial.print(FSTR(": Rotary Position Change"));
+            Serial.print(FSTR(": Rotary Position Change, newPos: "));
+            Serial.println(newPos);
 #endif
         }
     }
@@ -109,9 +93,9 @@ void Input::Update(uint8_t)
         // 0000 0002  0000 0001
         // ((uint8_t*)(&val))[0] is 0000 0001, pinMask
         // ((uint8_t*)(&val))[1] is 0000 0002, port*
-        uint8_t* port = (((uint8_t*)(&val))[1]);
+        volatile uint8_t* port = (volatile uint8_t *)(((uint8_t*)(&val))[1]);
         uint8_t mask = (((uint8_t*)(&val))[0]);
-        uint8_t reg = *port;
+        volatile uint8_t reg = *port;
 
         // check for bit at pos
         bool state = reg & mask;
@@ -123,12 +107,14 @@ void Input::Update(uint8_t)
             {
                 buttonOnChange[i](state);
             }
+            buttonPositions[i] = state;
 #ifdef DEBUG_PRINT
-            Serial.print(FSTR("[DEBUG]: "));
+            Serial.print(FSTR("[INFO]: "));
             Serial.print(__FILE__);
             Serial.print(FSTR(" at "));
             Serial.print(__LINE__);
-            Serial.print(FSTR(": Button Position Change"));
+            Serial.print(FSTR(": Button Position Change, state: "));
+            Serial.println(state);
 #endif
         }
     }
@@ -142,17 +128,17 @@ void Input::Init()
     Subsystem<Input>::Init();// important
 
 #ifdef DEBUG_PRINT
-    Serial.print(FSTR("[DEBUG]: "));
+    Serial.print(FSTR("[INFO]: "));
     Serial.print(__FILE__);
     Serial.print(FSTR(" at "));
     Serial.print(__LINE__);
-    Serial.println(FSTR("#INPUT: "));
+    Serial.print(FSTR(" INPUT: "));
     Serial.print(CONFIG::ADCINPUTS_SIZE);
     Serial.print(FSTR(" ADCINPUTS, "));
-    Serial.print (CONFIG::ROTARYPOSITIONS);
-    Serial.println (FSTR(" Positions"));
-    Serial.print (CONFIG::INPUTS_SIZE);
-    Serial.println (FSTR(" BUTTONS"));
+    Serial.print(CONFIG::ROTARYPOSITIONS);
+    Serial.print(FSTR(" Positions, "));
+    Serial.print(CONFIG::INPUTS_SIZE);
+    Serial.println(FSTR(" BUTTONS"));
 #endif //DEBUG_PRINT
 
     // TODO testing

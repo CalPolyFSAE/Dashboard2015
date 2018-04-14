@@ -6,11 +6,11 @@
  */
 
 #include "Screen.h"
-#include "Input.h"
+#include "util/atomic.h"
 
 // PROTECTED
 Screen::Screen() :
-    Subsystem<Screen>(16)// 16ms update interval
+    Subsystem<Screen>(CONFIG::SCREENINTERVAL)// update interval
 {
 
 }
@@ -21,19 +21,13 @@ void Screen::Init()
     Subsystem<Screen>::Init();
 
     // set up graphics controller
-    LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
-    LCD.DisplayOn();
-
-    // hook up callbacks
-    Input::StaticClass().BindOnChangeButton(delegate::from_method<Screen, &Screen::OnInputTOG>(this));
-    Input::StaticClass().BindOnChangeButton(delegate::from_method<Screen, &Screen::OnInputADC>(this));
-
-    // create display screens
+    //LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
+    //LCD.DisplayOn();
 }
 //
 void Screen::Update(uint8_t)
 {
-    Subsystem<Screen>::Update(0);
+    Serial.println(FSTR("Screen::Update"));
 }
 
 // get copy of volatile FrameData
@@ -50,7 +44,6 @@ void Screen::GetData(CANRaw::CAN_DATA& outd)
 {
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        // what the fk
         // const_cast will cast away volatility
         outd = *const_cast<CANRaw::CAN_DATA*>(&data);
     }
@@ -71,16 +64,6 @@ void Screen::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
     // copy out data
     header = FrameData;
     data = Data;
-}
-
-// initial handlers of the Input event
-void Screen::OnInputADC(uint8_t pos)
-{
-    OnRotaryInputChange(pos);
-}
-void Screen::OnInputTOG(uint8_t pos)
-{
-    OnButtonInputChange(pos);
 }
 
 void Screen::uploadLogoToController() {

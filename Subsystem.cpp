@@ -82,9 +82,12 @@ int8_t SubsystemControl::RegisterEvent(delegate const& Event, uint16_t Interval)
     if(slot >= 0)
     {
         TimeControl[slot] = new TC(Event, Interval);
+        Serial.println(slot);
         return slot;
     }else
+    {
         return -1;
+    }
 }
 
 void SubsystemControl::InitSubsystems()
@@ -99,11 +102,18 @@ void SubsystemControl::InitSubsystems()
 #ifdef DEBUG_PRINT
                 if(!systems[i]->bDidInit)
                 {
-                    Serial.print(FSTR("[DEBUG]: "));
+                    Serial.print(FSTR("[ERROR]: "));
                     Serial.print(__FILE__);
                     Serial.print(FSTR(" at "));
                     Serial.print(__LINE__);
-                    Serial.print(FSTR(": Subsystem failed to initialize"));
+                    Serial.println(FSTR(": Subsystem failed to initialize"));
+                }else
+                {
+                    Serial.print (FSTR("[INFO]: "));
+                    Serial.print (__FILE__);
+                    Serial.print (FSTR(" at "));
+                    Serial.print (__LINE__);
+                    Serial.println (FSTR(": Subsystem Initialized"));
                 }
 #endif
             }

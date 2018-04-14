@@ -25,12 +25,15 @@ public:
 
 // Display Subsystem
 // logic differers between cars
-class Screen : public Subsystem<Screen>, CANListener
+class Screen : public Subsystem<Screen>, public CANListener
 {
 public:
     friend class Subsystem<Screen>;
 
 protected:
+    // Lcd control
+    FT801IMPL_SPI LCD;
+
     Screen();
 
     class DrawableScreen* screens[];
@@ -38,20 +41,16 @@ protected:
     // startup
     virtual void Init() override;
     //
-    virtual void Update(uint8_t) override;
+    virtual void Update(uint8_t);
 
-    // used for input OnChange callback
-    virtual void OnRotaryInputChange(int8_t) {}
-    // used for input OnChange callback
-    virtual void OnButtonInputChange(int8_t) {}
+    // events
+    // no can data has been received in MAXNOCANUPDATES update cycles
+    virtual void OnNoCANData() {}
 
     // get copy of volatile FrameData
     void GetHeaderData(CANRaw::CAN_FRAME_HEADER& outh);
     // get copy of volatile Data
     void GetData(CANRaw::CAN_DATA& outd);
-
-    // Lcd control
-    FT801IMPL_SPI LCD;
 
 private:
 
@@ -60,10 +59,6 @@ private:
     // than the one set in FrameData
     virtual void INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
                                     const CANRaw::CAN_DATA& Data ) override;
-
-    // initial handlers of the Input event
-    void OnInputADC(uint8_t);
-    void OnInputTOG(uint8_t);
 
     // logo upload
     void uploadLogoToController();

@@ -21,12 +21,26 @@ public:
     friend class Subsystem<Input>;// this is necessary for StaticClass function
 
     // attach callback to button
-    int8_t BindOnChangeButton(const delegate& func);
+    int8_t BindOnChangeButton(const delegate& func, uint8_t index);
 
     // attach callback to rotary
-    int8_t BindOnChangeRotary(const delegate& func);
+    int8_t BindOnChangeRotary(const delegate& func, uint8_t index);
 
     virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read on complete
+
+    // position get functions
+    inline bool getButtonPos( uint8_t index ) {
+        if (index < CONFIG::INPUTS_SIZE)
+            return buttonPositions[index];
+        return false;
+    }
+
+    inline uint8_t getRotaryPos(uint8_t index)
+    {
+        if (index < CONFIG::ADCINPUTS_SIZE)
+            return rotaryPositions[index];
+        return 0;
+    }
 
 protected:
 
@@ -53,7 +67,7 @@ protected:
 
     // TODO add list of ADC channels to read and corresponding input channel
 
-    virtual void Update(uint8_t) override;// start ADC read
+    void Update(uint8_t);// start ADC read
     virtual void Init() override;
 
     // gets position from rawADC value

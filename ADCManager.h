@@ -54,6 +54,7 @@ protected:
 
     //setup registers for ADC
     virtual void Init() override;
+    void Update(uint8_t) {}
 
     //pointer to the current adc read Callback function
     static ADCManagerCallbackInterface* currentReadCallback;
