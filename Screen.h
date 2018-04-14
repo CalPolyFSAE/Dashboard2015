@@ -40,8 +40,6 @@ protected:
 
     // startup
     virtual void Init() override;
-    //
-    virtual void Update(uint8_t);
 
     // events
     // no can data has been received in MAXNOCANUPDATES update cycles

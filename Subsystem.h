@@ -100,18 +100,13 @@ public:
     inline static T& StaticClass();
 
 protected:
-    // Interval that Update should run at (in ms)
-    const uint16_t Interval;
 
-    Subsystem(uint16_t Interval);
+    Subsystem();
 
     //called to Initialize hardware
     virtual void Init() override;
 
 private:
-    inline void UpdateDelegateFunc( uint8_t ) {
-        static_cast<T*>(this)->Update(0);
-    }
 
 };
 
@@ -124,25 +119,10 @@ T& Subsystem<T>::StaticClass() {
 }
 
 template<class T>
-Subsystem<T>::Subsystem(uint16_t Interval) :
-    Interval(Interval)
+Subsystem<T>::Subsystem()
 {
     //keep track of all created subsystems
     SubsystemControl::StaticClass ().RegisterSubsystem (*this);
-    // create an event for Update if Interval is not zero
-    // this allows the update function to run on the same event structure that other timed events are using
-    if(Interval > 0)
-        if(SubsystemControl::StaticClass().RegisterEvent(
-                delegate::from_method<Subsystem<T>, &Subsystem<T>::UpdateDelegateFunc>(this), Interval) < 0)
-        {
-#ifdef DEBUG_PRINT
-            Serial.print(FSTR("[ERROR]: "));
-            Serial.print(__FILE__);
-            Serial.print(FSTR(" at "));
-            Serial.print(__LINE__);
-            Serial.print(FSTR(": RegisterEvent returned a negative number"));
-#endif
-        }
 }
 
 template<class T>
@@ -150,9 +130,7 @@ void Subsystem<T>::Init()
 {
     bDidInit = true;
 #ifdef DEBUG_PRINT
-    Serial.print(FSTR("[INFO]: Subsystem Init: Interval "));
-    Serial.print(Interval);
-    Serial.println(FSTR(" ms."));
+    Serial.println(FSTR("[INFO]: Subsystem Init"));
 #endif // DEBUG_PRINT
 }
 

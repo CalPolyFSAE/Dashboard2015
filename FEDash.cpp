@@ -32,9 +32,33 @@ void FEDash::Init()
     input.BindOnChangeRotary(delegate::from_method<FEDash, &FEDash::OnRotaryInputChange1>(this), 1);
     input.BindOnChangeRotary(delegate::from_method<FEDash, &FEDash::OnRotaryInputChange2>(this), 2);
 
-
     // Switch CAN message event
-    SubsystemControl::StaticClass().RegisterEvent(delegate::from_method<FEDash, &FEDash::sendSwitchPositions>(this), 12);
+    if (SubsystemControl::StaticClass ().RegisterEvent (
+            delegate::from_method<FEDash, &FEDash::sendSwitchPositions> (this),
+            12) < 0)
+    {
+#ifdef DEBUG_PRINT
+        Serial.print (FSTR("[ERROR]: "));
+        Serial.print (__FILE__);
+        Serial.print (FSTR(" at "));
+        Serial.print (__LINE__);
+        Serial.print (FSTR(": RegisterEvent returned a negative number"));
+#endif //DEBUG_PRINT
+    }
+
+    // update event
+    if (SubsystemControl::StaticClass ().RegisterEvent (
+            delegate::from_method<FEDash, &FEDash::Update> (this),
+            CONFIG::INPUTINTERVAL) < 0)
+    {
+#ifdef DEBUG_PRINT
+        Serial.print (FSTR("[ERROR]: "));
+        Serial.print (__FILE__);
+        Serial.print (FSTR(" at "));
+        Serial.print (__LINE__);
+        Serial.print (FSTR(": RegisterEvent returned a negative number"));
+#endif //DEBUG_PRINT
+    }
 
     // create display screens
     // TODO
@@ -42,7 +66,6 @@ void FEDash::Init()
 //
 void FEDash::Update(uint8_t)
 {
-    Screen::Update(0);
     Serial.println(FSTR("FEDash"));
 }
 

@@ -9,8 +9,7 @@
 #include "util/atomic.h"
 
 // PROTECTED
-Screen::Screen() :
-    Subsystem<Screen>(CONFIG::SCREENINTERVAL)// update interval
+Screen::Screen()
 {
 
 }
@@ -23,11 +22,6 @@ void Screen::Init()
     // set up graphics controller
     //LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
     //LCD.DisplayOn();
-}
-//
-void Screen::Update(uint8_t)
-{
-    Serial.println(FSTR("Screen::Update"));
 }
 
 // get copy of volatile FrameData

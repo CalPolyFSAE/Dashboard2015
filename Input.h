@@ -57,7 +57,6 @@ protected:
 
 
     Input() :
-        Subsystem(CONFIG::INPUTINTERVAL),
         rotaryADCValues{},
         rotaryPositions{},
         buttonPositions{},

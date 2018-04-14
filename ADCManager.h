@@ -48,8 +48,7 @@ public:
     void INT_ADCFinished();
 
 protected:
-    ADCManager() :
-        Subsystem(0)// no update event
+    ADCManager()
     {}
 
     //setup registers for ADC

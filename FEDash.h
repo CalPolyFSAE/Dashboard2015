@@ -29,7 +29,7 @@ protected:
     // startup
     virtual void Init() override;
     //
-    virtual void Update(uint8_t) override;
+    void Update(uint8_t);
 
     //events
     virtual void OnNoCANData() override;

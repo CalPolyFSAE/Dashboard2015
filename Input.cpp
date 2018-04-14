@@ -127,6 +127,17 @@ void Input::Init()
 {
     Subsystem<Input>::Init();// important
 
+    if (SubsystemControl::StaticClass().RegisterEvent(delegate::from_method<Input, &Input::Update>(this), CONFIG::INPUTINTERVAL) < 0)
+    {
+#ifdef DEBUG_PRINT
+        Serial.print (FSTR("[ERROR]: "));
+        Serial.print (__FILE__);
+        Serial.print (FSTR(" at "));
+        Serial.print (__LINE__);
+        Serial.print (FSTR(": RegisterEvent returned a negative number"));
+#endif //DEBUG_PRINT
+    }
+
 #ifdef DEBUG_PRINT
     Serial.print(FSTR("[INFO]: "));
     Serial.print(__FILE__);
