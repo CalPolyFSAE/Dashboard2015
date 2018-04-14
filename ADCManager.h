@@ -33,10 +33,10 @@ protected:
 };
 
 //
-class ADCManager : public Subsystem<ADCManager>
+class ADCManager : public Subsystem
 {
 public:
-    friend class Subsystem<ADCManager>;
+    friend class Subsystem;
 
     //start an ADC read
     bool StartRead(ADCManagerCallbackInterface* resultHandler, uint8_t channel);
@@ -48,12 +48,12 @@ public:
     void INT_ADCFinished();
 
 protected:
-    ADCManager()
+    ADCManager() :
+        Subsystem(0)// no update
     {}
 
     //setup registers for ADC
     virtual void Init() override;
-    void Update(uint8_t) {}
 
     //pointer to the current adc read Callback function
     static ADCManagerCallbackInterface* currentReadCallback;

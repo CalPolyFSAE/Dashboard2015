@@ -15,10 +15,10 @@
 
 
 // TODO make ADCManagerCallbackInterface use delegates
-class Input : public Subsystem<Input>, ADCManagerCallbackInterface
+class Input : public Subsystem, ADCManagerCallbackInterface
 {
 public:
-    friend class Subsystem<Input>;// this is necessary for StaticClass function
+    friend class Subsystem;// this is necessary for StaticClass function
 
     // attach callback to button
     int8_t BindOnChangeButton(const delegate& func, uint8_t index);
@@ -57,6 +57,7 @@ protected:
 
 
     Input() :
+        Subsystem(CONFIG::INPUTINTERVAL),
         rotaryADCValues{},
         rotaryPositions{},
         buttonPositions{},

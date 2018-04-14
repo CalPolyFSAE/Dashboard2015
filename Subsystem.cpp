@@ -78,11 +78,11 @@ void SubsystemControl::INT_CALL_TickAllTC()
 
 int8_t SubsystemControl::RegisterEvent(delegate const& Event, uint16_t Interval)
 {
+    Serial.println("SubsystemControl::RegisterEvent");
     int8_t slot = getNextFreeTC();
     if(slot >= 0)
     {
         TimeControl[slot] = new TC(Event, Interval);
-        Serial.println(slot);
         return slot;
     }else
     {
@@ -107,20 +107,13 @@ void SubsystemControl::InitSubsystems()
                     Serial.print(FSTR(" at "));
                     Serial.print(__LINE__);
                     Serial.println(FSTR(": Subsystem failed to initialize"));
-                }else
-                {
-                    Serial.print (FSTR("[INFO]: "));
-                    Serial.print (__FILE__);
-                    Serial.print (FSTR(" at "));
-                    Serial.print (__LINE__);
-                    Serial.println (FSTR(": Subsystem Initialized"));
                 }
 #endif
             }
         }
         bHaveSubInit = true;
 #ifdef DEBUG_PRINT
-        Serial.println(FSTR("InitSubsystems Completed"));
+        Serial.println(FSTR("[INFO]: InitSubsystems Completed"));
 #endif // DEBUG_PRINT
     }
 }
@@ -155,4 +148,36 @@ int8_t SubsystemControl::getNextFreeTC()
 ///
 //////////////////////////////
 
+
+
+Subsystem::Subsystem(uint8_t Interval) :
+        Interval(Interval)
+{
+    //keep track of all created subsystems
+    SubsystemControl::StaticClass ().RegisterSubsystem (*this);
+
+    // register event for update if interval is greater than 0
+    if (Interval > 0)
+        if (SubsystemControl::StaticClass ().RegisterEvent (
+                delegate::from_method<Subsystem, &Subsystem::Update> (this),
+                CONFIG::INPUTINTERVAL) < 0)
+        {
+#ifdef DEBUG_PRINT
+            Serial.print (FSTR("[ERROR]: "));
+            Serial.print (__FILE__);
+            Serial.print (FSTR(" at "));
+            Serial.print (__LINE__);
+            Serial.print (FSTR(": RegisterEvent returned a negative number"));
+#endif //DEBUG_PRINT
+        }
+}
+
+
+void Subsystem::Init()
+{
+    bDidInit = true;
+#ifdef DEBUG_PRINT
+    Serial.println(FSTR("[INFO]: Subsystem Init"));
+#endif // DEBUG_PRINT
+}
 

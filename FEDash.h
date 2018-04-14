@@ -10,11 +10,13 @@
 
 #include "Screen.h"
 
+// interval to send out sw positions on CAN (ms)
+#define DASHCANOUTPUTINTERVAL 12
 
 class FEDash : public Screen
 {
 public:
-    friend class Subsystem<FEDash>;// should get rid of this type of stuff
+    friend class Subsystem;// should get rid of this type of stuff
 
 protected:
     // current dash page

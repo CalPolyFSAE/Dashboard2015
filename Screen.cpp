@@ -9,7 +9,8 @@
 #include "util/atomic.h"
 
 // PROTECTED
-Screen::Screen()
+Screen::Screen() :
+    Subsystem(CONFIG::SCREENINTERVAL)
 {
 
 }
@@ -17,11 +18,29 @@ Screen::Screen()
 // startup
 void Screen::Init()
 {
-    Subsystem<Screen>::Init();
+    Subsystem::Init();
+    Serial.println("Screen::Init()");
 
     // set up graphics controller
     //LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
     //LCD.DisplayOn();
+}
+
+void Screen::Update(uint8_t)
+{
+    static uint8_t CANNoRxCounter = 0;
+    bool cpyRxCAN = bRxCANSinceLastUpdate;
+    bRxCANSinceLastUpdate = false;
+    if(!cpyRxCAN)
+    {
+        ++CANNoRxCounter;
+        if(CANNoRxCounter > CONFIG::MAXNOCANUPDATES)
+        {
+            OnNoCANData();
+            CANNoRxCounter = 0;
+        }
+    }
+
 }
 
 // get copy of volatile FrameData
@@ -58,6 +77,7 @@ void Screen::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
     // copy out data
     header = FrameData;
     data = Data;
+    bRxCANSinceLastUpdate = true;
 }
 
 void Screen::uploadLogoToController() {

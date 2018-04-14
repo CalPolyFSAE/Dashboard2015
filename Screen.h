@@ -25,10 +25,10 @@ public:
 
 // Display Subsystem
 // logic differers between cars
-class Screen : public Subsystem<Screen>, public CANListener
+class Screen : public Subsystem, public CANListener
 {
 public:
-    friend class Subsystem<Screen>;
+    friend class Subsystem;
 
 protected:
     // Lcd control
@@ -40,6 +40,7 @@ protected:
 
     // startup
     virtual void Init() override;
+    virtual void Update(uint8_t) override;
 
     // events
     // no can data has been received in MAXNOCANUPDATES update cycles
@@ -65,7 +66,11 @@ private:
     volatile CANRaw::CAN_FRAME_HEADER header;
     volatile CANRaw::CAN_DATA data;
 
+    // logo data
     static const uint8_t PROGMEM CPRacingLogo[];
+
+    // has there been a CAN message since the last update
+    volatile bool bRxCANSinceLastUpdate = false;
 
 };
 

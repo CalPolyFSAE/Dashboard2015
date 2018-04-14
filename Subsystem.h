@@ -87,7 +87,6 @@ protected:
 // allows for overriding of static methods
 // this is Curiously Recursive Template Pattern (CRTP)
 // https://stackoverflow.com/questions/34222703/how-to-override-static-method-of-template-class-in-derived-class
-template<class T>
 class Subsystem : public AbstractSubsystem
 {
 public:
@@ -97,14 +96,19 @@ public:
     virtual ~Subsystem() {}
 
     // get ref to singleton class of type T
+    template<class T>
     inline static T& StaticClass();
+
+    const uint8_t Interval;
 
 protected:
 
-    Subsystem();
+    Subsystem(uint8_t);
 
     //called to Initialize hardware
     virtual void Init() override;
+
+    virtual void Update(uint8_t) {}
 
 private:
 
@@ -113,25 +117,9 @@ private:
 /////////////////////////
 
 template<class T>
-T& Subsystem<T>::StaticClass() {
+T& Subsystem::StaticClass() {
     static T inst {};
     return inst;
-}
-
-template<class T>
-Subsystem<T>::Subsystem()
-{
-    //keep track of all created subsystems
-    SubsystemControl::StaticClass ().RegisterSubsystem (*this);
-}
-
-template<class T>
-void Subsystem<T>::Init()
-{
-    bDidInit = true;
-#ifdef DEBUG_PRINT
-    Serial.println(FSTR("[INFO]: Subsystem Init"));
-#endif // DEBUG_PRINT
 }
 
 

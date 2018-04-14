@@ -67,12 +67,14 @@ int main() {
 
     // create Subsystems
 #if TEAM==FE
-    Screen& screen = FEDash::StaticClass();
+    Screen& screen = Subsystem::StaticClass<FEDash>();
 #elif TEAM==FSAE
     Screen& screen = FEDash::StaticClass();
 #endif
 
-    Input& input = Input::StaticClass ();
+    //Input& input = Subsystem::StaticClass<Input> ();
+
+
 
     SubsystemControl::StaticClass().InitSubsystems();
 

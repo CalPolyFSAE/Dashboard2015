@@ -17,7 +17,7 @@ ADCManagerCallbackInterface* ADCManager::currentReadCallback = nullptr;
 uint8_t ADCManager::channel = 0;
 
 void ADCManager::Init() {
-    Subsystem<ADCManager>::Init();
+    Subsystem::Init();
 
     ADCSRA = (1 << ADPS2)/* | (1 << ADPS1)*/ | (1 << ADPS0); // Set ADC prescaler to 64 - 250KHz sample rate @ 16MHz
     ADMUX = (1 << REFS0);

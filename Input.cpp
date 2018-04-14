@@ -49,7 +49,7 @@ void Input::INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel)
     if(!(indexLastChannel >= CONFIG::ADCINPUTS_SIZE))
     {
         // start read for next channel
-        ADCManager::StaticClass ().StartRead (
+        Subsystem::StaticClass<ADCManager> ().StartRead (
                 this, CONFIG::ACDINPUTS[indexLastChannel]);
     }else
     {
@@ -61,6 +61,7 @@ void Input::INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel)
 
 void Input::Update(uint8_t)
 {
+    Subsystem::Update(0);
     // update positions while checking for change since last update
     for(uint8_t i = 0; i < CONFIG::ADCINPUTS_SIZE; ++i)
     {
@@ -120,23 +121,12 @@ void Input::Update(uint8_t)
     }
 
     // start next read cycle
-    ADCManager::StaticClass().StartRead(this, CONFIG::ACDINPUTS[0]);
+    Subsystem::StaticClass<ADCManager>().StartRead(this, CONFIG::ACDINPUTS[0]);
 }
 
 void Input::Init()
 {
-    Subsystem<Input>::Init();// important
-
-    if (SubsystemControl::StaticClass().RegisterEvent(delegate::from_method<Input, &Input::Update>(this), CONFIG::INPUTINTERVAL) < 0)
-    {
-#ifdef DEBUG_PRINT
-        Serial.print (FSTR("[ERROR]: "));
-        Serial.print (__FILE__);
-        Serial.print (FSTR(" at "));
-        Serial.print (__LINE__);
-        Serial.print (FSTR(": RegisterEvent returned a negative number"));
-#endif //DEBUG_PRINT
-    }
+    Subsystem::Init();// important
 
 #ifdef DEBUG_PRINT
     Serial.print(FSTR("[INFO]: "));
@@ -162,7 +152,7 @@ void Input::Init()
     }*/
     ///////////////
 
-    while(!ADCManager::StaticClass().ADCAvailable())
+    while(!Subsystem::StaticClass<ADCManager>().ADCAvailable())
         ;// wait for ADCManager to be available
 }
 
