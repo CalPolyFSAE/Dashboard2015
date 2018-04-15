@@ -7,6 +7,9 @@
 
 #include "Screen.h"
 #include "util/atomic.h"
+#include "Input.h"
+#include "CANLib.h"
+
 
 // PROTECTED
 Screen::Screen() :
@@ -21,6 +24,27 @@ void Screen::Init()
     Subsystem::Init();
     Serial.println("Screen::Init()");
 
+    // set up CAN Mob for outgoing input data
+    CANRaw& can = CANRaw::StaticClass();
+    CanTxMobHandle = can.GetNextFreeMob();
+    can.ConfigTx(DashInputCANMsg, CanTxMobHandle);
+
+#ifdef DASHCANOUTPUTINTERVAL
+    // Switch CAN message event
+    if (SubsystemControl::StaticClass ().RegisterEvent (
+            delegate::from_method<Screen, &Screen::sendSwitchPositions> (this),
+            DASHCANOUTPUTINTERVAL) < 0)
+    {
+#ifdef DEBUG_PRINT
+        Serial.print (FSTR("[ERROR]: "));
+        Serial.print (__FILE__);
+        Serial.print (FSTR(" at "));
+        Serial.print (__LINE__);
+        Serial.print (FSTR(": RegisterEvent returned a negative number"));
+#endif //DEBUG_PRINT
+#endif //DASHCANOUTPUTINTERVAL
+    }
+
     // set up graphics controller
     //LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
     //LCD.DisplayOn();
@@ -28,6 +52,7 @@ void Screen::Init()
 
 void Screen::Update(uint8_t)
 {
+    Subsystem::Update(0);
     static uint8_t CANNoRxCounter = 0;
     bool cpyRxCAN = bRxCANSinceLastUpdate;
     bRxCANSinceLastUpdate = false;
@@ -43,23 +68,23 @@ void Screen::Update(uint8_t)
 
 }
 
-// get copy of volatile FrameData
-void Screen::GetHeaderData(CANRaw::CAN_FRAME_HEADER& outh)
+void Screen::sendSwitchPositions(uint8_t)
 {
-    ATOMIC_BLOCK(ATOMIC_FORCEON)
-    {
-        // const_cast will cast away volatility
-        outh = *const_cast<CANRaw::CAN_FRAME_HEADER*>(&header);
-    }
-}
-// get copy of volatile Data
-void Screen::GetData(CANRaw::CAN_DATA& outd)
-{
-    ATOMIC_BLOCK(ATOMIC_FORCEON)
-    {
-        // const_cast will cast away volatility
-        outd = *const_cast<CANRaw::CAN_DATA*>(&data);
-    }
+    CANRaw::CAN_DATA data {};
+    DashInputCANMsgDataFormat* inputData = (DashInputCANMsgDataFormat*) data.byte;
+
+    // the indices used here are based on position of the rotary switch in CONFIG::ADCINPUTS[]
+    inputData->RedRotary = Subsystem::StaticClass<Input> ().getRotaryPos (0);
+    inputData->YellowRotary = Subsystem::StaticClass<Input> ().getRotaryPos (1);
+    inputData->BlackRotary = Subsystem::StaticClass<Input> ().getRotaryPos (2);
+
+    // this is not a great way of doing this, but it simplifies the
+    // operation by avoiding multiple calls to Input::getButtonPos(index) and
+    // getting rid of the need to format the data for the message.
+    // It will cause issues if the buttons change pins on micro
+    inputData->ButtonsArray = ~PINC;
+
+    CANRaw::StaticClass().INTS_TxData(data, CanTxMobHandle);
 }
 
 // PRIVATE
@@ -74,9 +99,7 @@ const uint8_t PROGMEM Screen::CPRacingLogo[] = {
 void Screen::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
                                 const CANRaw::CAN_DATA& Data )
 {
-    // copy out data
-    header = FrameData;
-    data = Data;
+    // just need to keep track of message rx
     bRxCANSinceLastUpdate = true;
 }
 

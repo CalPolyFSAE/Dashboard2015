@@ -8,6 +8,7 @@
 #include "FEDash.h"
 #include "Input.h"
 #include "Delegate.h"
+#include "DashPages/DashPage.h"
 
 void FEDash::Init()
 {
@@ -15,11 +16,7 @@ void FEDash::Init()
 
     Serial.println("FEDash::Init()");
 
-    // set up CAN Mob for outgoing input data
     CANRaw& can = CANRaw::StaticClass();
-    CanTxMobHandle = can.GetNextFreeMob();
-    can.ConfigTx(DashInputCANMsg, CanTxMobHandle);
-
     // set up CAN Mob for incoming messages
     CanRxMobHandle = can.GetNextFreeMob();
     can.ConfigRx(DashDisplayCANMsg, DashDisplayCANMsgMsk, CanRxMobHandle);
@@ -34,20 +31,6 @@ void FEDash::Init()
     input.BindOnChangeRotary(delegate::from_method<FEDash, &FEDash::OnRotaryInputChange1>(this), 1);
     input.BindOnChangeRotary(delegate::from_method<FEDash, &FEDash::OnRotaryInputChange2>(this), 2);
 
-    // Switch CAN message event
-    if (SubsystemControl::StaticClass ().RegisterEvent (
-            delegate::from_method<FEDash, &FEDash::sendSwitchPositions> (this),
-            DASHCANOUTPUTINTERVAL) < 0)
-    {
-#ifdef DEBUG_PRINT
-        Serial.print (FSTR("[ERROR]: "));
-        Serial.print (__FILE__);
-        Serial.print (FSTR(" at "));
-        Serial.print (__LINE__);
-        Serial.print (FSTR(": RegisterEvent returned a negative number"));
-#endif //DEBUG_PRINT
-    }
-
     // create display screens
     // TODO
 }
@@ -55,6 +38,18 @@ void FEDash::Init()
 void FEDash::Update(uint8_t)
 {
     Screen::Update(0);
+}
+
+// called on Can rx for Mob. Get received data with GetCANData()
+// dlc is the data length code of the received message. It may be different
+// than the one set in FrameData
+void FEDash::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
+                                const CANRaw::CAN_DATA& Data )
+{
+    Screen::INT_Call_GotFrame(FrameData, Data);// tracks Rx occurrence
+    // copy out data
+    header = FrameData;
+    data = Data;
 }
 
 // on no can data rx for interval
@@ -85,24 +80,4 @@ void FEDash::OnButtonInputChange0( uint8_t pos )
 void FEDash::OnButtonInputChange1( uint8_t pos )
 {
 
-}
-
-
-void FEDash::sendSwitchPositions(uint8_t)
-{
-    CANRaw::CAN_DATA data {};
-    DashInputCANMsgDataFormat* inputData = (DashInputCANMsgDataFormat*) data.byte;
-
-    // the indices used here are based on position of the rotary switch in CONFIG::ADCINPUTS[]
-    inputData->RedRotary = Subsystem::StaticClass<Input> ().getRotaryPos (0);
-    inputData->YellowRotary = Subsystem::StaticClass<Input> ().getRotaryPos (1);
-    inputData->BlackRotary = Subsystem::StaticClass<Input> ().getRotaryPos (2);
-
-    // this is not a great way of doing this, but it simplifies the
-    // operation by avoiding multiple calls to Input::getButtonPos(index) and
-    // getting rid of the need to format the data for the message.
-    // It will cause issues if the buttons change pins on micro
-    inputData->ButtonsArray = ~PINC;
-
-    CANRaw::StaticClass().INTS_TxData(data, CanTxMobHandle);
 }

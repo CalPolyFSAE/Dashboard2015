@@ -10,64 +10,6 @@
 
 #include "Screen.h"
 
-// interval to send out sw positions on CAN (ms)
-#define DASHCANOUTPUTINTERVAL 12
-
-class FEDash : public Screen
-{
-public:
-    friend class Subsystem;// should get rid of this type of stuff
-
-protected:
-    // current dash page
-    uint8_t currentPage = 0;
-    // handle on the mob configured for outgoing messages
-    CANRaw::CAN_MOB CanTxMobHandle = CANRaw::CAN_MOB::MOB_NONE;
-    // handle on the mob configured for outgoing messages
-    CANRaw::CAN_MOB CanRxMobHandle = CANRaw::CAN_MOB::MOB_NONE;
-
-    FEDash() {}
-
-    // startup
-    virtual void Init() override;
-    //
-    void Update(uint8_t);
-
-    //events
-    virtual void OnNoCANData() override;
-
-    // used for input callback
-    // rotary sw
-    void OnRotaryInputChange0(uint8_t);
-    void OnRotaryInputChange1(uint8_t);
-    void OnRotaryInputChange2(uint8_t);
-    // buttons
-    void OnButtonInputChange0(uint8_t);
-    void OnButtonInputChange1(uint8_t);
-
-
-    // every 12 ms?
-    void sendSwitchPositions(uint8_t);
-};
-
-// structure of outgoing input data
-struct DashInputCANMsgDataFormat
-{
-    uint8_t ButtonsArray;
-    uint8_t RedRotary;
-    uint8_t YellowRotary;
-    uint8_t BlackRotary;
-};
-
-// CAN message format used for outgoing button positions
-constexpr CANRaw::CAN_FRAME_HEADER DashInputCANMsg =
-    {
-        0xF5,             // id
-        0,                // rtr
-        0,                // ide
-        8                 // dlc
-    };
-
 // CAN message format used for incoming display data
 constexpr CANRaw::CAN_FRAME_HEADER DashDisplayCANMsg =
     {
@@ -82,6 +24,49 @@ constexpr CANRaw::CAN_FRAME_MASK DashDisplayCANMsgMsk =
         true,             // rtr
         true              // ide
     };
+
+class FEDash : public Screen
+{
+public:
+    friend class Subsystem;// should get rid of this type of stuff
+
+protected:
+
+    FEDash() {}
+
+    // startup
+    virtual void Init() override;
+    //
+    void Update(uint8_t);
+
+    // called on Can rx for Mob. Get received data with GetCANData()
+    // dlc is the data length code of the received message. It may be different
+    // than the one set in FrameData
+    virtual void INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
+                                    const CANRaw::CAN_DATA& Data ) override;
+
+    //events
+    virtual void OnNoCANData() override;
+
+    // used for input callback
+    // rotary sw
+    void OnRotaryInputChange0(uint8_t);
+    void OnRotaryInputChange1(uint8_t);
+    void OnRotaryInputChange2(uint8_t);
+    // buttons
+    void OnButtonInputChange0(uint8_t);
+    void OnButtonInputChange1(uint8_t);
+
+    // current dash page
+    uint8_t currentPage = 0;
+
+    // handle on the mob configured for outgoing messages
+    CANRaw::CAN_MOB CanRxMobHandle = CANRaw::CAN_MOB::MOB_NONE;
+
+    // data from the last CAN frame
+    volatile CANRaw::CAN_FRAME_HEADER header;
+    volatile CANRaw::CAN_DATA data;
+};
 
 
 #endif /* FEDASH_H_ */
