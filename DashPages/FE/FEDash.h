@@ -5,25 +5,13 @@
  *      Author: root
  */
 
-#ifndef FEDASH_H_
-#define FEDASH_H_
+#ifndef DASHPAGES_FE_FEDASH_H_
+#define DASHPAGES_FE_FEDASH_H_
 
-#include "Screen.h"
+#include "../../Screen.h"
+#include "FEDashConfig.h"
 
-// CAN message format used for incoming display data
-constexpr CANRaw::CAN_FRAME_HEADER DashDisplayCANMsg =
-    {
-        0x00,             // id
-        0,                // rtr
-        0,                // ide
-        8                 // dlc
-    };
-constexpr CANRaw::CAN_FRAME_MASK DashDisplayCANMsgMsk =
-    {
-        0xFFFF,           // id
-        true,             // rtr
-        true              // ide
-    };
+#define NUMPAGES 5
 
 class FEDash : public Screen
 {
@@ -32,7 +20,7 @@ public:
 
 protected:
 
-    FEDash() {}
+    FEDash();
 
     // startup
     virtual void Init() override;
@@ -60,13 +48,12 @@ protected:
     // current dash page
     uint8_t currentPage = 0;
 
-    // handle on the mob configured for outgoing messages
-    CANRaw::CAN_MOB CanRxMobHandle = CANRaw::CAN_MOB::MOB_NONE;
-
     // data from the last CAN frame
-    volatile CANRaw::CAN_FRAME_HEADER header;
-    volatile CANRaw::CAN_DATA data;
+    volatile FEDashConfig::FEDashDataPack data;
+
+    // dashPages
+    class DashPage* pages[NUMPAGES];
 };
 
 
-#endif /* FEDASH_H_ */
+#endif /* DASHPAGES_FE_FEDASH_H_ */

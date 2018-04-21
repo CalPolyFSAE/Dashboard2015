@@ -9,11 +9,12 @@
 #include "avr/interrupt.h"
 
 // attach callback to button
-int8_t Input::BindOnChangeButton( const delegate& func, uint8_t index )
+int8_t Input::BindOnChangeButton( const delegate& func, BUTTON btn )
 {
-    if (index < CONFIG::INPUTS_SIZE)
+    uint8_t pos = (uint8_t) btn;
+    if (!delegate::isValid (buttonOnChange[pos]))
     {
-        buttonOnChange[index] = func;
+        buttonOnChange[pos] = func;
         return 0;
     }
     else
@@ -23,11 +24,12 @@ int8_t Input::BindOnChangeButton( const delegate& func, uint8_t index )
 }
 
 // attach callback to rotary
-int8_t Input::BindOnChangeRotary( const delegate& func, uint8_t index )
+int8_t Input::BindOnChangeRotary( const delegate& func, ROTARY rot )
 {
-    if (index < CONFIG::ADCINPUTS_SIZE)
+    uint8_t pos = (uint8_t) rot;
+    if (!delegate::isValid (rotaryOnChange[pos]))
     {
-        rotaryOnChange[index] = func;
+        rotaryOnChange[pos] = func;
         return 0;
     }
     else
@@ -46,11 +48,11 @@ void Input::INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel)
     ++indexLastChannel;
 
     // figure out if we need to go back to the beginning
-    if(!(indexLastChannel >= CONFIG::ADCINPUTS_SIZE))
+    if(!(indexLastChannel >= ADCINPUTS_SIZE))
     {
         // start read for next channel
         Subsystem::StaticClass<ADCManager> ().StartRead (
-                this, CONFIG::ACDINPUTS[indexLastChannel]);
+                this, ACDINPUTS[indexLastChannel]);
     }else
     {
         // reset counter
@@ -63,7 +65,7 @@ void Input::Update(uint8_t)
 {
     Subsystem::Update(0);
     // update positions while checking for change since last update
-    for(uint8_t i = 0; i < CONFIG::ADCINPUTS_SIZE; ++i)
+    for(uint8_t i = 0; i < ADCINPUTS_SIZE; ++i)
     {
         uint8_t newPos = positionFromADCResult(rotaryADCValues[i]);
         if(rotaryPositions[i] != newPos)
@@ -86,9 +88,9 @@ void Input::Update(uint8_t)
     }
 
     // check for button changes
-    for(uint8_t i = 0; i < CONFIG::INPUTS_SIZE; ++i)
+    for(uint8_t i = 0; i < INPUTS_SIZE; ++i)
     {
-        uint16_t val = CONFIG::INPUTS[i];
+        uint16_t val = INPUTS[i];
         // Ex: val looks like this
         // port* pinMask appended in an uint16
         // 0000 0002  0000 0001
@@ -121,7 +123,7 @@ void Input::Update(uint8_t)
     }
 
     // start next read cycle
-    Subsystem::StaticClass<ADCManager>().StartRead(this, CONFIG::ACDINPUTS[0]);
+    Subsystem::StaticClass<ADCManager>().StartRead(this, ACDINPUTS[0]);
 }
 
 void Input::Init()
@@ -134,11 +136,11 @@ void Input::Init()
     Serial.print(FSTR(" at "));
     Serial.print(__LINE__);
     Serial.print(FSTR(" INPUT: "));
-    Serial.print(CONFIG::ADCINPUTS_SIZE);
+    Serial.print(ADCINPUTS_SIZE);
     Serial.print(FSTR(" ADCINPUTS, "));
-    Serial.print(CONFIG::ROTARYPOSITIONS);
+    Serial.print(ROTARYPOSITIONS);
     Serial.print(FSTR(" Positions, "));
-    Serial.print(CONFIG::INPUTS_SIZE);
+    Serial.print(INPUTS_SIZE);
     Serial.println(FSTR(" BUTTONS"));
 #endif //DEBUG_PRINT
 
@@ -165,20 +167,20 @@ uint8_t Input::positionFromADCResult(volatile uint16_t& result)
     }
 
     // from CPFERotarySwitch.h
-    uint8_t position = (uint8_t) (CONFIG::ROTARYPOSITIONS
-                    - (float) cpy / (1024.0 / (float) CONFIG::ROTARYPOSITIONS));
-    if(position >= CONFIG::ROTARYPOSITIONS)// clamp
-        position = CONFIG::ROTARYPOSITIONS - 1;
+    uint8_t position = (uint8_t) (ROTARYPOSITIONS
+                    - (float) cpy / (1024.0 / (float) ROTARYPOSITIONS));
+    if(position >= ROTARYPOSITIONS)// clamp
+        position = ROTARYPOSITIONS - 1;
 
     return position;
 }
 
 uint8_t Input::getIndexOfChannel(uint8_t channel)
 {
-    for(uint8_t i = 0; i < CONFIG::ADCINPUTS_SIZE; ++i)
+    for(uint8_t i = 0; i < ADCINPUTS_SIZE; ++i)
     {
-        if(channel == CONFIG::ACDINPUTS[i])
+        if(channel == ACDINPUTS[i])
             return i;
     }
-    return CONFIG::ADCINPUTS_SIZE;
+    return ADCINPUTS_SIZE;
 }

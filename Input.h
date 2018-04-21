@@ -14,30 +14,73 @@
 #include "Delegate.h"
 
 
+
 // TODO make ADCManagerCallbackInterface use delegates
 class Input : public Subsystem, ADCManagerCallbackInterface
 {
 public:
     friend class Subsystem;// this is necessary for StaticClass function
 
+    // input channels
+    // active low
+    // Note, these ports have to be configured in the pinConfig function in main.cpp
+    constexpr uint16_t BUTTON0 = BIT(PINC, PC0);// specify which bits to read for input
+    constexpr uint16_t BUTTON1 = BIT(PINC, PC1);
+    constexpr uint16_t INPUTS[] =
+    {
+        BUTTON0,
+        BUTTON1
+    };
+    constexpr uint8_t INPUTS_SIZE = 2;
+
+
+    // rotary switch configs
+    constexpr uint8_t RED_ADC = 1;
+    constexpr uint8_t YELLOW_ADC = 0;
+    constexpr uint8_t BLACK_ADC = 2;
+
+    // this also dictates the indices to be used with Input::getRotaryPos function
+    constexpr uint8_t ACDINPUTS[] =
+    {
+        RED_ADC,
+        YELLOW_ADC,
+        BLACK_ADC
+    };
+    constexpr uint8_t ADCINPUTS_SIZE = 3;
+
+    // positions in array of different inputs
+    enum class ROTARY : uint8_t
+    {
+        RED = 0,
+        YELLOW = 1,
+        BLACK = 2
+    };
+    enum class BUTTON : uint8_t
+    {
+        BTNL = 0,
+        BTNR = 1
+    };
+
+    constexpr uint8_t ROTARYPOSITIONS = 12;
+
     // attach callback to button
-    int8_t BindOnChangeButton(const delegate& func, uint8_t index);
+    int8_t BindOnChangeButton(const delegate&, BUTTON);
 
     // attach callback to rotary
-    int8_t BindOnChangeRotary(const delegate& func, uint8_t index);
+    int8_t BindOnChangeRotary(const delegate&, ROTARY);
 
     virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read on complete
 
     // position get functions
     inline bool getButtonPos( uint8_t index ) {
-        if (index < CONFIG::INPUTS_SIZE)
+        if (index < INPUTS_SIZE)
             return buttonPositions[index];
         return false;
     }
 
     inline uint8_t getRotaryPos(uint8_t index)
     {
-        if (index < CONFIG::ADCINPUTS_SIZE)
+        if (index < ADCINPUTS_SIZE)
             return rotaryPositions[index];
         return 0;
     }
@@ -45,15 +88,16 @@ public:
 protected:
 
     // ADC states
-    volatile uint16_t rotaryADCValues[CONFIG::ADCINPUTS_SIZE];// raw ADC values
-    uint8_t rotaryPositions[CONFIG::ADCINPUTS_SIZE];// calculated positions
+    volatile uint16_t rotaryADCValues[ADCINPUTS_SIZE];// raw ADC values
+    uint8_t rotaryPositions[ADCINPUTS_SIZE];// calculated positions
 
     // last button states
-    bool buttonPositions[CONFIG::INPUTS_SIZE];
+    bool buttonPositions[INPUTS_SIZE];
 
     // callbacks for bound input functions
-    delegate rotaryOnChange[CONFIG::ADCINPUTS_SIZE];
-    delegate buttonOnChange[CONFIG::INPUTS_SIZE];
+    delegate rotaryOnChange[ADCINPUTS_SIZE];
+    delegate buttonOnChange[INPUTS_SIZE];
+
 
 
     Input() :

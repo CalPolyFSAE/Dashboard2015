@@ -22,7 +22,6 @@ Screen::Screen() :
 void Screen::Init()
 {
     Subsystem::Init();
-    Serial.println("Screen::Init()");
 
     // set up CAN Mob for outgoing input data
     CANRaw& can = CANRaw::StaticClass();
@@ -46,8 +45,8 @@ void Screen::Init()
     }
 
     // set up graphics controller
-    //LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
-    //LCD.DisplayOn();
+    LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
+    LCD.DisplayOn();
 }
 
 void Screen::Update(uint8_t)

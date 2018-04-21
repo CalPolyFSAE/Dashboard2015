@@ -9,7 +9,6 @@
 #define DASHBOARD2_DASHBOARD2_H_
 
 #include "stdint.h"
-#include "avr/iocanxx.h"
 
 #define VERSION 002
 
@@ -40,35 +39,6 @@ namespace CONFIG
     // INPUT:
     // timing interval for Input (ms)
     constexpr uint8_t INPUTINTERVAL = 10;
-
-    // input channels
-    // active low
-    // Note, these ports have to be configured in the pinConfig function in main.cpp
-    constexpr uint16_t BUTTON0 = BIT(PINC, PC0);// specify which bits to read for input
-    constexpr uint16_t BUTTON1 = BIT(PINC, PC1);
-    constexpr uint16_t INPUTS[] =
-    {
-        BUTTON0,
-        BUTTON1
-    };
-    constexpr uint8_t INPUTS_SIZE = 2;
-
-
-    // rotary switch configs
-    constexpr uint8_t RED_ADC = 1;
-    constexpr uint8_t YELLOW_ADC = 0;
-    constexpr uint8_t BLACK_ADC = 2;
-
-    // this also dictates the indices to be used with Input::getRotaryPos function
-    constexpr uint8_t ACDINPUTS[] =
-    {
-        RED_ADC,
-        YELLOW_ADC,
-        BLACK_ADC
-    };
-    constexpr uint8_t ADCINPUTS_SIZE = 3;
-
-    constexpr uint8_t ROTARYPOSITIONS = 12;
 
     // SCREEN:
     // screen update Interval

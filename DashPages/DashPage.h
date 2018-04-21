@@ -15,7 +15,7 @@ class DashPage
 public:
     virtual ~DashPage() {}
 
-    virtual void Construct() = 0;
+    virtual void Begin() = 0;
     virtual void Draw() = 0;
 };
 

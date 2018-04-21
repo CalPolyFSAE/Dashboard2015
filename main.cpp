@@ -8,8 +8,7 @@
 #include "Subsystem.h"
 #include "Input.h"
 #include "CANLib.h"
-#include "FEDash.h"
-
+#include "DashPages/FE/FEDash.h"
 #include "Delegate.h"
 
 #define TEAM FE //Other: FSAE
