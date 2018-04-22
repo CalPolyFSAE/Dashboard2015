@@ -48,8 +48,6 @@ protected:
 
     Screen();
 
-    class DashPage* screens[];
-
     // startup
     virtual void Init() override;
     virtual void Update(uint8_t) override;

@@ -10,8 +10,11 @@
 #include "../../Delegate.h"
 #include "../DashPage.h"
 #include "FEDashConfig.h"
+#include "Charging.h"
 
 FEDash::FEDash() :
+    CANData{},
+    CANDataS{},
     pages{}
 {
 
@@ -55,12 +58,23 @@ void FEDash::Init()
 
     // create display screens
     // TODO
-    Charging a = new Charging()
+    AddNextPage(new Charging(LCD, CANDataS));
 }
 //
 void FEDash::Update(uint8_t)
 {
     Screen::Update(0);
+
+    // copy data out of volatile buffer
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+    {
+        CANDataS = *(const_cast<DashTypes::DashData*>(&CANData));// get rid of cv qualifier
+    }
+
+    if(pages[currentPage] != nullptr)
+    {
+        pages[currentPage]->Draw();
+    }
 }
 
 // called on Can rx for Mob. Get received data with GetCANData()
@@ -71,11 +85,11 @@ void FEDash::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
 {
     Screen::INT_Call_GotFrame(FrameData, Data);// tracks Rx occurrence
     // copy out data
-    for(uint8_t i = 0; i < FEDashConfig::FEDashDataPackLayoutSize; ++i)
+    for(uint8_t i = 0; i < DashTypes::DashDataPackLayoutSize; ++i)
     {
         if(FrameData.id == FEDashConfig::FEDashDataPackLayout[i])
         {
-            data.Msg[i] = Data;
+            CANData.Msg.data[i] = Data;
         }
     }
 }
@@ -84,6 +98,18 @@ void FEDash::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
 void FEDash::OnNoCANData()
 {
     Serial.println(FSTR("FEDash::OnNoCANData"));
+}
+
+void FEDash::AddNextPage(DashPage* page)
+{
+    for(uint8_t i = 0; i < NUMPAGES; ++i)
+    {
+        if(pages[i] == nullptr)
+        {
+            pages[i] = page;
+            return;
+        }
+    }
 }
 
 // used for input Change callback

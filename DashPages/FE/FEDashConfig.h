@@ -8,8 +8,6 @@
 #ifndef DASHPAGES_FE_FEDASHCONFIG_H_
 #define DASHPAGES_FE_FEDASHCONFIG_H_
 
-#include "../../CANLib.h"
-
 namespace FEDashConfig
 {
     // CAN messages for incoming data
@@ -69,7 +67,7 @@ namespace FEDashConfig
             true              // ide
         };
 
-    // id mapped to position in FEDashDataPack
+    // id mapped to position in DashDataPack
     constexpr uint8_t FEDashDataPackLayout[] =
         {
             DashCAN0.id,
@@ -77,12 +75,6 @@ namespace FEDashConfig
             DashCAN2.id,
             WarningCAN.id
         };
-    constexpr uint8_t FEDashDataPackLayoutSize = 4;
-
-    struct FEDashDataPack
-    {
-        CANRaw::CAN_DATA Msg[FEDashDataPackLayoutSize];
-    };
 }
 
 

@@ -10,6 +10,7 @@
 
 #include "../../Screen.h"
 #include "FEDashConfig.h"
+#include "../DashTypes.h"
 
 #define NUMPAGES 5
 
@@ -36,6 +37,9 @@ protected:
     //events
     virtual void OnNoCANData() override;
 
+    // add next page to list
+    void AddNextPage(class DashPage*);
+
     // used for input callback
     // rotary sw
     void OnRotaryInputChange0(uint8_t);
@@ -49,7 +53,8 @@ protected:
     uint8_t currentPage = 0;
 
     // data from the last CAN frame
-    volatile FEDashConfig::FEDashDataPack data;
+    volatile DashTypes::DashData CANData;
+    DashTypes::DashData CANDataS;
 
     // dashPages
     class DashPage* pages[NUMPAGES];

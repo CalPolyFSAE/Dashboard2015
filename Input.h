@@ -24,29 +24,29 @@ public:
     // input channels
     // active low
     // Note, these ports have to be configured in the pinConfig function in main.cpp
-    constexpr uint16_t BUTTON0 = BIT(PINC, PC0);// specify which bits to read for input
-    constexpr uint16_t BUTTON1 = BIT(PINC, PC1);
-    constexpr uint16_t INPUTS[] =
+    static constexpr uint16_t BUTTON0 = BIT(PINC, PC0);// specify which bits to read for input
+    static constexpr uint16_t BUTTON1 = BIT(PINC, PC1);
+    static constexpr uint16_t INPUTS[] =
     {
         BUTTON0,
         BUTTON1
     };
-    constexpr uint8_t INPUTS_SIZE = 2;
+    static constexpr uint8_t INPUTS_SIZE = 2;
 
 
     // rotary switch configs
-    constexpr uint8_t RED_ADC = 1;
-    constexpr uint8_t YELLOW_ADC = 0;
-    constexpr uint8_t BLACK_ADC = 2;
+    static constexpr uint8_t RED_ADC = 1;
+    static constexpr uint8_t YELLOW_ADC = 0;
+    static constexpr uint8_t BLACK_ADC = 2;
 
     // this also dictates the indices to be used with Input::getRotaryPos function
-    constexpr uint8_t ACDINPUTS[] =
+    static constexpr uint8_t ACDINPUTS[] =
     {
         RED_ADC,
         YELLOW_ADC,
         BLACK_ADC
     };
-    constexpr uint8_t ADCINPUTS_SIZE = 3;
+    static constexpr uint8_t ADCINPUTS_SIZE = 3;
 
     // positions in array of different inputs
     enum class ROTARY : uint8_t
@@ -61,7 +61,7 @@ public:
         BTNR = 1
     };
 
-    constexpr uint8_t ROTARYPOSITIONS = 12;
+    static constexpr uint8_t ROTARYPOSITIONS = 12;
 
     // attach callback to button
     int8_t BindOnChangeButton(const delegate&, BUTTON);

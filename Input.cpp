@@ -8,6 +8,20 @@
 #include "Input.h"
 #include "avr/interrupt.h"
 
+constexpr uint16_t Input::BUTTON0;
+constexpr uint16_t Input::BUTTON1;
+constexpr uint16_t Input::INPUTS[];
+constexpr uint8_t Input::INPUTS_SIZE;
+
+constexpr uint8_t Input::RED_ADC;
+constexpr uint8_t Input::YELLOW_ADC;
+constexpr uint8_t Input::BLACK_ADC;
+
+constexpr uint8_t Input::ACDINPUTS[];
+constexpr uint8_t Input::ADCINPUTS_SIZE;
+
+constexpr uint8_t Input::ROTARYPOSITIONS;
+
 // attach callback to button
 int8_t Input::BindOnChangeButton( const delegate& func, BUTTON btn )
 {

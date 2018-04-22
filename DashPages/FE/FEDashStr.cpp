@@ -6,6 +6,7 @@
  */
 
 #include "FEDashStr.h"
+#include <avr/pgmspace.h>
 
 static const char PROGMEM WarningMessage_ControllerTemperature[] = "CONTROLLER WARM: %.2fC";
 static const char PROGMEM WarningMessage_MotorTemperature[] = "MOTOR WARM: %.2fC";
@@ -208,80 +209,137 @@ PGM_P const BMSChargingErrorStringTable[] PROGMEM =
 
 
 
-const char * PROGMEM FEDashStr::warningMessageToString( WarningMessage warning ) {
+void FEDashStr::WarningMessageToString(WarningMessage warning, STATE& out) {
+    const char* PROGMEM str = nullptr;
     switch (warning) {
         case WarningMessage::BatteryLowVoltage:
-            return WarningMessage_BatteryLowVoltage;
+            str = WarningMessage_BatteryLowVoltage;
+            break;
         case WarningMessage::BatteryTemperature:
-            return WarningMessage_BatteryTemperature;
+            str = WarningMessage_BatteryTemperature;
+            break;
         case WarningMessage::ControllerTemperature:
-            return WarningMessage_ControllerTemperature;
+            str = WarningMessage_ControllerTemperature;
+            break;
         case WarningMessage::LVBattery:
-            return WarningMessage_LVBattery;
+            str = WarningMessage_LVBattery;
+            break;
         case WarningMessage::MotorTemperature:
-            return WarningMessage_MotorTemperature;
+            str = WarningMessage_MotorTemperature;
+            break;
         case WarningMessage::Precharge:
-            return WarningMessage_Precharge;
+            str = WarningMessage_Precharge;
+            break;
         case WarningMessage::sbRIOTemperature:
-            return WarningMessage_sbRIOTemperature;
+            str = WarningMessage_sbRIOTemperature;
+            break;
         case WarningMessage::IMD:
-            return WarningMessage_IMD;
+            str = WarningMessage_IMD;
+            break;
         case WarningMessage::BSPD:
-            return WarningMessage_BSPD;
+            str = WarningMessage_BSPD;
+            break;
         case WarningMessage::RemoteReturnToPits:
-            return WarningMessage_RemotePit;
+            str = WarningMessage_RemotePit;
+            break;
         case WarningMessage::EStopInterrupted:
-            return WarningMessage_EStop;
+            str = WarningMessage_EStop;
+            break;
         case WarningMessage::NoCellComms:
-            return WarningMessage_NoCellComms;
+            str = WarningMessage_NoCellComms;
+            break;
         case WarningMessage::MCOverSpeed:
-            return WarningMessage_MCOverSpeed;
+            str = WarningMessage_MCOverSpeed;
+            break;
         case WarningMessage::MCOverCurrent:
-            return WarningMessage_MCOverCurrent;
+            str = WarningMessage_MCOverCurrent;
+            break;
         case WarningMessage::MCOverVoltage:
-            return WarningMessage_MCOverVoltage;
+            str = WarningMessage_MCOverVoltage;
+            break;
         case WarningMessage::MCOverTemp:
-            return WarningMessage_MCOverTemp;
+            str = WarningMessage_MCOverTemp;
+            break;
         case WarningMessage::MCDirectionCommand:
-            return WarningMessage_MCDirectionCommand;
+            str = WarningMessage_MCDirectionCommand;
+            break;
         case WarningMessage::MCInverterResponseTimeout:
-            return WarningMessage_MCInverterResponseTimeout;
+            str = WarningMessage_MCInverterResponseTimeout;
+            break;
         case WarningMessage::MCDesatFault:
-            return WarningMessage_MCDesatFault;
+            str = WarningMessage_MCDesatFault;
+            break;
         case WarningMessage::MCHardwareOverCurrentFault:
-            return WarningMessage_MCHardwareOverCurrentFault;
+            str = WarningMessage_MCHardwareOverCurrentFault;
+            break;
         case WarningMessage::MCUnderVoltage:
-            return WarningMessage_MCUnderVoltage;
+            str = WarningMessage_MCUnderVoltage;
+            break;
         case WarningMessage::MCCommandMessageLost:
-            return WarningMessage_MCCommandMessageLost;
+            str = WarningMessage_MCCommandMessageLost;
+            break;
         case WarningMessage::MCMotorOverTemp:
-            return WarningMessage_MCMotorOverTemp;
+            str = WarningMessage_MCMotorOverTemp;
+            break;
         case WarningMessage::MCModAOverTemp:
-            return WarningMessage_MCModAOverTemp;
+            str = WarningMessage_MCModAOverTemp;
+            break;
         case WarningMessage::MCModBOverTem:
-            return WarningMessage_MCModBOverTemp;
+            str = WarningMessage_MCModBOverTemp;
+            break;
         case WarningMessage::MCModCOverTemp:
-            return WarningMessage_MCModCOverTemp;
+            str = WarningMessage_MCModCOverTemp;
+            break;
         case WarningMessage::MCPCBOverTemp:
-            return WarningMessage_MCPCBOverTemp;
+            str = WarningMessage_MCPCBOverTemp;
+            break;
         case WarningMessage::MCGateDrv1OverTemp:
-            return WarningMessage_MCGateDrv1OverTemp;
+            str = WarningMessage_MCGateDrv1OverTemp;
+            break;
         case WarningMessage::MCGateDrv2OverTemp:
-            return WarningMessage_MCGateDrv2OverTemp;
+            str = WarningMessage_MCGateDrv2OverTemp;
+            break;
         case WarningMessage::MCDateDrv3OverTemp:
-            return WarningMessage_MCGateDrv3OverTemp;
+            str = WarningMessage_MCGateDrv3OverTemp;
+            break;
         case WarningMessage::MCCurrentSensorFault:
-            return WarningMessage_MCCurrentSensorFault;
+            str = WarningMessage_MCCurrentSensorFault;
+            break;
         case WarningMessage::MCResolverNotConnected:
-            return WarningMessage_MCResolverNotConnected;
+            str = WarningMessage_MCResolverNotConnected;
+            break;
         case WarningMessage::ShutdownLatchTripped:
-            return WarningMessage_ShutdownLatchTripped;
+            str = WarningMessage_ShutdownLatchTripped;
+            break;
         case WarningMessage::UnknownBMS:
-            return WarningMessage_UnknownBMS;
+            str = WarningMessage_UnknownBMS;
+            break;
         case WarningMessage::RemoteEmergency:
-            return WarningMessage_RemoteEmergency;
+            str = WarningMessage_RemoteEmergency;
+            break;
+        default:
+            str = WarningMessage_Invalid;
+            break;
     }
-    return WarningMessage_Invalid;
+    strncpy_P(out.STATE_STR, str, STATE_MAX_DESC_LENGTH);
+}
+
+void FEDashStr::BmsChargeErrorToString(eBMSLastChargeError error, BMS_CHARGING_ERROR& out)
+{
+    strncpy_P (
+            out.BMS_CHARGING_ERROR_STR,
+            (PGM_P) pgm_read_word(
+                    &(BMSChargingErrorStringTable[(uint8_t) error])),
+            BMS_CHARGING_STATE_MAX_LENGTH);
+}
+
+void FEDashStr::BmsChargeStateToString(eBMSChargingState state, BMS_CHARGING_STATE& out)
+{
+    strncpy_P (
+            out.BMS_CHARGING_STATE_STR,
+            (PGM_P) pgm_read_word(
+                    &(BMSChargingStateStringTable[(uint8_t ) state])),
+            BMS_CHARGING_STATE_MAX_LENGTH);
 }
 
 

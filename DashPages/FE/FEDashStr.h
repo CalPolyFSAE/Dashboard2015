@@ -21,17 +21,17 @@ public:
 
     struct BMS_CHARGING_ERROR
     {
-        const char BMS_CHARGING_ERROR_STR[BMS_CHARGING_ERROR_MAX_LENGTH];
+        char BMS_CHARGING_ERROR_STR[BMS_CHARGING_ERROR_MAX_LENGTH];
     };
 
     struct BMS_CHARGING_STATE
     {
-        const char BMS_CHARGING_STATE_STR[BMS_CHARGING_STATE_MAX_LENGTH];
+        char BMS_CHARGING_STATE_STR[BMS_CHARGING_STATE_MAX_LENGTH];
     };
 
     struct STATE
     {
-        const char STATE_STR[STATE_MAX_DESC_LENGTH];
+        char STATE_STR[STATE_MAX_DESC_LENGTH];
     };
 
     enum class MCControlState
@@ -135,7 +135,11 @@ public:
 
     FEDashStr();
 
-    const char * PROGMEM warningMessageToString(WarningMessage warning);
+    void WarningMessageToString(WarningMessage warning, STATE&);
+
+    void BmsChargeErrorToString(eBMSLastChargeError error, BMS_CHARGING_ERROR&);
+
+    void BmsChargeStateToString(eBMSChargingState state, BMS_CHARGING_STATE&);
 };
 
 
