@@ -100,19 +100,12 @@ void Charging::Draw()
     float16::toFloat32 (&IChargerActual,
                         swap (data->IChargerActual));
 
-    char BMSChargingState[FEDashStr::BMS_CHARGING_STATE_MAX_LENGTH];
-    char BMSChargingError[FEDashStr::BMS_CHARGING_ERROR_MAX_LENGTH];
 
-    strncpy_P (
-            BMSChargingState,
-            (PGM_P) pgm_read_word (
-                    &(BMSChargingStateStringTable[(uint8_t) data->chargingState])),
-            BMS_CHARGING_STATE_MAX_LENGTH);
-    strncpy_P (
-            BMSChargingError,
-            (PGM_P) pgm_read_word (
-                    &(BMSChargingErrorStringTable[(uint8_t) data->chargeError])),
-            BMS_CHARGING_ERROR_MAX_LENGTH);
+    FEDashStr::BMS_CHARGING_STATE chargingState;
+    FEDashStr::BMS_CHARGING_ERROR chargingError;
+
+    FEDashStr::BmsChargeStateToString(data->chargingState, chargingState);
+    FEDashStr::BmsChargeErrorToString(data->chargeError, chargingError);
 
     LCD->DLStart ();
 
@@ -127,8 +120,8 @@ void Charging::Draw()
     LCD->PrintText (5, 100, 28, 0, "VCellMin: %.2f", VCellMin);
     LCD->PrintText (5, 125, 28, 0, "VCellMean: %.2f", VCellMean);
     LCD->PrintText (5, 150, 28, 0, "VTotal: %.2f", VTotal);
-    LCD->PrintText (5, 175, 28, 0, "Charging State: %s", BMSChargingState);
-    LCD->PrintText (5, 200, 28, 0, "Last Charging Error: %s", BMSChargingError);
+    LCD->PrintText (5, 175, 28, 0, "Charging State: %s", chargingState.BMS_CHARGING_STATE_STR);
+    LCD->PrintText (5, 200, 28, 0, "Last Charging Error: %s", chargingError.BMS_CHARGING_ERROR_STR);
     LCD->PrintText (190, 0, 28, 0, "VChargerSetpoint: %.2f", VChargerSetpoint);
     LCD->PrintText (190, 25, 28, 0, "IChargerSetpoint: %.2f", IChargerSetpoint);
     LCD->PrintText (190, 50, 28, 0, "VChargerActual: %.2f", VChargerActual);

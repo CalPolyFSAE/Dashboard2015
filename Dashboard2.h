@@ -10,6 +10,9 @@
 
 #include "stdint.h"
 
+#define TEAM FE //Other: FSAE
+
+
 #define VERSION 002
 
 // uncomment to print version info through serial on startup

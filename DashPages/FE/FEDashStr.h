@@ -135,11 +135,11 @@ public:
 
     FEDashStr();
 
-    void WarningMessageToString(WarningMessage warning, STATE&);
+    static void WarningMessageToString(WarningMessage warning, STATE&);
 
-    void BmsChargeErrorToString(eBMSLastChargeError error, BMS_CHARGING_ERROR&);
+    static void BmsChargeErrorToString(eBMSLastChargeError error, BMS_CHARGING_ERROR&);
 
-    void BmsChargeStateToString(eBMSChargingState state, BMS_CHARGING_STATE&);
+    static void BmsChargeStateToString(eBMSChargingState state, BMS_CHARGING_STATE&);
 };
 
 

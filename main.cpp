@@ -10,8 +10,7 @@
 #include "CANLib.h"
 #include "DashPages/FE/FEDash.h"
 #include "Delegate.h"
-
-#define TEAM FE //Other: FSAE
+#include "Dashboard2.h"
 
 static void pinConfig() { // run by main to configure pins
     //Init Digital Inputs for Buttons
