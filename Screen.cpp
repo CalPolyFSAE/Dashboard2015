@@ -22,6 +22,15 @@ Screen::Screen() :
 void Screen::Init()
 {
     Subsystem::Init();
+    // set up graphics controller
+
+    LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
+
+    LCD.DisplayOn();
+
+    uploadLogoToController();
+
+    displayStartingScreen();
 
     // set up CAN Mob for outgoing input data
     CANRaw& can = CANRaw::StaticClass();
@@ -43,10 +52,6 @@ void Screen::Init()
 #endif //DEBUG_PRINT
 #endif //DASHCANOUTPUTINTERVAL
     }
-
-    // set up graphics controller
-    LCD.Init(FT_DISPLAY_RESOLUTION, 0, false);
-    LCD.DisplayOn();
 }
 
 void Screen::Update(uint8_t)
@@ -111,6 +116,26 @@ void Screen::uploadLogoToController() {
     LCD.BitmapSource (108676);
     LCD.BitmapLayout (FT_ARGB1555, 500, 49);
     LCD.BitmapSize (FT_BILINEAR, FT_BORDER, FT_BORDER, 250, 49);
+    LCD.DLEnd ();
+    LCD.Finish ();
+}
+
+void Screen::displayStartingScreen() {
+    LCD.DLStart ();
+    const char Display_string[] = "Cal Poly FSAE";
+
+    LCD.ColorRGB (0xFF, 0xFF, 0xFF);
+    LCD.Cmd_Text (FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 8, 29, FT_OPT_CENTER,
+                  "Cal Poly FSAE");
+    LCD.ColorRGB (0xFF, 0x00, 0x00);
+    LCD.PrintText (FT_DISPLAYWIDTH / 2, FT_DISPLAYHEIGHT / 2, 29, FT_OPT_CENTER,
+                   "...STARTING...");
+
+    LCD.ColorRGB (0xFF, 0xFF, 0xFF);
+    LCD.Begin (FT_BITMAPS);
+    LCD.Vertex2ii (FT_DISPLAYWIDTH / 4, 215, 0, 0);
+    LCD.End ();
+
     LCD.DLEnd ();
     LCD.Finish ();
 }

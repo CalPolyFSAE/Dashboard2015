@@ -46,6 +46,14 @@ ISR(TIMER1_COMPA_vect) {
 
 int main() {
 
+    init();// the display library uses delay from Arduino. Wonderful
+
+    pinConfig();
+
+    timer1_init();
+
+    sei();
+
     Serial.begin (SERIAL_BAUD);
     Serial.println (FSTR("DASHBOARD"));
 #ifdef PRINT_VERSION_INFO
@@ -54,11 +62,21 @@ int main() {
     Serial.println(FSTR(__DATE__));
 #endif // PRINT_VERSION_INFO
 
-    cli();
 
-    pinConfig();
+    uint8_t a = 0;
+    while(a < 5)
+    {
+        for(volatile uint16_t i = 0; i != 0xFFFF; ++i)
+        {
+            i += 2;
+            i -= 2;
+            i += 1;
+            i -= 1;
+        }
+        Serial.println(FSTR("------------"));
+        a++;
+    }
 
-    timer1_init();
 
     CANRaw& CAN = CANRaw::StaticClass();// this is not a subsystem
     CAN.Init(CANRaw::CAN_BAUDRATE::B1M);// set baudrate
@@ -72,14 +90,12 @@ int main() {
 
     //Input& input = Subsystem::StaticClass<Input> ();
 
-
-
     SubsystemControl::StaticClass().InitSubsystems();
 
-    sei();
 
     while(1)
     {
         SubsystemControl::StaticClass().MainLoop();
     }
+
 }

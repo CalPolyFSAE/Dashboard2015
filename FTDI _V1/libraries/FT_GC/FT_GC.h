@@ -363,13 +363,10 @@ FT_Status FT_GC<FT_Trans>::Init(uint8_t ResType, uint16_t options1 = 0, bool fli
 	}
 	/* Initialize SPI channel */
 	FT_Trans::Init();
-
 	/* Bootup of graphics controller */
 	Reset();
-
 	/* Set the display configurations followed by external clock set, spi clock change wrt FT80x */
 	DisplayConfigExternalClock(ResType);
-
 //   if ((options1 & FT_INTERNAL_CLOCK_SOURCE) == FT_INTERNAL_CLOCK_SOURCE) {
 	if (true) {
 		/* Set to use internal clock source */

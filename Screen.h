@@ -69,6 +69,8 @@ private:
 
     // logo upload
     void uploadLogoToController();
+    // shows logo and some text
+    void displayStartingScreen();
 
     // logo data
     static const uint8_t PROGMEM CPRacingLogo[];
