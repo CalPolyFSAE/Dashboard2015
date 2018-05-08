@@ -43,6 +43,15 @@ public:
     friend class Subsystem;
 
 protected:
+
+    // startup states
+    enum class StartupStates : uint8_t
+    {
+        RUNNING,
+        WAITING_FOR_INPUT,
+        STARTUP
+    };
+
     // Lcd control
     FT801IMPL_SPI LCD;
 
@@ -50,7 +59,10 @@ protected:
 
     // startup
     virtual void Init() override;
+    // update
     virtual void Update(uint8_t) override;
+    // draw call for Running State
+    virtual void RunningDraw() = 0;
 
     // called on Can rx for Mob. Get received data with GetCANData()
     // dlc is the data length code of the received message. It may be different
@@ -62,15 +74,26 @@ protected:
     // no can data has been received in MAXNOCANUPDATES update cycles
     virtual void OnNoCANData() {}
 
+    // force CurrentState into running mode
+    // used to override startup and waiting for CAN screens
+    // or forcing the screen into a mode that allows displaying errors
+    void ForceStateRunning();
+
     // every 12 ms?
-    void sendSwitchPositions(uint8_t);
+    void SendSwitchPositions(uint8_t);
 
 private:
+    // choose which screen to display
+    void displayStateActions();
 
     // logo upload
     void uploadLogoToController();
     // shows logo and some text
     void displayStartingScreen();
+    // shows switch positions and NO CAN DATA
+    void displayWaitingScreen();
+    // cycles no CAN timer and fires event
+    void checkNoCAN();
 
     // logo data
     static const uint8_t PROGMEM CPRacingLogo[];
@@ -78,8 +101,14 @@ private:
     // has there been a CAN message since the last update
     volatile bool bRxCANSinceLastUpdate = false;
 
+    // is there CAN
+    bool bIsCANData = false;
+
     // handle on the mob configured for outgoing messages
     CANRaw::CAN_MOB CanTxMobHandle = CANRaw::CAN_MOB::MOB_NONE;
+
+    // current display state
+    StartupStates CurrentState;
 
 };
 

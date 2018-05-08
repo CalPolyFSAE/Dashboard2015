@@ -37,6 +37,8 @@ protected:
     //events
     virtual void OnNoCANData() override;
 
+    virtual void RunningDraw();
+
     // add next page to list
     void AddNextPage(class DashPage*);
 
@@ -53,8 +55,9 @@ protected:
     uint8_t currentPage = 0;
 
     // data from the last CAN frame
+    // this is an array of CAN Data Frames sorted by id
     volatile DashTypes::DashData CANData;
-    DashTypes::DashData CANDataS;
+    DashTypes::DashData CANDataSafe;
 
     // dashPages
     class DashPage* pages[NUMPAGES];

@@ -54,30 +54,25 @@ int8_t Input::BindOnChangeRotary( const delegate& func, ROTARY rot )
 
 void Input::INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel)
 {
-    // MUST start the ADC on first channel in array
-    static uint8_t indexLastChannel = 0;
-
-    rotaryADCValues[indexLastChannel] = value;
-
-    ++indexLastChannel;
-
-    // figure out if we need to go back to the beginning
-    if(!(indexLastChannel >= ADCINPUTS_SIZE))
-    {
-        // start read for next channel
-        Subsystem::StaticClass<ADCManager> ().StartRead (
-                this, ACDINPUTS[indexLastChannel]);
-    }else
-    {
-        // reset counter
-        indexLastChannel = 0;
-        // do nothing, next read cycle will be started by Update
-    }
+    bDidCompleteRead = true;
+    rotaryADCValues[channel] = value;
 }
 
 void Input::Update(uint8_t)
 {
     Subsystem::Update(0);
+
+    for(uint8_t indexLastChannel = 0; indexLastChannel < ADCINPUTS_SIZE; ++indexLastChannel)
+    {
+        bDidCompleteRead = false;
+        // start read for next channel
+        Subsystem::StaticClass<ADCManager> ().StartRead (
+                this, ACDINPUTS[indexLastChannel]);
+        // wait for complete
+        while(!bDidCompleteRead);
+    }
+
+
     // update positions while checking for change since last update
     for(uint8_t i = 0; i < ADCINPUTS_SIZE; ++i)
     {
@@ -86,6 +81,7 @@ void Input::Update(uint8_t)
         {
             if(delegate::isValid(rotaryOnChange[i]))
             {
+                Serial.println("FIRING");
                 rotaryOnChange[i](newPos);// report change along with new position
             }
             rotaryPositions[i] = newPos;// update the rotary positions array
@@ -107,15 +103,14 @@ void Input::Update(uint8_t)
         uint16_t val = INPUTS[i];
         // Ex: val looks like this
         // port* pinMask appended in an uint16
-        // 0000 0002  0000 0001
-        // ((uint8_t*)(&val))[0] is 0000 0001, pinMask
-        // ((uint8_t*)(&val))[1] is 0000 0002, port*
-        volatile uint8_t* port = (volatile uint8_t *)(((uint8_t*)(&val))[1]);
-        uint8_t mask = (((uint8_t*)(&val))[0]);
-        volatile uint8_t reg = *port;
+        // 0101 1011  0000 0001
+        // ((uint8_t*)(&val))[1] is 0000 0001, pinMask
+        // ((uint8_t*)(&val))[0] is 0101 1011, port*
+        volatile uint8_t* port = (volatile uint8_t *)(((uint8_t*)(&val))[0]);
+        uint8_t mask = (((uint8_t*)(&val))[1]);
 
         // check for bit at pos
-        bool state = reg & mask;
+        bool state = *port & mask;
 
         // check for button change
         if(state != buttonPositions[i])
@@ -135,9 +130,6 @@ void Input::Update(uint8_t)
 #endif
         }
     }
-
-    // start next read cycle
-    Subsystem::StaticClass<ADCManager>().StartRead(this, ACDINPUTS[0]);
 }
 
 void Input::Init()

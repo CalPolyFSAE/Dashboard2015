@@ -72,16 +72,18 @@ public:
     virtual void INT_Call_ADC_Finished(const uint16_t& value, uint8_t channel) override;// start next ADC read on complete
 
     // position get functions
-    inline bool getButtonPos( uint8_t index ) {
-        if (index < INPUTS_SIZE)
-            return buttonPositions[index];
+    inline bool getButtonPos( BUTTON button ) {
+        uint8_t buti = (uint8_t)button;
+        if (buti < INPUTS_SIZE)
+            return buttonPositions[buti];
         return false;
     }
 
-    inline uint8_t getRotaryPos(uint8_t index)
+    inline uint8_t getRotaryPos(ROTARY rot)
     {
-        if (index < ADCINPUTS_SIZE)
-            return rotaryPositions[index];
+        uint8_t roti = (uint8_t)rot;
+        if (roti < ADCINPUTS_SIZE)
+            return rotaryPositions[roti];
         return 0;
     }
 
@@ -98,6 +100,7 @@ protected:
     delegate rotaryOnChange[ADCINPUTS_SIZE];
     delegate buttonOnChange[INPUTS_SIZE];
 
+    volatile bool bDidCompleteRead = false;
 
 
     Input() :

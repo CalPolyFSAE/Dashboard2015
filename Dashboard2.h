@@ -24,14 +24,6 @@
 // serial baudrate
 #define SERIAL_BAUD 9600
 
-// a string helper that replaces the Arduino F macro and maintains const
-class __FlashStringHelper;
-#define FSTR(string_literal) (reinterpret_cast<const __FlashStringHelper*>(PSTR(string_literal)))
-
-// port and pin is the register and bit position that should be read for
-// pin state
-#define BIT(addr, pin) {(uint16_t)(((uint8_t)&addr)<<8 | pin)}
-
 //TODO: config stuff
 namespace CONFIG
 {
@@ -39,18 +31,30 @@ namespace CONFIG
     // max number of jobs the Timing system can have
     constexpr uint8_t RSCMAXJOBS = 15;
 
+
     // INPUT:
     // timing interval for Input (ms)
-    constexpr uint8_t INPUTINTERVAL = 10;
+    // this will debounce input
+    constexpr uint8_t INPUTINTERVAL = 50;
+
 
     // SCREEN:
     // screen update Interval
     constexpr uint8_t SCREENINTERVAL = 16;
+
     // update cycles before OnNoCANData event
     // will be about SCREENINTERVAL*MAXNOCANUPDATES ms
     constexpr uint8_t MAXNOCANUPDATES = 3;
 
 }
+
+// a string helper that replaces the Arduino F macro and maintains const
+class __FlashStringHelper;
+#define FSTR(string_literal) (reinterpret_cast<const __FlashStringHelper*>(PSTR(string_literal)))
+
+// port and pin is the register and bit position that should be read for
+// pin state
+#define BIT(addr, pin) {(uint16_t)(((uint8_t)&addr)<<8 | _BV(pin))}
 
 
 /* stuff for led outputs

@@ -14,7 +14,7 @@
 
 FEDash::FEDash() :
     CANData{},
-    CANDataS{},
+    CANDataSafe{},
     pages{}
 {
 
@@ -58,7 +58,7 @@ void FEDash::Init()
 
     // create display screens
     // TODO
-    AddNextPage(new Charging(LCD, CANDataS));
+    AddNextPage(new Charging(LCD, CANDataSafe));
 }
 //
 void FEDash::Update(uint8_t)
@@ -68,12 +68,7 @@ void FEDash::Update(uint8_t)
     // copy data out of volatile buffer
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        CANDataS = *(const_cast<DashTypes::DashData*>(&CANData));// get rid of cv qualifier
-    }
-
-    if(pages[currentPage] != nullptr)
-    {
-        pages[currentPage]->Draw();
+        CANDataSafe = *(const_cast<DashTypes::DashData*>(&CANData));// get rid of cv qualifier
     }
 }
 
@@ -97,7 +92,15 @@ void FEDash::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
 // on no can data rx for interval
 void FEDash::OnNoCANData()
 {
-    Serial.println(FSTR("FEDash::OnNoCANData"));
+    //Serial.println(FSTR("FEDash::OnNoCANData"));
+}
+
+void FEDash::RunningDraw()
+{
+    if(pages[currentPage] != nullptr)
+    {
+        pages[currentPage]->Draw();
+    }
 }
 
 void FEDash::AddNextPage(DashPage* page)

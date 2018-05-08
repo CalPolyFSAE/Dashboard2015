@@ -1,6 +1,5 @@
 
 #include <stdint.h>
-#include <string.h>
 
 #include "AVRLibrary/arduino/Arduino.h"
 
@@ -8,6 +7,7 @@
 #include "Subsystem.h"
 #include "Input.h"
 #include "CANLib.h"
+#include "ADCManager.h"
 #include "DashPages/FE/FEDash.h"
 #include "Delegate.h"
 #include "Dashboard2.h"
@@ -37,6 +37,10 @@ ISR(TIMER1_COMPA_vect) {
     SubsystemControl::StaticClass().INT_CALL_TickAllTC();
 }
 
+ISR(ADC_vect) {
+    Subsystem::StaticClass<ADCManager>().INT_ADCFinished();
+}
+
 //interrupt for CAN timeout
 //63/sec
 //SIGNAL(TIMER2_OVF_vect) {
@@ -46,7 +50,7 @@ ISR(TIMER1_COMPA_vect) {
 
 int main() {
 
-    init();// the display library uses delay from Arduino. Wonderful
+    init();// the display library uses delay from Arduino.
 
     pinConfig();
 
@@ -62,7 +66,7 @@ int main() {
     Serial.println(FSTR(__DATE__));
 #endif // PRINT_VERSION_INFO
 
-
+    /*
     uint8_t a = 0;
     while(a < 5)
     {
@@ -75,7 +79,7 @@ int main() {
         }
         Serial.println(FSTR("------------"));
         a++;
-    }
+    }*/
 
 
     CANRaw& CAN = CANRaw::StaticClass();// this is not a subsystem
@@ -88,12 +92,14 @@ int main() {
     Screen& screen = FEDash::StaticClass();
 #endif
 
-    //Input& input = Subsystem::StaticClass<Input> ();
+    Input& input = Subsystem::StaticClass<Input> ();
+
+    ADCManager& adc = Subsystem::StaticClass<ADCManager>();
 
     SubsystemControl::StaticClass().InitSubsystems();
 
 
-    while(1)
+    while(true)
     {
         SubsystemControl::StaticClass().MainLoop();
     }

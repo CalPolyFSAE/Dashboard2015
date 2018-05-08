@@ -53,12 +53,9 @@ void ADCManager::INT_ADCFinished()
     if(!ADCAvailable())
     {
         uint16_t result;
-        //this should be unnecessary
-        ATOMIC_BLOCK(ATOMIC_FORCEON)
-        {
-            result = ADCL;
-            result |= ADCH << 8;
-        }
+
+        result = ADCL;
+        result |= ADCH << 8;
 
         currentReadCallback->INT_Call_ADC_Finished(result, channel);
         currentReadCallback = nullptr;
