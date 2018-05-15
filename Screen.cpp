@@ -35,6 +35,15 @@ void Screen::Init()
     CanTxMobHandle = can.GetNextFreeMob();
     can.ConfigTx(DashInputCANMsg, CanTxMobHandle);
 
+    // hook up callbacks
+    // input
+    Input& input = Subsystem::StaticClass<Input>();
+    input.BindOnChangeButton(delegate::from_method<Screen, &Screen::OnButtonInputChange0>(this), Input::BUTTON::BTN0);
+    input.BindOnChangeButton(delegate::from_method<Screen, &Screen::OnButtonInputChange1>(this), Input::BUTTON::BTN1);
+    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange0>(this), Input::ROTARY::ROT2);
+    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange1>(this), Input::ROTARY::ROT0);
+    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange2>(this), Input::ROTARY::ROT1);
+
 #ifdef DASHCANOUTPUTINTERVAL
     // Switch CAN message event
     if (SubsystemControl::StaticClass ().RegisterEvent (
@@ -68,27 +77,40 @@ void Screen::ForceStateRunning()
 
 void Screen::SendSwitchPositions(uint8_t)
 {
-    CANRaw::CAN_DATA data {};
-    DashInputCANMsgDataFormat* inputData = (DashInputCANMsgDataFormat*) data.byte;
+    if(CurrentState == StartupStates::RUNNING)
+    {
+        CANRaw::CAN_DATA data
+            { };
+        DashInputCANMsgDataFormat* inputData =
+                (DashInputCANMsgDataFormat*) data.byte;
 
-    // the indices used here are based on position of the rotary switch in CONFIG::ADCINPUTS[]
-    inputData->RedRotary = Subsystem::StaticClass<Input> ().getRotaryPos (Input::ROTARY::RED);
-    inputData->YellowRotary = Subsystem::StaticClass<Input> ().getRotaryPos (Input::ROTARY::YELLOW);
-    inputData->BlackRotary = Subsystem::StaticClass<Input> ().getRotaryPos (Input::ROTARY::BLACK);
+        // the indices used here are based on position of the rotary switch in CONFIG::ADCINPUTS[]
+        inputData->RedRotary = Subsystem::StaticClass<Input> ().getRotaryPos (
+                Input::ROTARY::ROT0);
+        inputData->YellowRotary =
+                Subsystem::StaticClass<Input> ().getRotaryPos (
+                        Input::ROTARY::ROT1);
+        inputData->BlackRotary = Subsystem::StaticClass<Input> ().getRotaryPos (
+                Input::ROTARY::ROT2);
 
-    // this is not a great way of doing this, but it simplifies the
-    // operation by avoiding multiple calls to Input::getButtonPos(index) and
-    // getting rid of the need to format the data for the message.
-    // It will cause issues if the buttons change pins on mcu
-    inputData->ButtonsArray = ~PINC;
+        // this is not a great way of doing this, but it simplifies the
+        // operation by avoiding multiple calls to Input::getButtonPos(index) and
+        // getting rid of the need to format the data for the message.
+        // It will cause issues if the buttons change pins on mcu
+        inputData->ButtonsArray = ~PINC;
 
-    CANRaw::StaticClass().INTS_TxData(data, CanTxMobHandle);
+        CANRaw::StaticClass ().INTS_TxData (data, CanTxMobHandle);
+    }
 }
 
 // PRIVATE
 
 const uint8_t PROGMEM Screen::CPRacingLogo[] = {
 #include "GraphicsAssets/CPRacingLogo.inc"
+};
+
+const uint8_t PROGMEM Screen::MSFont[] = {
+#include "GraphicsAssets/MSFont"
 };
 
 void Screen::displayStateActions()
@@ -133,8 +155,8 @@ void Screen::uploadLogoToController() {
 
 void Screen::displayStartingScreen() {
 
-    // display for about 3 seconds
-    static uint8_t StartupTimer = 200;
+    // display for about 2 seconds
+    static uint8_t StartupTimer = 145;
     if (StartupTimer > 0)
     {
         --StartupTimer;
@@ -167,11 +189,13 @@ void Screen::displayWaitingScreen()
     LCD.Clear(0,0,0);
     LCD.ColorRGB(255, 255, 255);
 
-    uint8_t rpos = Subsystem::StaticClass<Input> ().getRotaryPos (Input::ROTARY::RED);
-    uint8_t ypos = Subsystem::StaticClass<Input> ().getRotaryPos (Input::ROTARY::YELLOW);
-    uint8_t bpos = Subsystem::StaticClass<Input> ().getRotaryPos (Input::ROTARY::BLACK);
+    Input& input = Subsystem::StaticClass<Input> ();
 
-    if(rpos != 0 || ypos != 0 || bpos != 0)
+    uint8_t rightpos = input.getRotaryPos (Input::ROTARY::ROT0);
+    uint8_t leftpos = input.getRotaryPos (Input::ROTARY::ROT1);
+    uint8_t midpos = input.getRotaryPos (Input::ROTARY::ROT2);
+
+    if(rightpos != 0 || leftpos != 0 || midpos != 0)
     {
         LCD.Cmd_Text(228, 137, 26, FT_OPT_CENTER, "Switch position error");
     }
@@ -179,9 +203,9 @@ void Screen::displayWaitingScreen()
     LCD.Cmd_Scale(32768, 32768);
     LCD.Cmd_SetMatrix();
 
-    LCD.Cmd_Number(147, 178, 30, 0, rpos);
-    LCD.Cmd_Number(216, 178, 30, 0, ypos);
-    LCD.Cmd_Number(285, 178, 30, 0, bpos);
+    LCD.Cmd_Number(147, 178, 30, 0, leftpos);
+    LCD.Cmd_Number(216, 178, 30, 0, midpos);
+    LCD.Cmd_Number(285, 178, 30, 0, rightpos);
 
     LCD.Cmd_LoadIdentity();
     LCD.Cmd_SetMatrix();
@@ -200,6 +224,14 @@ void Screen::displayWaitingScreen()
 
     LCD.DLEnd();
     LCD.Finish();
+
+    uint8_t bpos0 = input.getButtonPos(Input::BUTTON::BTN0);
+    uint8_t bpos1 = input.getButtonPos(Input::BUTTON::BTN1);
+
+    if(bpos0 == 0 && bpos1 == 0)// both buttons are pressed override
+    {
+        CurrentState = StartupStates::RUNNING;
+    }
 /*
 COLOR_RGB(255, 255, 255)
 CMD_TEXT(228, 137, 26, OPT_CENTER, "Switch position error")

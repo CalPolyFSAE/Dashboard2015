@@ -9,7 +9,7 @@
 #define DASHPAGES_CHARGING_H_
 
 #include "../DashPage.h"
-#include "../DashTypes.h"
+#include "FEDashTypes.h"
 #include "../../FTDI _V1/FT_VM801P43_50.h"
 
 class Charging : public DashPage

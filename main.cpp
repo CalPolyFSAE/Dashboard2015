@@ -9,6 +9,7 @@
 #include "CANLib.h"
 #include "ADCManager.h"
 #include "DashPages/FE/FEDash.h"
+#include "DashPages/CC/CCDash.h"
 #include "Delegate.h"
 #include "Dashboard2.h"
 
@@ -89,7 +90,7 @@ int main() {
 #if TEAM==FE
     Screen& screen = Subsystem::StaticClass<FEDash>();
 #elif TEAM==FSAE
-    Screen& screen = FEDash::StaticClass();
+    Screen& screen = Subsystem::StaticClass<CCDash>();
 #endif
 
     Input& input = Subsystem::StaticClass<Input> ();

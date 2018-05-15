@@ -74,6 +74,15 @@ protected:
     // no can data has been received in MAXNOCANUPDATES update cycles
     virtual void OnNoCANData() {}
 
+    // used for input callback
+    // rotary sw
+    virtual void OnRotaryInputChange0(uint8_t) {}
+    virtual void OnRotaryInputChange1(uint8_t) {}
+    virtual void OnRotaryInputChange2(uint8_t) {}
+    // buttons
+    virtual void OnButtonInputChange0(uint8_t) {}
+    virtual void OnButtonInputChange1(uint8_t) {}
+
     // force CurrentState into running mode
     // used to override startup and waiting for CAN screens
     // or forcing the screen into a mode that allows displaying errors
@@ -97,6 +106,9 @@ private:
 
     // logo data
     static const uint8_t PROGMEM CPRacingLogo[];
+
+    // font data
+    static const uint8_t PROGMEM MSFont[];
 
     // has there been a CAN message since the last update
     volatile bool bRxCANSinceLastUpdate = false;

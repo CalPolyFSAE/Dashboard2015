@@ -247,7 +247,7 @@ void CANRaw::INT_CANIT() {
             }
             else if (mobStatus & _BV (RXOK))
             {
-                /*
+
                 // TODO: dlcw warning
                 uint8_t dlc = Can_get_dlc();// in case of dlcw and dlc changing
                 CAN_DATA Data;
@@ -278,7 +278,7 @@ void CANRaw::INT_CANIT() {
                 // reset Mob to correct configuration as it will change when using masks
                 ReconfigureMob((CAN_MOB)mob);
 
-                Can_clear_status_mob();*/
+                Can_clear_status_mob();
             }
         }
         else
@@ -406,3 +406,78 @@ void CANRaw::ReconfigureMob(CAN_MOB mobn)
 
     CANPAGE = origCANPAGE;
 }
+
+
+
+///////////////////////////TESTING///////////////////////////
+//#define CAN_TESTING
+
+#ifdef CAN_TESTING
+
+#include "Subsystem.h"
+#include "AVRLibrary/arduino/Arduino.h"
+
+class CANTestL : CANListener
+{
+public:
+    CANTestL()
+    {
+        gotF = false;
+        sentF = false;
+    }
+
+    volatile bool gotF;
+    volatile bool sentF;
+
+protected:
+
+    virtual void INT_Call_GotFrame(const CANRaw::CAN_FRAME_HEADER& FrameData, const CANRaw::CAN_DATA& Data) {
+        gotF = true;
+    };
+    virtual void INT_Call_SentFrame(const CANRaw::CAN_FRAME_HEADER& frameConfig) {
+        sentF = true;
+    };
+
+};
+
+int main()
+{
+    Serial.begin(9600);
+
+    CANRaw::CAN_FRAME_HEADER testH =
+    {
+            0x0F,
+            0,
+            0,
+            8   // dlc
+    };
+
+    CANRaw::CAN_FRAME_MASK testM =
+    {
+            0xFFFF,
+            true,
+            true
+    };
+
+    CANTestL listener = CANTestL();
+    CANRaw& can = Subsystem::StaticClass<CANRaw>();
+    can.Init(CANRaw::CAN_BAUDRATE::B1M);
+    CANRaw::CAN_MOB rxH = can.GetNextFreeMob();
+    can.ConfigRx(testH, testM, rxH);
+    if(!can.BindListener(&listener, rxH))
+    {
+        Serial.println("FAILED TO BIND");
+    }
+
+    while(true){
+        if(listener.gotF == true)
+        {
+            listener.gotF = false;
+            Serial.println("RX");
+        }
+    }
+
+    return 0;
+}
+
+#endif

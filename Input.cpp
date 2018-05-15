@@ -8,14 +8,14 @@
 #include "Input.h"
 #include "avr/interrupt.h"
 
-constexpr uint16_t Input::BUTTON0;
-constexpr uint16_t Input::BUTTON1;
-constexpr uint16_t Input::INPUTS[];
+constexpr Input::BUTTONINFO Input::BUTTON0;
+constexpr Input::BUTTONINFO Input::BUTTON1;
+constexpr Input::BUTTONINFO Input::INPUTS[];
 constexpr uint8_t Input::INPUTS_SIZE;
 
-constexpr uint8_t Input::RED_ADC;
-constexpr uint8_t Input::YELLOW_ADC;
-constexpr uint8_t Input::BLACK_ADC;
+constexpr uint8_t Input::ROT0_ADC;
+constexpr uint8_t Input::ROT1_ADC;
+constexpr uint8_t Input::ROT2_ADC;
 
 constexpr uint8_t Input::ACDINPUTS[];
 constexpr uint8_t Input::ADCINPUTS_SIZE;
@@ -81,7 +81,7 @@ void Input::Update(uint8_t)
         {
             if(delegate::isValid(rotaryOnChange[i]))
             {
-                Serial.println("FIRING");
+                //Serial.println("FIRING");
                 rotaryOnChange[i](newPos);// report change along with new position
             }
             rotaryPositions[i] = newPos;// update the rotary positions array
@@ -100,14 +100,8 @@ void Input::Update(uint8_t)
     // check for button changes
     for(uint8_t i = 0; i < INPUTS_SIZE; ++i)
     {
-        uint16_t val = INPUTS[i];
-        // Ex: val looks like this
-        // port* pinMask appended in an uint16
-        // 0101 1011  0000 0001
-        // ((uint8_t*)(&val))[1] is 0000 0001, pinMask
-        // ((uint8_t*)(&val))[0] is 0101 1011, port*
-        volatile uint8_t* port = (volatile uint8_t *)(((uint8_t*)(&val))[0]);
-        uint8_t mask = (((uint8_t*)(&val))[1]);
+        volatile uint8_t* port = INPUTS[i].addr;
+        uint8_t mask = INPUTS[i].mask;
 
         // check for bit at pos
         bool state = *port & mask;

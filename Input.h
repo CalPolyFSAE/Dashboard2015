@@ -21,44 +21,59 @@ class Input : public Subsystem, ADCManagerCallbackInterface
 public:
     friend class Subsystem;// this is necessary for StaticClass function
 
+    struct BUTTONINFO
+    {
+        volatile uint8_t* addr;
+        uint8_t mask;
+    };
+
     // input channels
     // active low
     // Note, these ports have to be configured in the pinConfig function in main.cpp
-    static constexpr uint16_t BUTTON0 = BIT(PINC, PC0);// specify which bits to read for input
-    static constexpr uint16_t BUTTON1 = BIT(PINC, PC1);
-    static constexpr uint16_t INPUTS[] =
+    static constexpr BUTTONINFO BUTTON0 = {
+            &PINC,
+            _BV(PC0)
+    };
+
+    static constexpr BUTTONINFO BUTTON1 = {
+            &PINC,
+            _BV(PC1)
+    };
+
+    static constexpr BUTTONINFO INPUTS[] =
     {
         BUTTON0,
         BUTTON1
     };
     static constexpr uint8_t INPUTS_SIZE = 2;
 
+    enum class BUTTON : uint8_t
+    {
+        BTN0 = 0,
+        BTN1 = 1
+    };
+
 
     // rotary switch configs
-    static constexpr uint8_t RED_ADC = 1;
-    static constexpr uint8_t YELLOW_ADC = 0;
-    static constexpr uint8_t BLACK_ADC = 2;
+    static constexpr uint8_t ROT0_ADC = 1;//RED
+    static constexpr uint8_t ROT1_ADC = 0;//YELLOW
+    static constexpr uint8_t ROT2_ADC = 2;//BLACK
 
-    // this also dictates the indices to be used with Input::getRotaryPos function
+    // this also dictates the index to be used with Input::getRotaryPos function
     static constexpr uint8_t ACDINPUTS[] =
     {
-        RED_ADC,
-        YELLOW_ADC,
-        BLACK_ADC
+        ROT0_ADC,
+        ROT1_ADC,
+        ROT2_ADC
     };
     static constexpr uint8_t ADCINPUTS_SIZE = 3;
 
     // positions in array of different inputs
     enum class ROTARY : uint8_t
     {
-        RED = 0,
-        YELLOW = 1,
-        BLACK = 2
-    };
-    enum class BUTTON : uint8_t
-    {
-        BTNL = 0,
-        BTNR = 1
+        ROT0 = 0,
+        ROT1 = 1,
+        ROT2 = 2
     };
 
     static constexpr uint8_t ROTARYPOSITIONS = 12;

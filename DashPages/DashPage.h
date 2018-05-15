@@ -49,6 +49,10 @@ public:
         dst[1] = src[0];
         return a;
     }
+
+    inline static float motecToFloat( uint16_t value, float scaler = 100.0 ) {
+        return (float) swap (value) / scaler;
+    }
 };
 
 

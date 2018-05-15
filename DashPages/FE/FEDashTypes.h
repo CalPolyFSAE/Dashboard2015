@@ -9,7 +9,7 @@
 #define DASHPAGES_DASHTYPES_H_
 
 #include "stdint.h"
-#include "../CANLib.h"
+#include "../../CANLib.h"
 
 namespace DashTypes
 {

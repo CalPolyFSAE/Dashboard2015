@@ -1,27 +1,26 @@
 /*
- * FEDash.h
+ * CCDash.h
  *
- *  Created on: Apr 11, 2018
+ *  Created on: May 12, 2018
  *      Author: root
  */
 
-#ifndef DASHPAGES_FE_FEDASH_H_
-#define DASHPAGES_FE_FEDASH_H_
+#ifndef DASHPAGES_CC_CCDASH_H_
+#define DASHPAGES_CC_CCDASH_H_
 
 #include "../../Screen.h"
-#include "FEDashConfig.h"
-#include "FEDashTypes.h"
+#include "CCDashConfig.h"
 
 #define NUMPAGES 5
 
-class FEDash : public Screen
+class CCDash : public Screen
 {
 public:
     friend class Subsystem;// should get rid of this type of stuff
 
 protected:
 
-    FEDash();
+    CCDash();
 
     // startup
     virtual void Init() override;
@@ -39,8 +38,11 @@ protected:
     // add next page to list
     void AddNextPage(class DashPage*);
 
+    //
+    void uploadFontToController();
+
     //events
-     virtual void OnNoCANData() override;
+    virtual void OnNoCANData() override;
     // used for input callback
     // rotary sw
     virtual void OnRotaryInputChange0(uint8_t) override;
@@ -55,12 +57,12 @@ protected:
 
     // data from the last CAN frame
     // this is an array of CAN Data Frames sorted by id
-    volatile DashTypes::DashData CANData;
-    DashTypes::DashData CANDataSafe;
+    volatile CCDashConfig::DashInfo DashInfoR;
+    CCDashConfig::DashInfo DashInfoSafe;
 
     // dashPages
     class DashPage* pages[NUMPAGES];
 };
 
 
-#endif /* DASHPAGES_FE_FEDASH_H_ */
+#endif /* DASHPAGES_CC_CCDASH_H_ */

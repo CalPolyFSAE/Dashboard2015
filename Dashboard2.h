@@ -10,10 +10,10 @@
 
 #include "stdint.h"
 
-#define TEAM FE //Other: FSAE
+#define TEAM FSAE //Other: FSAE
 
 
-#define VERSION 002
+#define VERSION 003
 
 // uncomment to print version info through serial on startup
 #define PRINT_VERSION_INFO
@@ -51,10 +51,6 @@ namespace CONFIG
 // a string helper that replaces the Arduino F macro and maintains const
 class __FlashStringHelper;
 #define FSTR(string_literal) (reinterpret_cast<const __FlashStringHelper*>(PSTR(string_literal)))
-
-// port and pin is the register and bit position that should be read for
-// pin state
-#define BIT(addr, pin) {(uint16_t)(((uint8_t)&addr)<<8 | _BV(pin))}
 
 
 /* stuff for led outputs
