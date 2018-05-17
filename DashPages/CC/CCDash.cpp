@@ -12,13 +12,24 @@
 #include "../DashPage.h"
 #include "CCDashConfig.h"
 #include "CCDashStr.h"
+#include "../DashPage.h"
+#include "Driving.h"
+#include "ErrorConditions.h"
+
+const uint8_t PROGMEM CCDash::MSFont[] = {
+#include "../../GraphicsAssets/MSFont"
+};
 
 CCDash::CCDash() :
     DashInfoR{},
     DashInfoSafe{},
-    pages{}
+    DisplayInfo{},
+    pages{},
+    rot0pos(),
+    rot1pos(),
+    rot2pos()
 {
-
+    ErrorManager = nullptr;
 }
 
 void CCDash::Init()
@@ -42,20 +53,48 @@ void CCDash::Init()
     can.ConfigRx(CCDashConfig::DashCANFrame2, CCDashConfig::DashCANMsgMsk, CanRxMobHandle);
     can.BindListener(this, CanRxMobHandle, true);
 
+
+    ErrorManager = new ErrorConditions(DisplayInfo);
+
     // create display screens
     // TODO
-    //AddNextPage(new Charging(LCD, CANDataSafe));
+    DrivingPage = new Driving(LCD, DisplayInfo);
+    AddNextPage(DrivingPage);
 }
 //
 void CCDash::Update(uint8_t)
 {
     Screen::Update(0);
 
+
+    bool needUpdate = false;
     // copy data out of volatile buffer
     ATOMIC_BLOCK(ATOMIC_FORCEON)
     {
-        DashInfoSafe = *(const_cast<CCDashConfig::DashInfo*>(&DashInfoR));// get rid of cv qualifier
+        needUpdate = bNewData;
+        if(needUpdate)
+        {
+            bNewData = false;
+            DashInfoSafe = *(const_cast<CCDashConfig::DashInfo*>(&DashInfoR));// get rid of cv qualifier
+        }
     }
+
+    if (needUpdate)// update values
+    {
+        DisplayInfo.EngineTemp = DashPage::motecToFloat(DashInfoSafe.c0.EngineTemp);
+        DisplayInfo.RPM = DashPage::motecToFloat(DashInfoSafe.c0.RPM, 1.0);
+        DisplayInfo.Gear = DashPage::motecToFloat(DashInfoSafe.c0.Gear);
+        DisplayInfo.Speed = DashPage::motecToFloat(DashInfoSafe.c0.Speed);
+        DisplayInfo.Lambda = DashPage::motecToFloat(DashInfoSafe.c1.Lambda);
+        DisplayInfo.OilTemp = DashPage::motecToFloat(DashInfoSafe.c1.OilTemp);
+        DisplayInfo.MAP = DashPage::motecToFloat(DashInfoSafe.c1.MAP);
+        DisplayInfo.ThrottlePOS = DashPage::motecToFloat(DashInfoSafe.c1.ThrottlePOS);
+        DisplayInfo.BatteryVoltage = DashPage::motecToFloat(DashInfoSafe.c2.BatteryVoltage);
+        DisplayInfo.OilPressure = DashPage::motecToFloat(DashInfoSafe.c2.OilPressure);
+        DisplayInfo.IAT = DashPage::motecToFloat(DashInfoSafe.c2.IAT);
+    }
+
+
 }
 
 // called on Can rx for Mob. Get received data with GetCANData()
@@ -65,10 +104,11 @@ void CCDash::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
                                 const CANRaw::CAN_DATA& Data )
 {
     Screen::INT_Call_GotFrame(FrameData, Data);// tracks Rx occurrence
+    bNewData = true;
     // copy out data
     for(uint8_t i = 0; i < CCDashConfig::NUM_CAN_MESSAGES; ++i)
     {
-        if(FrameData.id == CCDashConfig::DashInfoLayout[i])
+        if(FrameData.id == CCDashConfig::DashInfoLayout[i].id)
         {
             DashInfoR.msg[i] = Data;
         }
@@ -80,6 +120,13 @@ void CCDash::OnNoCANData()
 {
     Screen::OnNoCANData();
     //Serial.println(FSTR("FEDash::OnNoCANData"));
+    DrivingPage->SetDisplayNoCAN(true);
+}
+
+void CCDash::OnCANData()
+{
+    Screen::OnCANData();
+    DrivingPage->SetDisplayNoCAN(false);
 }
 
 void CCDash::RunningDraw()
@@ -104,7 +151,6 @@ void CCDash::AddNextPage(DashPage* page)
 
 void CCDash::uploadFontToController()
 {
-
     LCD.Cmd_Inflate(-115660);
     LCD.WriteCmdfromflash(MSFont, sizeof(MSFont));
     LCD.Finish();
@@ -124,17 +170,18 @@ void CCDash::uploadFontToController()
 void CCDash::OnRotaryInputChange0( uint8_t pos )
 {
     Screen::OnRotaryInputChange0(pos);
-    Serial.println(FSTR("FEDash::OnRotaryInputChange0"));
+    rot0pos = pos;
+    currentPage = pos;
 }
 void CCDash::OnRotaryInputChange1( uint8_t pos )
 {
     Screen::OnRotaryInputChange1(pos);
-    Serial.println(FSTR("FEDash::OnRotaryInputChange1"));
+    rot1pos = pos;
 }
 void CCDash::OnRotaryInputChange2( uint8_t pos )
 {
     Screen::OnRotaryInputChange2(pos);
-    Serial.println(FSTR("FEDash::OnRotaryInputChange2"));
+    rot2pos = pos;
 }
 // buttons
 void CCDash::OnButtonInputChange0( uint8_t pos )

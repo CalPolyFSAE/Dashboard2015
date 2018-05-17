@@ -78,6 +78,22 @@ namespace CCDashConfig
         uint8_t unused;
     };
 
+    struct ConvertedInfo
+    {
+        float EngineTemp;
+        float RPM;
+        float Gear;
+        float Speed;
+        float Lambda;
+        float OilTemp;
+        float MAP;
+        float ThrottlePOS;
+        float BatteryVoltage;
+        float OilPressure;
+        float IAT;
+        float Brightness;
+    };
+
     constexpr uint8_t NUM_CAN_MESSAGES = 3;
 
     struct DashInfo
@@ -97,7 +113,7 @@ namespace CCDashConfig
         };
     };
 
-    constexpr CANRaw::CAN_FRAME_MASK DashInfoLayout[] =
+    constexpr CANRaw::CAN_FRAME_HEADER DashInfoLayout[] =
     {
         DashCANFrame0,
         DashCANFrame1,
@@ -106,18 +122,22 @@ namespace CCDashConfig
 
     // Errors
     constexpr uint8_t ERROR_ARRAY_SIZE = 10;
+    constexpr uint8_t ERROR_TICKS_PERIOD_MS = 1000;
+    constexpr uint8_t ERROR_TICKS_BEFORE_ACK_ERROR_RESET = 100;
 
-    constexpr uint8_t EngineErrThreshold = 212;
-    constexpr uint8_t EngineWarnThreshold = 205;
+    constexpr uint8_t EngineTempColdThresholdL = 100;
+    constexpr uint8_t EngineTempErrThresholdH = 212;
+    constexpr uint8_t EngineTempWarnThresholdH = 205;
 
-    constexpr float BatteryErrThreshold = 11.8;
-    constexpr uint8_t BatteryWarnThreshold = 12;
+    constexpr float BatteryErrThresholdL = 11.8;
+    constexpr uint8_t BatteryWarnThresholdL = 12;
 
-    constexpr uint8_t OilPressureErrThreshold = 5;
-    constexpr uint8_t OilPressureWarnThreshold = 15;
+    constexpr uint8_t OilPressureErrThresholdL = 5;
+    constexpr uint8_t OilPressureWarnThresholdL = 15;
 
-    constexpr uint8_t OilTempErrThreshold = 250;
-    constexpr uint8_t OilTempWarnThreshold = 210;
+    constexpr uint8_t OilTempColdThresholdL = 100;
+    constexpr uint8_t OilTempErrThresholdH = 250;
+    constexpr uint8_t OilTempWarnThresholdH = 210;
 
 }
 

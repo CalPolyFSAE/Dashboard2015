@@ -10,7 +10,7 @@
 
 #include "stdint.h"
 
-#define TEAM FSAE //Other: FSAE
+#define TEAM FSAE // FE, FSAE
 
 
 #define VERSION 003

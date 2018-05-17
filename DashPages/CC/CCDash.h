@@ -43,6 +43,7 @@ protected:
 
     //events
     virtual void OnNoCANData() override;
+    virtual void OnCANData() override;
     // used for input callback
     // rotary sw
     virtual void OnRotaryInputChange0(uint8_t) override;
@@ -52,16 +53,27 @@ protected:
     virtual void OnButtonInputChange0(uint8_t) override;
     virtual void OnButtonInputChange1(uint8_t) override;
 
+    uint8_t rot0pos, rot1pos, rot2pos;
+
     // current dash page
     uint8_t currentPage = 0;
 
     // data from the last CAN frame
     // this is an array of CAN Data Frames sorted by id
+    volatile bool bNewData = false;
     volatile CCDashConfig::DashInfo DashInfoR;
     CCDashConfig::DashInfo DashInfoSafe;
 
+    CCDashConfig::ConvertedInfo DisplayInfo;
+
+    // font data
+    static const uint8_t PROGMEM MSFont[];
+
     // dashPages
     class DashPage* pages[NUMPAGES];
+    class ErrorConditions* ErrorManager;
+
+    class Driving* DrivingPage;
 };
 
 
