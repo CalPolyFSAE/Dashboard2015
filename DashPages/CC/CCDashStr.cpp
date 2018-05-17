@@ -8,12 +8,6 @@
 #include "CCDashStr.h"
 #include "avr/pgmspace.h"
 
-static const char PROGMEM WarningMessage_EngineTemperature[] = "Engine Hot: %.1fF";
-static const char PROGMEM WarningMessage_OilTemperature[] = "Oil Temperature: %.1fF";
-static const char PROGMEM WarningMessage_OilPressure[] = "Oil Pressure: %.1f psi";
-static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Low: %.1fF";
-static const char PROGMEM WarningMessage_Invalid[] = "Invalid Warning Msg.";
-
 static const char PROGMEM RotaryRed1[] = "LC - Default";
 static const char PROGMEM RotaryRed2[] = "LC - -100rpm";
 static const char PROGMEM RotaryRed3[] = "LC - +100rpm";
@@ -82,6 +76,84 @@ void CCDashStr::getDialStr(ROTARY rot, uint8_t pos, char cpyout[])
             break;
     }
     strncpy_P(cpyout, str, STATE_MAX_DESC_LENGTH);
+}
+
+
+static const char PROGMEM WarningMessage_EngineTemperatureError[] = "Engine Temperature Error";
+static const char PROGMEM WarningMessage_EngineTemperatureHigh[] = "Engine Temp High Warn";
+static const char PROGMEM WarningMessage_OilTemperatureHigh[] = "Oil Temp High Warn";
+static const char PROGMEM WarningMessage_Invalid[] = "Invalid";
+static const char PROGMEM WarningMessage_InvalidData[] = "Invalid Data";
+static const char PROGMEM WarningMessage_BatteryLow[] = "Battery Voltage Low";
+static const char PROGMEM WarningMessage_OilPressure[] = "Oil Pressure Low";
+
+static const size_t CCDashStr::ERROR_MAX_MSG_LENGTH = 25;
+
+
+void CCDashStr::getErrorTypeStr(Error e, char out[])
+{
+    const char* PROGMEM str = nullptr;
+    switch(e.GetErrorType())
+    {
+        case Error::ErrorType::EngineOverheat:
+            str = WarningMessage_EngineTemperatureError;
+            break;
+        case Error::ErrorType::HighEngineTemp:
+            str = WarningMessage_EngineTemperatureHigh;
+            break;
+        case Error::ErrorType::HighOilTemp:
+            str = WarningMessage_OilTemperatureHigh;
+            break;
+        case Error::ErrorType::Invalid:
+            str = WarningMessage_Invalid;
+            break;
+        case Error::ErrorType::InvalidValue:
+            str = WarningMessage_InvalidData;
+            break;
+        case Error::ErrorType::LowBatteryVoltage:
+            str = WarningMessage_BatteryLow;
+            break;
+        case Error::ErrorType::LowOilPressure:
+            str = WarningMessage_OilPressure;
+            break;
+    }
+    strncpy_P(out, str, ERROR_MAX_MSG_LENGTH);
+}
+
+static const char PROGMEM ErrorLevel_Danger[] = "DANGER";
+static const char PROGMEM ErrorLevel_Error[] = "ERROR";
+static const char PROGMEM ErrorLevel_Message[] = "Message";
+static const char PROGMEM ErrorLevel_None[] = "Invalid";
+static const char PROGMEM ErrorLevel_ReturnToPits[] = "RETURN";
+static const char PROGMEM ErrorLevel_Warning[] = "Warning";
+
+static const size_t CCDashStr::ERROR_MAX_TYPE_LENGTH = 15;
+
+void CCDashStr::getErrorMsgStr(Error e, char out[])
+{
+    const char* PROGMEM str = nullptr;
+    switch(e.GetErrorLevel())
+    {
+        case Error::ErrorLevel::Danger:
+            str = ErrorLevel_Danger;
+            break;
+        case Error::ErrorLevel::Error:
+            str = ErrorLevel_Error;
+            break;
+        case Error::ErrorLevel::Message:
+            str = ErrorLevel_Message;
+            break;
+        case Error::ErrorLevel::None:
+            str = ErrorLevel_None;
+            break;
+        case Error::ErrorLevel::ReturnToPits:
+            str = ErrorLevel_ReturnToPits;
+            break;
+        case Error::ErrorLevel::Warning:
+            str = ErrorLevel_Warning;
+            break;
+    }
+    strncpy_P(out, str, ERROR_MAX_MSG_LENGTH);
 }
 
 

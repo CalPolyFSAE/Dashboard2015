@@ -10,11 +10,14 @@
 
 #include "stdint.h"
 #include "stddef.h"
+#include "Error.h"
 
 class CCDashStr
 {
 public:
     static const size_t STATE_MAX_DESC_LENGTH;
+    static const size_t ERROR_MAX_MSG_LENGTH;
+    static const size_t ERROR_MAX_TYPE_LENGTH;
 
     enum class ROTARY : uint8_t
     {
@@ -24,6 +27,9 @@ public:
     };
 
     static void getDialStr(ROTARY, uint8_t pos, char[]);
+
+    static void getErrorTypeStr(Error, char[]);
+    static void getErrorMsgStr(Error, char[]);
 
 };
 
