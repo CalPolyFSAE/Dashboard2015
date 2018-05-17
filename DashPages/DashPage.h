@@ -14,6 +14,23 @@
 class DashPage
 {
 public:
+    struct Color
+    {
+        uint8_t r,g,b;
+        Color() :
+            Color(0,0,0)
+        {}
+        Color(uint8_t r, uint8_t g, uint8_t b):
+            r(r), g(g), b(b)
+        {}
+    };
+    const Color RED = Color(255, 0, 0);
+    const Color YELLOW = Color(255, 255, 0);
+    const Color BLUE = Color(0, 76, 255);
+    const Color GREEN = Color(0, 255, 0);
+    const Color WHITE = Color(255, 255, 255);
+    const Color BLACK = Color(0, 0, 0);
+
     virtual ~DashPage() {}
 
     virtual void Begin() = 0;
