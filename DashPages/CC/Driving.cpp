@@ -109,7 +109,7 @@ void Driving::Draw()
     //oil temp
     LCD.ColorRGB (oilBarColor.r, oilBarColor.g, oilBarColor.b);
     LCD.Cmd_Progress (50, 249, 200, 12, FT_OPT_FLAT, DashInfo.OilTemp,
-                      CCDashConfig::OilPressureErrThresholdL); // last two (value, range)
+                      CCDashConfig::OilTempErrThresholdH); // last two (value, range)
 
     // water temp
     LCD.ColorRGB (waterBarColor.r, waterBarColor.g, waterBarColor.b); // water tmp color
