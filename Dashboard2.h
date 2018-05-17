@@ -22,7 +22,7 @@
 #define DEBUG_PRINT
 
 // serial baudrate
-#define SERIAL_BAUD 9600
+#define SERIAL_BAUD 115200
 
 //TODO: config stuff
 namespace CONFIG
@@ -44,7 +44,7 @@ namespace CONFIG
 
     // update cycles before OnNoCANData event
     // will be about SCREENINTERVAL*MAXNOCANUPDATES ms
-    constexpr uint8_t MAXNOCANUPDATES = 3;
+    constexpr uint8_t MAXNOCANUPDATES = 120;
 
 }
 

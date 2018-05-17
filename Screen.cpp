@@ -106,7 +106,8 @@ void Screen::SendSwitchPositions(uint8_t)
 // PRIVATE
 
 const uint8_t PROGMEM Screen::CPRacingLogo[] = {
-#include "GraphicsAssets/CPRacingLogo.inc"
+//#include "GraphicsAssets/CPRacingLogo.inc"
+#include "GraphicsAssets/CPRacingLogo2"
 };
 
 void Screen::displayStateActions()
@@ -136,7 +137,8 @@ void Screen::INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
 }
 
 void Screen::uploadLogoToController() {
-    LCD.Cmd_Inflate (108676);
+
+    /*LCD.Cmd_Inflate (108676);
     LCD.WriteCmdfromflash (CPRacingLogo, sizeof(CPRacingLogo));
     LCD.Finish ();
 
@@ -147,6 +149,20 @@ void Screen::uploadLogoToController() {
     LCD.BitmapSize (FT_BILINEAR, FT_BORDER, FT_BORDER, 250, 49);
     LCD.DLEnd ();
     LCD.Finish ();
+    */
+
+    LCD.Cmd_Inflate (17400);
+    LCD.WriteCmdfromflash (CPRacingLogo, sizeof(CPRacingLogo));
+    LCD.Finish ();
+
+    LCD.DLStart ();
+    LCD.BitmapHandle(1);
+    LCD.BitmapSource(17400);
+    LCD.BitmapLayout(FT_ARGB1555, 620, 96);
+    LCD.BitmapSize(FT_BILINEAR, FT_BORDER, FT_BORDER, 310, 96);
+    LCD.DLEnd ();
+    LCD.Finish ();
+
 }
 
 void Screen::displayStartingScreen() {
@@ -171,8 +187,13 @@ void Screen::displayStartingScreen() {
                    "...STARTING...");
 
     LCD.ColorRGB (0xFF, 0xFF, 0xFF);
+
+    //LCD.Begin (FT_BITMAPS);
+    //LCD.Vertex2ii (FT_DISPLAYWIDTH / 4, 215, 0, 0);
+    //LCD.End ();
+
     LCD.Begin (FT_BITMAPS);
-    LCD.Vertex2ii (FT_DISPLAYWIDTH / 4, 215, 0, 0);
+    LCD.Vertex2ii(90, 184, 1, 0);
     LCD.End ();
 
     LCD.DLEnd ();
@@ -224,6 +245,7 @@ void Screen::displayWaitingScreen()
     uint8_t bpos0 = input.getButtonPos(Input::BUTTON::BTN0);
     uint8_t bpos1 = input.getButtonPos(Input::BUTTON::BTN1);
 
+
     if(bpos0 == 0 && bpos1 == 0)// both buttons are pressed override
     {
         CurrentState = StartupStates::RUNNING;
@@ -262,23 +284,20 @@ void Screen::checkNoCAN()
     if(!cpyRxCAN)
     {
         ++CANNoRxCounter;
-        CANRxCounter = 0;
         if(CANNoRxCounter > CONFIG::MAXNOCANUPDATES)
         {
             OnNoCANData();
+            Serial.println("OnNoCANData");
             bIsCANData = false;
             CANNoRxCounter = 0;
-        }
-    }else
-    {
-        ++CANRxCounter;
-        CANNoRxCounter = 0;
-        if(CANRxCounter > CONFIG::MAXNOCANUPDATES)
-        {
-            OnCANData();
-            bIsCANData = true;
             CANRxCounter = 0;
         }
+    }else if(!bIsCANData)
+    {
+        OnCANData();
+        Serial.println("OnCANData");
+        bIsCANData = true;
+        CANNoRxCounter = 0;
     }
 }
 

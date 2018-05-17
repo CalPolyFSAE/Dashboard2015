@@ -7,8 +7,9 @@
 
 #include "Driving.h"
 #include "CCDashStr.h"
+#include "AVRLibrary/arduino/Arduino.h"
 
-constexpr char Driving::GearText[];
+constexpr char* Driving::GearText[];
 
 Driving::Driving(FT801IMPL_SPI& LCD, const CCDashConfig::ConvertedInfo& info) :
     DashInfo(info),
@@ -25,7 +26,6 @@ void Driving::Begin()
 
 void Driving::Draw()
 {
-
     Color oilBarColor, waterBarColor, BVBoxColor, BVTextColor, OPBoxColor, OPTextColor;
     // oil temp color
     if (DashInfo.OilTemp > CCDashConfig::OilTempErrThresholdH)
@@ -77,10 +77,24 @@ void Driving::Draw()
     CCDashStr::getErrorMsgStr(CurrentError, errorMsg);
     CCDashStr::getErrorTypeStr(CurrentError, errorType);
 
-    LCD.DLStart();
-    LCD.ClearColorRGB(0, 0, 0);
+    const char* gear = GearText[(uint8_t)DashInfo.Gear];
 
-    LCD.Cmd_Text(240, 34, 0, FT_OPT_CENTERX, "");// GEAR
+    LCD.DLStart();
+    LCD.Clear(0, 0, 0);
+
+    LCD.ColorRGB(255, 255, 255);
+
+    // logo in corner
+    LCD.Cmd_Scale(32768, 32768);
+    LCD.Cmd_Translate(0, -1048576);
+    LCD.Cmd_SetMatrix();
+    LCD.Begin(FT_BITMAPS);
+    LCD.Vertex2ii(328, 0, 1, 0);
+    LCD.End();
+    LCD.Cmd_LoadIdentity();
+    LCD.Cmd_SetMatrix();
+
+    LCD.Cmd_Text(240, 34, 0, FT_OPT_CENTERX, gear);// GEAR
 
     LCD.Cmd_Number(364, 90, 31, FT_OPT_CENTER, DashInfo.Speed);// MPH
     LCD.Cmd_Text(364, 114, 26, FT_OPT_CENTER, "MPH");
@@ -93,12 +107,14 @@ void Driving::Draw()
     LCD.PrintText(265, 237, 26, FT_OPT_CENTERY, "%.1f F", DashInfo.EngineTemp);
 
     //oil temp
-    LCD.ColorRGB(oilBarColor.r, oilBarColor.g, oilBarColor.b);
-    LCD.Cmd_Progress(50, 249, 200, 12, FT_OPT_FLAT, 92, 100);// last two (value, range)
+    LCD.ColorRGB (oilBarColor.r, oilBarColor.g, oilBarColor.b);
+    LCD.Cmd_Progress (50, 249, 200, 12, FT_OPT_FLAT, DashInfo.OilTemp,
+                      CCDashConfig::OilPressureErrThresholdL); // last two (value, range)
 
     // water temp
-    LCD.ColorRGB(waterBarColor.r, waterBarColor.g, waterBarColor.b);// water tmp color
-    LCD.Cmd_Progress(50, 229, 200, 12, FT_OPT_FLAT, 66, 100);// last two (value, range)
+    LCD.ColorRGB (waterBarColor.r, waterBarColor.g, waterBarColor.b); // water tmp color
+    LCD.Cmd_Progress (50, 229, 200, 12, FT_OPT_FLAT, DashInfo.EngineTemp,
+                      CCDashConfig::EngineTempErrThresholdH); // last two (value, range)
 
 
 
@@ -172,6 +188,9 @@ void Driving::Draw()
     LCD.Vertex2ii(0, 220, 0, 0);
     LCD.Vertex2ii(480, 220, 0, 0);
     LCD.End();
+
+    LCD.DLEnd ();
+    LCD.Finish ();
 }
 
 void Driving::SetDisplayError(Error e)

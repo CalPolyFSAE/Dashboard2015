@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 
 #include "CANLib.h"
+#include "AVRLibrary/arduino/Arduino.h"
 
 //#include "Commands/CommandManager.h"
 ISR(CANIT_vect) {
@@ -110,7 +111,6 @@ bool CANRaw::BindListener( CANListener* listener, CAN_MOB mobn,
     }
 
     Handlers[mob] = listener;
-    MobModes[mob] = CAN_MOB_OPERATING_MODE::DISABLED;
 
     return true;
 }
@@ -149,7 +149,7 @@ bool CANRaw::ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mas
         return false;
 
     uint8_t mob = (uint8_t)mobn;
-    if(MobModes[mob] != CAN_MOB_OPERATING_MODE::DISABLED || Handlers[mob] == nullptr)
+    if(MobModes[mob] != CAN_MOB_OPERATING_MODE::DISABLED)
     {
         return false;
     }
@@ -159,9 +159,6 @@ bool CANRaw::ConfigRx( const CAN_FRAME_HEADER& header, const CAN_FRAME_MASK& mas
     MobMasks[mob] = mask;
 
     ReconfigureMob(mobn);
-
-    Can_set_mob(mob);// has to happen before Can_config_rx
-    Can_config_rx();// must happen after ReconfigureMob
 
     return true;
 }
@@ -245,7 +242,7 @@ void CANRaw::INT_CANIT() {
 
                 //do not reconfigure because this mob should still be configured properly
             }
-            else if (mobStatus & _BV (RXOK))
+            else if ((mobStatus & _BV (RXOK)) || (mobStatus & _BV(DLCW)))
             {
 
                 // TODO: dlcw warning
@@ -272,13 +269,15 @@ void CANRaw::INT_CANIT() {
 
                 // the dlc in received data might be different than what was specified when configured
                 // notify that message was received (Rx callback)
-                if(handler)
+                if(handler != nullptr)
+                {
                     handler->INT_Call_GotFrame(Header, Data);
+                }
+
+                Can_clear_status_mob();
 
                 // reset Mob to correct configuration as it will change when using masks
                 ReconfigureMob((CAN_MOB)mob);
-
-                Can_clear_status_mob();
             }
         }
         else
@@ -398,6 +397,7 @@ void CANRaw::ReconfigureMob(CAN_MOB mobn)
             }
 
             Can_enable_mob_int(mob);// enable interrupts for this mob
+            Can_config_rx();// must happen after ReconfigureMob
 
             break;
         default:

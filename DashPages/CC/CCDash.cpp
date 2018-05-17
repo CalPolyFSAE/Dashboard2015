@@ -15,6 +15,7 @@
 #include "../DashPage.h"
 #include "Driving.h"
 #include "ErrorConditions.h"
+#include "AVRLibrary/arduino/Arduino.h"
 
 const uint8_t PROGMEM CCDash::MSFont[] = {
 #include "../../GraphicsAssets/MSFont"
@@ -30,6 +31,7 @@ CCDash::CCDash() :
     rot2pos()
 {
     ErrorManager = nullptr;
+    DrivingPage = nullptr;
 }
 
 void CCDash::Init()
@@ -44,14 +46,17 @@ void CCDash::Init()
     CANRaw::CAN_MOB CanRxMobHandle = can.GetNextFreeMob();
     can.ConfigRx(CCDashConfig::DashCANFrame0, CCDashConfig::DashCANMsgMsk, CanRxMobHandle);
     can.BindListener(this, CanRxMobHandle, true);
+    Serial.println((uint8_t)CanRxMobHandle);
 
     CanRxMobHandle = can.GetNextFreeMob();
     can.ConfigRx(CCDashConfig::DashCANFrame1, CCDashConfig::DashCANMsgMsk, CanRxMobHandle);
     can.BindListener(this, CanRxMobHandle, true);
+    Serial.println((uint8_t)CanRxMobHandle);
 
     CanRxMobHandle = can.GetNextFreeMob();
     can.ConfigRx(CCDashConfig::DashCANFrame2, CCDashConfig::DashCANMsgMsk, CanRxMobHandle);
     can.BindListener(this, CanRxMobHandle, true);
+    Serial.println((uint8_t)CanRxMobHandle);
 
 
     ErrorManager = new ErrorConditions(DisplayInfo);
@@ -131,6 +136,8 @@ void CCDash::OnCANData()
 
 void CCDash::RunningDraw()
 {
+    // force no can off
+    //DrivingPage->SetDisplayNoCAN(false);
     if(pages[currentPage] != nullptr)
     {
         pages[currentPage]->Draw();
@@ -151,12 +158,12 @@ void CCDash::AddNextPage(DashPage* page)
 
 void CCDash::uploadFontToController()
 {
-    LCD.Cmd_Inflate(-115660);
+    LCD.Cmd_Inflate(0);
     LCD.WriteCmdfromflash(MSFont, sizeof(MSFont));
     LCD.Finish();
 
     LCD.DLStart();
-    LCD.BitmapHandle(1);
+    LCD.BitmapHandle(0);
     LCD.BitmapSource(-115660);
     LCD.BitmapLayout(FT_L4, 28, 88);
     LCD.BitmapSize(FT_NEAREST, FT_BORDER, FT_BORDER, 56, 88);

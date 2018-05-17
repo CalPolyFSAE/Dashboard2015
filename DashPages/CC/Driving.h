@@ -32,7 +32,7 @@ protected:
     Error CurrentError;
     bool bDisplayNoCAN;
 
-    static constexpr char GearText[] = {'0', '1', '2', '3', '4', '5', '/'};
+    static constexpr char* GearText[] = {"0", "1", "2", "3", "4", "5", "/"};
 };
 
 
