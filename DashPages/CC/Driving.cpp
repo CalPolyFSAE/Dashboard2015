@@ -6,11 +6,16 @@
  */
 
 #include "Driving.h"
+#include "CCDashStr.h"
 
-Driving::Driving(FT801IMPL_SPI& LCD, const CCDashConfig::DashInfo& info) :
-    LCD(LCD)
+constexpr char Driving::GearText[];
+
+Driving::Driving(FT801IMPL_SPI& LCD, const CCDashConfig::ConvertedInfo& info) :
+    DashInfo(info),
+    LCD(LCD),
+    CurrentError()
 {
-    DashInfo = info;
+    bDisplayNoCAN = false;
 }
 
 void Driving::Begin()
@@ -20,101 +25,161 @@ void Driving::Begin()
 
 void Driving::Draw()
 {
-    float EngineTemp, RPM, Gear, Speed, OilTemp, OilPressure, BatteryVoltage;
 
-    EngineTemp = motecToFloat(DashInfo.c0.EngineTemp);
-    RPM = motecToFloat(DashInfo.c0.RPM, 1.0);
-    Gear = motecToFloat(DashInfo.c0.Gear);
-    Speed = motecToFloat(DashInfo.c0.Speed);
-    OilTemp = motecToFloat(DashInfo.c1.OilTemp);
-    OilPressure = motecToFloat(DashInfo.c2.OilPressure);
-    BatteryVoltage = motecToFloat(DashInfo.c2.BatteryVoltage);
+    Color oilBarColor, waterBarColor, BVBoxColor, BVTextColor, OPBoxColor, OPTextColor;
+    // oil temp color
+    if (DashInfo.OilTemp > CCDashConfig::OilTempErrThresholdH)
+        oilBarColor = RED;
+    else if (DashInfo.OilTemp > CCDashConfig::OilTempWarnThresholdH)
+        oilBarColor = YELLOW;
+    else if(DashInfo.OilTemp < CCDashConfig::OilTempColdThresholdL)
+        oilBarColor = BLUE;
+    else
+        oilBarColor = GREEN;
+
+    // water color
+    if (DashInfo.EngineTemp > CCDashConfig::EngineTempErrThresholdH)
+        waterBarColor = RED;
+    else if (DashInfo.EngineTemp > CCDashConfig::EngineTempWarnThresholdH)
+        waterBarColor = YELLOW;
+    else if(DashInfo.EngineTemp < CCDashConfig::EngineTempColdThresholdL)
+        waterBarColor = BLUE;
+    else
+        waterBarColor = GREEN;
+
+    // Batt volt color
+    if (DashInfo.BatteryVoltage < CCDashConfig::BatteryErrThresholdL){
+        BVBoxColor = RED;
+        BVTextColor = YELLOW;
+    }else if (DashInfo.BatteryVoltage < CCDashConfig::BatteryWarnThresholdL){
+        BVBoxColor = YELLOW;
+        BVTextColor = BLACK;
+    }else{
+        BVBoxColor = GREEN;
+        BVTextColor = BLACK;
+    }
+
+    // oil pressure color
+    if (DashInfo.OilPressure < CCDashConfig::OilPressureErrThresholdL){
+        OPBoxColor = RED;
+        OPTextColor = YELLOW;
+    }else if (DashInfo.BatteryVoltage < CCDashConfig::OilPressureWarnThresholdL){
+        OPBoxColor = YELLOW;
+        OPTextColor = BLACK;
+    }else{
+        OPBoxColor = GREEN;
+        OPTextColor = BLACK;
+    }
+
+    char errorMsg[CCDashStr::ERROR_MAX_MSG_LENGTH];
+    char errorType[CCDashStr::ERROR_MAX_TYPE_LENGTH];
+
+    CCDashStr::getErrorMsgStr(CurrentError, errorMsg);
+    CCDashStr::getErrorTypeStr(CurrentError, errorType);
 
     LCD.DLStart();
     LCD.ClearColorRGB(0, 0, 0);
 
     LCD.Cmd_Text(240, 34, 0, FT_OPT_CENTERX, "");// GEAR
 
-    LCD.Cmd_Number(364, 90, 31, FT_OPT_CENTER, Speed);// MPH
+    LCD.Cmd_Number(364, 90, 31, FT_OPT_CENTER, DashInfo.Speed);// MPH
     LCD.Cmd_Text(364, 114, 26, FT_OPT_CENTER, "MPH");
 
 
     LCD.Cmd_Text(10, 255, 27, FT_OPT_CENTERY, "OIL");
     LCD.Cmd_Text(4, 237, 27, FT_OPT_CENTERY, "WTR");
 
-    LCD.PrintText(265, 255, 26, FT_OPT_CENTERY, "%.1f F", OilTemp);
-    LCD.PrintText(265, 237, 26, FT_OPT_CENTERY, "%.1f F", EngineTemp);
+    LCD.PrintText(265, 255, 26, FT_OPT_CENTERY, "%.1f F", DashInfo.OilTemp);
+    LCD.PrintText(265, 237, 26, FT_OPT_CENTERY, "%.1f F", DashInfo.EngineTemp);
 
-    LCD.ColorRGB(255, 0, 0);// oil color
+    //oil temp
+    LCD.ColorRGB(oilBarColor.r, oilBarColor.g, oilBarColor.b);
     LCD.Cmd_Progress(50, 249, 200, 12, FT_OPT_FLAT, 92, 100);// last two (value, range)
 
-    LCD.ColorRGB(0, 255, 0);// water color
+    // water temp
+    LCD.ColorRGB(waterBarColor.r, waterBarColor.g, waterBarColor.b);// water tmp color
     LCD.Cmd_Progress(50, 229, 200, 12, FT_OPT_FLAT, 66, 100);// last two (value, range)
 
 
 
     LCD.ColorRGB(0, 255, 255);
-    LCD.Cmd_Number(140, 90, 25, FT_OPT_CENTERY | FT_OPT_RIGHTX, RPM);// RPM
+    LCD.Cmd_Number(140, 90, 25, FT_OPT_CENTERY | FT_OPT_RIGHTX, DashInfo.RPM);// RPM
 
 
-
-    LCD.ColorRGB(255, 0, 0);// OP Box color
+    // OP Box color
+    LCD.ColorRGB(OPBoxColor.r, OPBoxColor.g, OPBoxColor.b);
     LCD.Begin(FT_RECTS);
     LCD.Vertex2ii(325, 222, 0, 0);
     LCD.Vertex2ii(375, 247, 0, 0);
     LCD.End();
 
-    LCD.ColorRGB(251, 255, 0);// OP Color, select based on temp
+    LCD.ColorRGB(OPTextColor.r, OPTextColor.g, OPTextColor.b);// OP Color, select based on temp
     LCD.Cmd_Text(350, 235, 27, FT_OPT_CENTER, "OP");
 
-
-    LCD.ColorRGB(38, 255, 0);// BV Box Color
+    // BV Box Color
+    LCD.ColorRGB(BVBoxColor.r, BVBoxColor.g, BVBoxColor.b);
     LCD.Begin(FT_RECTS);
     LCD.Vertex2ii(325, 247, 0, 0);
     LCD.Vertex2ii(375, 272, 0, 0);
     LCD.End();
 
-    LCD.ColorRGB(0, 0, 0);// BV COLOR
+    LCD.ColorRGB(BVTextColor.r, BVTextColor.g, BVTextColor.b);// BV COLOR
     LCD.Cmd_Text(350, 260, 27, FT_OPT_CENTER, "BV");
 
 
     LCD.ColorRGB(255, 255, 255);
-    LCD.PrintText(390, 235, 26, FT_OPT_CENTERY, "%.1f PSI", OILPRESS);
-    LCD.PrintText(390, 260, 26, FT_OPT_CENTERY, "%.1f V", BATVOLT);
+    LCD.PrintText(390, 235, 26, FT_OPT_CENTERY, "%.1f PSI", DashInfo.OilPressure);
+    LCD.PrintText(390, 260, 26, FT_OPT_CENTERY, "%.1f V", DashInfo.BatteryVoltage);
 
 
-    // warnings
-    LCD.ColorRGB(255, 0, 0);
-    LCD.Begin(FT_RECTS);
-    LCD.Vertex2ii(0, 120, 0, 0);
-    LCD.Vertex2ii(250, 200, 0, 0);
-    LCD.End();
-    LCD.ColorRGB(0, 0, 0);
-    LCD.Begin(FT_RECTS);
-    LCD.Vertex2ii(10, 130, 0, 0);
-    LCD.Vertex2ii(240, 190, 0, 0);
-    LCD.End();
-    LCD.ColorRGB(255, 255, 0);
-    LCD.Cmd_Text(125, 143, 29, FT_OPT_CENTER, "ERROR LEVEL");
-    LCD.Cmd_Text(125, 170, 27, FT_OPT_CENTER, "ERROR MESSAGE");
+    if(CurrentError.GetErrorType() != Error::ErrorType::Invalid)
+    {
+        // warnings
+        LCD.ColorRGB(255, 0, 0);
+        LCD.Begin(FT_RECTS);
+        LCD.Vertex2ii(0, 120, 0, 0);
+        LCD.Vertex2ii(250, 200, 0, 0);
+        LCD.End();
+        LCD.ColorRGB(0, 0, 0);
+        LCD.Begin(FT_RECTS);
+        LCD.Vertex2ii(10, 130, 0, 0);
+        LCD.Vertex2ii(240, 190, 0, 0);
+        LCD.End();
+        LCD.ColorRGB(255, 255, 0);
+        LCD.Cmd_Text(125, 143, 29, FT_OPT_CENTER, errorType);
+        LCD.Cmd_Text(125, 170, 27, FT_OPT_CENTER, errorMsg);
+    }
 
     // NOCAN
-    LCD.ColorRGB(255, 0, 0);
-    LCD.Begin(FT_RECTS);
-    LCD.Vertex2ii(0, 0, 0, 0);
-    LCD.Vertex2ii(200, 50, 0, 0);
-    LCD.End();
-    LCD.ColorRGB(0, 0, 0);
-    LCD.Begin(FT_RECTS);
-    LCD.Vertex2ii(5, 5, 0, 0);
-    LCD.Vertex2ii(195, 45, 0, 0);
-    LCD.End();
-    LCD.ColorRGB(255, 255, 0);
-    LCD.Cmd_Text(100, 25, 30, FT_OPT_CENTER, "NO DATA");
+    if (bDisplayNoCAN)
+    {
+        LCD.ColorRGB (255, 0, 0);
+        LCD.Begin (FT_RECTS);
+        LCD.Vertex2ii (0, 0, 0, 0);
+        LCD.Vertex2ii (200, 50, 0, 0);
+        LCD.End ();
+        LCD.ColorRGB (0, 0, 0);
+        LCD.Begin (FT_RECTS);
+        LCD.Vertex2ii (5, 5, 0, 0);
+        LCD.Vertex2ii (195, 45, 0, 0);
+        LCD.End ();
+        LCD.ColorRGB (255, 255, 0);
+        LCD.Cmd_Text (100, 25, 30, FT_OPT_CENTER, "NO DATA");
+    }
 
     LCD.ColorRGB(156, 156, 156);// grey line
     LCD.Begin(FT_RECTS);
     LCD.Vertex2ii(0, 220, 0, 0);
     LCD.Vertex2ii(480, 220, 0, 0);
     LCD.End();
+}
+
+void Driving::SetDisplayError(Error e)
+{
+    CurrentError = e;
+}
+
+void Driving::SetDisplayNoCAN(bool displayNOCAN)
+{
+    bDisplayNoCAN = displayNOCAN;
 }
