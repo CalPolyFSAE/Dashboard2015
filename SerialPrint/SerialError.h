@@ -5,12 +5,12 @@
  *      Author: root
  */
 
-#ifndef SERIALPRINT_ERROR_H_
-#define SERIALPRINT_ERROR_H_
+#ifndef SERIALPRINT_SERIALERROR_H_
+#define SERIALPRINT_SERIALERROR_H_
 
 #include "stdint.h"
 
-class Error
+class SerialError
 {
 public:
     enum class ErrorType
@@ -21,11 +21,11 @@ public:
         Type02
     };
 
-    Error(ErrorType);
+    SerialError(ErrorType);
 
 private:
     ErrorType error;
 };
 
 
-#endif /* SERIALPRINT_ERROR_H_ */
+#endif /* SERIALPRINT_SERIALERROR_H_ */

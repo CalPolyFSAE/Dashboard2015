@@ -109,10 +109,6 @@ const uint8_t PROGMEM Screen::CPRacingLogo[] = {
 #include "GraphicsAssets/CPRacingLogo.inc"
 };
 
-const uint8_t PROGMEM Screen::MSFont[] = {
-#include "GraphicsAssets/MSFont"
-};
-
 void Screen::displayStateActions()
 {
     switch(CurrentState)
@@ -279,6 +275,7 @@ void Screen::checkNoCAN()
         CANNoRxCounter = 0;
         if(CANRxCounter > CONFIG::MAXNOCANUPDATES)
         {
+            OnCANData();
             bIsCANData = true;
             CANRxCounter = 0;
         }

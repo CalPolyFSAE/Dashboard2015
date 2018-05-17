@@ -73,6 +73,7 @@ protected:
     // events
     // no can data has been received in MAXNOCANUPDATES update cycles
     virtual void OnNoCANData() {}
+    virtual void OnCANData() {}
 
     // used for input callback
     // rotary sw
@@ -106,9 +107,6 @@ private:
 
     // logo data
     static const uint8_t PROGMEM CPRacingLogo[];
-
-    // font data
-    static const uint8_t PROGMEM MSFont[];
 
     // has there been a CAN message since the last update
     volatile bool bRxCANSinceLastUpdate = false;
