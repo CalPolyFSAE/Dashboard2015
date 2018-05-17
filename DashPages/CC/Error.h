@@ -29,6 +29,8 @@ public:
         Invalid
     };
 
+    static constexpr uint8_t NUM_ERROR_TYPES = 7;
+
     Error() {
         type = ErrorType::Invalid;
     }
