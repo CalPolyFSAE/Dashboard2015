@@ -9,8 +9,8 @@
 #define SERIALPRINT_DEBUG_H_
 
 #include "stdint.h"
-#include "Error.h"
 #include "avr/pgmspace.h"
+#include "SerialError.h"
 
 // a string helper that replaces the Arduino F macro and maintains const
 class __FlashStringHelper;
@@ -22,11 +22,11 @@ class Debug
 {
 public:
     //used to output message
-    static void LogMessageln( Error& err );
+    static void LogMessageln( SerialError& err );
     static void LogMessageln( const __FlashStringHelper* c);
     static void LogMessageln( uint8_t num );
 
-    static void LogMessage( Error& err );
+    static void LogMessage( SerialError& err );
     static void LogMessage( const __FlashStringHelper* c);
     static void LogMessage( uint8_t num );
 

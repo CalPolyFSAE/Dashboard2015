@@ -9,7 +9,7 @@
 #include "AVRLibrary/arduino/Arduino.h"
 
 //used to output message
-static void Debug::LogMessageln( Error& err ) {
+static void Debug::LogMessageln( SerialError& err ) {
 
 }
 
@@ -21,7 +21,7 @@ static void Debug::LogMessageln( uint8_t num ) {
     Serial.println(num);
 }
 
-static void Debug::LogMessage( Error& err ) {
+static void Debug::LogMessage( SerialError& err ) {
 
 }
 
