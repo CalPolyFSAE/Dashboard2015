@@ -55,9 +55,9 @@ public:
 
 
     // rotary switch configs
-    static constexpr uint8_t ROT0_ADC = 1;//RED
-    static constexpr uint8_t ROT1_ADC = 0;//YELLOW
-    static constexpr uint8_t ROT2_ADC = 2;//BLACK
+    static constexpr uint8_t ROT0_ADC = 0;//channel 0 right
+    static constexpr uint8_t ROT1_ADC = 1;//channel 1 left
+    static constexpr uint8_t ROT2_ADC = 2;//channel 2 middle
 
     // this also dictates the index to be used with Input::getRotaryPos function
     static constexpr uint8_t ACDINPUTS[] =
@@ -71,9 +71,9 @@ public:
     // positions in array of different inputs
     enum class ROTARY : uint8_t
     {
-        ROT0 = 0,
-        ROT1 = 1,
-        ROT2 = 2
+        ROT0 = 0,// right
+        ROT1 = 1,// left
+        ROT2 = 2// middle
     };
 
     static constexpr uint8_t ROTARYPOSITIONS = 12;

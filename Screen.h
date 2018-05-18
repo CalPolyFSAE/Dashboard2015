@@ -14,7 +14,7 @@
 #include "FTDI _V1/FT_VM801P43_50.h"
 
 // interval to send out sw positions on CAN (ms)
-#define DASHCANOUTPUTINTERVAL 12
+#define DASHCANOUTPUTINTERVAL 200
 
 // structure of outgoing input data
 struct DashInputCANMsgDataFormat
@@ -28,7 +28,7 @@ struct DashInputCANMsgDataFormat
 // CAN message format used for outgoing button positions
 constexpr CANRaw::CAN_FRAME_HEADER DashInputCANMsg =
     {
-        0xF5,             // id
+        0x4EF,             // id
         0,                // rtr
         0,                // ide
         8                 // dlc
@@ -119,6 +119,7 @@ private:
 
     // current display state
     StartupStates CurrentState;
+    bool bForceOverride = false;
 
 };
 

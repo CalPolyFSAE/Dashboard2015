@@ -25,7 +25,7 @@ CCDash::CCDash() :
     DashInfoR{},
     DashInfoSafe{},
     DisplayInfo{},
-    pages{},
+    pages(),
     rot0pos(),
     rot1pos(),
     rot2pos()
@@ -59,12 +59,14 @@ void CCDash::Init()
     Serial.println((uint8_t)CanRxMobHandle);
 
 
-    ErrorManager = new ErrorConditions(DisplayInfo);
+    //ErrorManager = new ErrorConditions(DisplayInfo);
 
     // create display screens
     // TODO
     DrivingPage = new Driving(LCD, DisplayInfo);
     AddNextPage(DrivingPage);
+
+    ForceStateRunning();
 }
 //
 void CCDash::Update(uint8_t)
@@ -136,12 +138,28 @@ void CCDash::OnCANData()
 
 void CCDash::RunningDraw()
 {
-    // force no can off
-    //DrivingPage->SetDisplayNoCAN(false);
-    if(pages[currentPage] != nullptr)
+    uint8_t pageS = currentPage % NUMPAGES;
+    if(pages[pageS] != nullptr)
     {
-        pages[currentPage]->Draw();
+        pages[pageS]->Draw();
+    }else
+    {
+        DrawInvalidPage();
     }
+}
+
+void CCDash::DrawInvalidPage()
+{
+    LCD.DLStart();
+    LCD.Clear(0, 0, 0);
+
+    for(uint8_t i = 0; i < 0xFF; ++i)
+    {
+        __asm volatile("nop");
+    }
+
+    LCD.DLEnd();
+    LCD.Finish();
 }
 
 void CCDash::AddNextPage(DashPage* page)
@@ -177,17 +195,20 @@ void CCDash::uploadFontToController()
 void CCDash::OnRotaryInputChange0( uint8_t pos )
 {
     Screen::OnRotaryInputChange0(pos);
+    Serial.println("CCDash::OnRotaryInputChange0");
     rot0pos = pos;
-    currentPage = pos;
 }
 void CCDash::OnRotaryInputChange1( uint8_t pos )
 {
     Screen::OnRotaryInputChange1(pos);
+    Serial.println("CCDash::OnRotaryInputChange1");
     rot1pos = pos;
+    currentPage = pos;
 }
 void CCDash::OnRotaryInputChange2( uint8_t pos )
 {
     Screen::OnRotaryInputChange2(pos);
+    Serial.println("CCDash::OnRotaryInputChange2");
     rot2pos = pos;
 }
 // buttons

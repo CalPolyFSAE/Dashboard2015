@@ -11,8 +11,6 @@
 #include "../../Screen.h"
 #include "CCDashConfig.h"
 
-#define NUMPAGES 5
-
 class CCDash : public Screen
 {
 public:
@@ -33,7 +31,10 @@ protected:
     virtual void INT_Call_GotFrame( const CANRaw::CAN_FRAME_HEADER& FrameData,
                                     const CANRaw::CAN_DATA& Data ) override;
 
+    // draw call
     virtual void RunningDraw();
+
+    void DrawInvalidPage();
 
     // add next page to list
     void AddNextPage(class DashPage*);
@@ -70,7 +71,7 @@ protected:
     static const uint8_t PROGMEM MSFont[];
 
     // dashPages
-    class DashPage* pages[NUMPAGES];
+    class DashPage* pages[CCDashConfig::NUMPAGES];
     class ErrorConditions* ErrorManager;
 
     class Driving* DrivingPage;

@@ -40,9 +40,9 @@ void Screen::Init()
     Input& input = Subsystem::StaticClass<Input>();
     input.BindOnChangeButton(delegate::from_method<Screen, &Screen::OnButtonInputChange0>(this), Input::BUTTON::BTN0);
     input.BindOnChangeButton(delegate::from_method<Screen, &Screen::OnButtonInputChange1>(this), Input::BUTTON::BTN1);
-    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange0>(this), Input::ROTARY::ROT2);
-    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange1>(this), Input::ROTARY::ROT0);
-    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange2>(this), Input::ROTARY::ROT1);
+    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange0>(this), Input::ROTARY::ROT0);
+    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange1>(this), Input::ROTARY::ROT1);
+    input.BindOnChangeRotary(delegate::from_method<Screen, &Screen::OnRotaryInputChange2>(this), Input::ROTARY::ROT2);
 
 #ifdef DASHCANOUTPUTINTERVAL
     // Switch CAN message event
@@ -72,7 +72,7 @@ void Screen::Update(uint8_t)
 
 void Screen::ForceStateRunning()
 {
-    CurrentState = StartupStates::RUNNING;
+    bForceOverride = true;
 }
 
 void Screen::SendSwitchPositions(uint8_t)
@@ -118,6 +118,8 @@ void Screen::displayStateActions()
             RunningDraw();
             break;
         case StartupStates::WAITING_FOR_INPUT:
+            if(bForceOverride)
+                CurrentState = StartupStates::RUNNING;
             displayWaitingScreen();
             break;
         case StartupStates::STARTUP:
@@ -168,7 +170,7 @@ void Screen::uploadLogoToController() {
 void Screen::displayStartingScreen() {
 
     // display for about 2 seconds
-    static uint8_t StartupTimer = 145;
+    static uint8_t StartupTimer = 60;
     if (StartupTimer > 0)
     {
         --StartupTimer;
@@ -287,7 +289,7 @@ void Screen::checkNoCAN()
         if(CANNoRxCounter > CONFIG::MAXNOCANUPDATES)
         {
             OnNoCANData();
-            Serial.println("OnNoCANData");
+            //Serial.println("OnNoCANData");
             bIsCANData = false;
             CANNoRxCounter = 0;
             CANRxCounter = 0;
@@ -295,7 +297,7 @@ void Screen::checkNoCAN()
     }else if(!bIsCANData)
     {
         OnCANData();
-        Serial.println("OnCANData");
+        //Serial.println("OnCANData");
         bIsCANData = true;
         CANNoRxCounter = 0;
     }

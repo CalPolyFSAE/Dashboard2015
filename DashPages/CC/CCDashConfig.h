@@ -15,7 +15,7 @@ namespace CCDashConfig
     // CAN messages for incoming data
     constexpr CANRaw::CAN_FRAME_HEADER DashCANFrame0 =
     {
-        0xF0,             // id
+        0x4E0,             // id
         0,                // rtr
         0,                // ide
         8                 // dlc
@@ -23,7 +23,7 @@ namespace CCDashConfig
 
     constexpr CANRaw::CAN_FRAME_HEADER DashCANFrame1 =
     {
-        0xF2,             // id
+        0x4E1,             // id
         0,                // rtr
         0,                // ide
         8                 // dlc
@@ -31,16 +31,7 @@ namespace CCDashConfig
 
     constexpr CANRaw::CAN_FRAME_HEADER DashCANFrame2 =
     {
-        0xF3,             // id
-        0,                // rtr
-        0,                // ide
-        8                 // dlc
-    };
-
-    // used as info for TX message containing INPUT data
-    constexpr CANRaw::CAN_FRAME_HEADER DashCANMsgHeader =
-    {
-        0x15,             // id
+        0x4E2,             // id
         0,                // rtr
         0,                // ide
         8                 // dlc
@@ -54,7 +45,7 @@ namespace CCDashConfig
     };
 
     struct DashCAN0
-    { // 0x0E0
+    { // 0x4E0
         uint16_t EngineTemp;
         uint16_t RPM;
         uint16_t Gear;
@@ -62,7 +53,7 @@ namespace CCDashConfig
     };
 
     struct DashCAN1
-    { // 0x0E1
+    { // 0x4E1
         uint16_t Lambda;
         uint16_t OilTemp;
         uint16_t MAP;
@@ -70,7 +61,7 @@ namespace CCDashConfig
     };
 
     struct DashCAN2
-    { // 0x0E2
+    { // 0x4E2
         uint16_t BatteryVoltage;
         uint16_t OilPressure;
         uint16_t IAT;
@@ -120,9 +111,12 @@ namespace CCDashConfig
         DashCANFrame2
     };
 
+    //pages
+    constexpr uint8_t NUMPAGES = 12;
+
     // Errors
     constexpr uint8_t ERROR_ARRAY_SIZE = 10;
-    constexpr uint8_t ERROR_TICKS_PERIOD_MS = 1000;
+    constexpr uint16_t ERROR_TICKS_PERIOD_MS = 1000;
     constexpr uint8_t ERROR_TICKS_BEFORE_ACK_ERROR_RESET = 100;
 
     constexpr uint8_t EngineTempColdThresholdL = 100;

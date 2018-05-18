@@ -81,7 +81,7 @@ void Input::Update(uint8_t)
         {
             if(delegate::isValid(rotaryOnChange[i]))
             {
-                //Serial.println("FIRING");
+                Serial.println("Input::Update;FIRING");
                 rotaryOnChange[i](newPos);// report change along with new position
             }
             rotaryPositions[i] = newPos;// update the rotary positions array
@@ -111,6 +111,7 @@ void Input::Update(uint8_t)
         {
             if(delegate::isValid(buttonOnChange[i]))
             {
+                Serial.println("Input::Update;FIRING BUTTON");
                 buttonOnChange[i](state);
             }
             buttonPositions[i] = state;

@@ -60,16 +60,15 @@ int main() {
     sei();
 
     Serial.begin (SERIAL_BAUD);
-    Serial.println (FSTR("DASHBOARD"));
+    Serial.println (FSTR("-----------DASHBOARD--------------"));
 #ifdef PRINT_VERSION_INFO
     Serial.print (FSTR("VERSION: "));
     Serial.println (VERSION);
     Serial.println(FSTR(__DATE__));
 #endif // PRINT_VERSION_INFO
 
-    /*
     uint8_t a = 0;
-    while(a < 5)
+    while(a < 2)
     {
         for(volatile uint16_t i = 0; i != 0xFFFF; ++i)
         {
@@ -78,9 +77,9 @@ int main() {
             i += 1;
             i -= 1;
         }
-        Serial.println(FSTR("------------"));
+        //Serial.println(FSTR("------------"));
         a++;
-    }*/
+    }
 
 
     CANRaw& CAN = CANRaw::StaticClass();// this is not a subsystem

@@ -6,6 +6,7 @@
  */
 
 #include "Subsystem.h"
+#include "Dashboard2.h"
 
 
 /////////////////////////////////////////////////
@@ -80,7 +81,7 @@ int8_t SubsystemControl::RegisterEvent(delegate const& Event, uint16_t Interval)
 {
     Serial.println("SubsystemControl::RegisterEvent");
     int8_t slot = getNextFreeTC();
-    if(slot >= 0)
+    if(slot >= 0 && slot < CONFIG::RSCMAXJOBS && delegate::isValid(Event))
     {
         TimeControl[slot] = new TC(Event, Interval);
         return slot;
