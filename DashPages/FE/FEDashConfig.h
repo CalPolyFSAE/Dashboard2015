@@ -75,6 +75,8 @@ namespace FEDashConfig
             DashCAN2.id,
             WarningCAN.id
         };
+
+    constexpr uint8_t NUMPAGES = 5;
 }
 
 

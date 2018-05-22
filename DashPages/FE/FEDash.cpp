@@ -97,7 +97,7 @@ void FEDash::RunningDraw()
 
 void FEDash::AddNextPage(DashPage* page)
 {
-    for(uint8_t i = 0; i < NUMPAGES; ++i)
+    for(uint8_t i = 0; i < FEDashConfig::NUMPAGES; ++i)
     {
         if(pages[i] == nullptr)
         {

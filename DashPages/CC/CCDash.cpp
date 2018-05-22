@@ -138,7 +138,7 @@ void CCDash::OnCANData()
 
 void CCDash::RunningDraw()
 {
-    uint8_t pageS = currentPage % NUMPAGES;
+    uint8_t pageS = currentPage % CCDashConfig::NUMPAGES;
     if(pages[pageS] != nullptr)
     {
         pages[pageS]->Draw();
@@ -164,7 +164,7 @@ void CCDash::DrawInvalidPage()
 
 void CCDash::AddNextPage(DashPage* page)
 {
-    for(uint8_t i = 0; i < NUMPAGES; ++i)
+    for(uint8_t i = 0; i < CCDashConfig::NUMPAGES; ++i)
     {
         if(pages[i] == nullptr)
         {

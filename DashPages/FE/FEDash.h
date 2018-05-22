@@ -12,8 +12,6 @@
 #include "FEDashConfig.h"
 #include "FEDashTypes.h"
 
-#define NUMPAGES 5
-
 class FEDash : public Screen
 {
 public:
@@ -59,7 +57,7 @@ protected:
     DashTypes::DashData CANDataSafe;
 
     // dashPages
-    class DashPage* pages[NUMPAGES];
+    class DashPage* pages[FEDashConfig::NUMPAGES];
 };
 
 
