@@ -153,10 +153,14 @@ void CCDash::DrawInvalidPage()
     LCD.DLStart();
     LCD.Clear(0, 0, 0);
 
-    for(uint8_t i = 0; i < 0xFF; ++i)
-    {
-        __asm volatile("nop");
-    }
+    LCD.Cmd_Scale(32768, 32768);
+    LCD.Cmd_Translate(0, -1048576);
+    LCD.Cmd_SetMatrix();
+    LCD.Begin(FT_BITMAPS);
+    LCD.Vertex2ii(328, 0, 1, 0);
+    LCD.End();
+    LCD.Cmd_LoadIdentity();
+    LCD.Cmd_SetMatrix();
 
     LCD.DLEnd();
     LCD.Finish();

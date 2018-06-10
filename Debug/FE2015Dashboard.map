@@ -237,22 +237,14 @@ Discarded input sections
                 0x0000000000000000        0x2 ./DashPages/FE/FEDash.o
  .text._ZN6FEDash11RunningDrawEv
                 0x0000000000000000       0x30 ./DashPages/FE/FEDash.o
+ .text._ZN6FEDash20OnButtonInputChange1Eh
+                0x0000000000000000        0x2 ./DashPages/FE/FEDash.o
  .text._ZN6FEDashD2Ev
                 0x0000000000000000        0x4 ./DashPages/FE/FEDash.o
  .text._ZN6FEDash6UpdateEh
                 0x0000000000000000       0x28 ./DashPages/FE/FEDash.o
  .text._ZN6FEDash17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
                 0x0000000000000000       0xd8 ./DashPages/FE/FEDash.o
- .text._ZN6FEDash20OnRotaryInputChange0Eh
-                0x0000000000000000        0xc ./DashPages/FE/FEDash.o
- .text._ZN6FEDash20OnRotaryInputChange1Eh
-                0x0000000000000000        0xc ./DashPages/FE/FEDash.o
- .text._ZN6FEDash20OnRotaryInputChange2Eh
-                0x0000000000000000        0xc ./DashPages/FE/FEDash.o
- .text._ZN6FEDash20OnButtonInputChange0Eh
-                0x0000000000000000        0xc ./DashPages/FE/FEDash.o
- .text._ZN6FEDash20OnButtonInputChange1Eh
-                0x0000000000000000        0xc ./DashPages/FE/FEDash.o
  .text._ZN11CANListenerD0Ev
                 0x0000000000000000        0x4 ./DashPages/FE/FEDash.o
  .text._ZN6FEDashD0Ev
@@ -265,16 +257,6 @@ Discarded input sections
                 0x0000000000000000       0x4a ./DashPages/FE/FEDash.o
  .text._ZN6FEDash11AddNextPageEP8DashPage
                 0x0000000000000000       0x68 ./DashPages/FE/FEDash.o
- .progmem.data._ZZN6FEDash20OnButtonInputChange1EhE3__c
-                0x0000000000000000       0x1d ./DashPages/FE/FEDash.o
- .progmem.data._ZZN6FEDash20OnButtonInputChange0EhE3__c
-                0x0000000000000000       0x1d ./DashPages/FE/FEDash.o
- .progmem.data._ZZN6FEDash20OnRotaryInputChange2EhE3__c
-                0x0000000000000000       0x1d ./DashPages/FE/FEDash.o
- .progmem.data._ZZN6FEDash20OnRotaryInputChange1EhE3__c
-                0x0000000000000000       0x1d ./DashPages/FE/FEDash.o
- .progmem.data._ZZN6FEDash20OnRotaryInputChange0EhE3__c
-                0x0000000000000000       0x1d ./DashPages/FE/FEDash.o
  .rodata._ZTV6FEDash
                 0x0000000000000000       0x2a ./DashPages/FE/FEDash.o
  .rodata._ZN12FEDashConfigL13DashCANMsgMskE
@@ -436,8 +418,6 @@ Discarded input sections
                 0x0000000000000000       0xde ./DashPages/CC/CCDash.o
  .text._ZN5FT_GCI16FT_Transport_SPIE8WriteCmdEm
                 0x0000000000000000      0x27c ./DashPages/CC/CCDash.o
- .text._ZN6CCDash15DrawInvalidPageEv
-                0x0000000000000000       0x5e ./DashPages/CC/CCDash.o
  .bss._ZGVZN6CANRaw11StaticClassEvE3CAN
                 0x0000000000000000        0x8 ./DashPages/CC/CCDash.o
  .bss._ZZN6CANRaw11StaticClassEvE3CAN
@@ -1359,7 +1339,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000     0x975c
+.text           0x0000000000000000     0x97e2
  *(.vectors)
  .vectors       0x0000000000000000       0x94 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/crtat90can128.o
                 0x0000000000000000                __vectors
@@ -1626,420 +1606,423 @@ END GROUP
  .text._ZN5FT_GCI16FT_Transport_SPIE6FinishEv
                 0x00000000000028cc      0x128 ./DashPages/CC/CCDash.o
                 0x00000000000028cc                _ZN5FT_GCI16FT_Transport_SPIE6FinishEv
+ .text._ZN6CCDash15DrawInvalidPageEv
+                0x00000000000029f4       0xd8 ./DashPages/CC/CCDash.o
+                0x00000000000029f4                _ZN6CCDash15DrawInvalidPageEv
  .text._ZN6CCDash11RunningDrawEv
-                0x00000000000029f4       0x9c ./DashPages/CC/CCDash.o
-                0x00000000000029f4                _ZN6CCDash11RunningDrawEv
+                0x0000000000002acc       0x4a ./DashPages/CC/CCDash.o
+                0x0000000000002acc                _ZN6CCDash11RunningDrawEv
  .text._ZN5FT_GCI16FT_Transport_SPIE20TransferCmdfromflashEPKhm
-                0x0000000000002a90      0x30a ./DashPages/CC/CCDash.o
-                0x0000000000002a90                _ZN5FT_GCI16FT_Transport_SPIE20TransferCmdfromflashEPKhm
+                0x0000000000002b16      0x30a ./DashPages/CC/CCDash.o
+                0x0000000000002b16                _ZN5FT_GCI16FT_Transport_SPIE20TransferCmdfromflashEPKhm
  .text._ZN6CCDash22uploadFontToControllerEv
-                0x0000000000002d9a      0x1a0 ./DashPages/CC/CCDash.o
-                0x0000000000002d9a                _ZN6CCDash22uploadFontToControllerEv
+                0x0000000000002e20      0x1a0 ./DashPages/CC/CCDash.o
+                0x0000000000002e20                _ZN6CCDash22uploadFontToControllerEv
  .text._ZN6CCDash4InitEv
-                0x0000000000002f3a      0x212 ./DashPages/CC/CCDash.o
-                0x0000000000002f3a                _ZN6CCDash4InitEv
+                0x0000000000002fc0      0x212 ./DashPages/CC/CCDash.o
+                0x0000000000002fc0                _ZN6CCDash4InitEv
  .text._ZN9CCDashStr15getErrorTypeStrE5ErrorPc
-                0x000000000000314c       0x2a ./DashPages/CC/CCDashStr.o
-                0x000000000000314c                _ZN9CCDashStr15getErrorTypeStrE5ErrorPc
+                0x00000000000031d2       0x2a ./DashPages/CC/CCDashStr.o
+                0x00000000000031d2                _ZN9CCDashStr15getErrorTypeStrE5ErrorPc
  .text._ZN9CCDashStr14getErrorMsgStrE5ErrorPc
-                0x0000000000003176       0x42 ./DashPages/CC/CCDashStr.o
-                0x0000000000003176                _ZN9CCDashStr14getErrorMsgStrE5ErrorPc
+                0x00000000000031fc       0x42 ./DashPages/CC/CCDashStr.o
+                0x00000000000031fc                _ZN9CCDashStr14getErrorMsgStrE5ErrorPc
  .text._ZN7Driving5BeginEv
-                0x00000000000031b8        0x2 ./DashPages/CC/Driving.o
-                0x00000000000031b8                _ZN7Driving5BeginEv
+                0x000000000000323e        0x2 ./DashPages/CC/Driving.o
+                0x000000000000323e                _ZN7Driving5BeginEv
  .text._ZN7DrivingD2Ev
-                0x00000000000031ba        0x2 ./DashPages/CC/Driving.o
-                0x00000000000031ba                _ZN7DrivingD1Ev
-                0x00000000000031ba                _ZN7DrivingD2Ev
+                0x0000000000003240        0x2 ./DashPages/CC/Driving.o
+                0x0000000000003240                _ZN7DrivingD1Ev
+                0x0000000000003240                _ZN7DrivingD2Ev
  .text._ZN7DrivingD0Ev
-                0x00000000000031bc        0x4 ./DashPages/CC/Driving.o
-                0x00000000000031bc                _ZN7DrivingD0Ev
+                0x0000000000003242        0x4 ./DashPages/CC/Driving.o
+                0x0000000000003242                _ZN7DrivingD0Ev
  .text._ZN7DrivingC2ER9FT801ImplI16FT_Transport_SPIERKN12CCDashConfig13ConvertedInfoE
-                0x00000000000031c0       0x42 ./DashPages/CC/Driving.o
-                0x00000000000031c0                _ZN7DrivingC2ER9FT801ImplI16FT_Transport_SPIERKN12CCDashConfig13ConvertedInfoE
-                0x00000000000031c0                _ZN7DrivingC1ER9FT801ImplI16FT_Transport_SPIERKN12CCDashConfig13ConvertedInfoE
+                0x0000000000003246       0x42 ./DashPages/CC/Driving.o
+                0x0000000000003246                _ZN7DrivingC2ER9FT801ImplI16FT_Transport_SPIERKN12CCDashConfig13ConvertedInfoE
+                0x0000000000003246                _ZN7DrivingC1ER9FT801ImplI16FT_Transport_SPIERKN12CCDashConfig13ConvertedInfoE
  .text._ZN7Driving15SetDisplayNoCANEb
-                0x0000000000003202        0x6 ./DashPages/CC/Driving.o
-                0x0000000000003202                _ZN7Driving15SetDisplayNoCANEb
+                0x0000000000003288        0x6 ./DashPages/CC/Driving.o
+                0x0000000000003288                _ZN7Driving15SetDisplayNoCANEb
  .text._ZN5FT_GCI16FT_Transport_SPIE8Cmd_TextEiihjPKc
-                0x0000000000003208      0x158 ./DashPages/CC/Driving.o
-                0x0000000000003208                _ZN5FT_GCI16FT_Transport_SPIE8Cmd_TextEiihjPKc
+                0x000000000000328e      0x158 ./DashPages/CC/Driving.o
+                0x000000000000328e                _ZN5FT_GCI16FT_Transport_SPIE8Cmd_TextEiihjPKc
  .text._ZN7Driving4DrawEv
-                0x0000000000003360      0xd20 ./DashPages/CC/Driving.o
-                0x0000000000003360                _ZN7Driving4DrawEv
+                0x00000000000033e6      0xd20 ./DashPages/CC/Driving.o
+                0x00000000000033e6                _ZN7Driving4DrawEv
  .text._ZN9Subsystem6UpdateEh
-                0x0000000000004080        0x2 ./ADCManager.o
-                0x0000000000004080                _ZN9Subsystem6UpdateEh
+                0x0000000000004106        0x2 ./ADCManager.o
+                0x0000000000004106                _ZN9Subsystem6UpdateEh
  .text._ZN10ADCManagerD2Ev
-                0x0000000000004082        0x2 ./ADCManager.o
-                0x0000000000004082                _ZN10ADCManagerD1Ev
-                0x0000000000004082                _ZN10ADCManagerD2Ev
+                0x0000000000004108        0x2 ./ADCManager.o
+                0x0000000000004108                _ZN10ADCManagerD1Ev
+                0x0000000000004108                _ZN10ADCManagerD2Ev
  .text._ZN10ADCManager4InitEv
-                0x0000000000004084       0x1a ./ADCManager.o
-                0x0000000000004084                _ZN10ADCManager4InitEv
+                0x000000000000410a       0x1a ./ADCManager.o
+                0x000000000000410a                _ZN10ADCManager4InitEv
  .text._ZN10ADCManagerD0Ev
-                0x000000000000409e        0x4 ./ADCManager.o
-                0x000000000000409e                _ZN10ADCManagerD0Ev
+                0x0000000000004124        0x4 ./ADCManager.o
+                0x0000000000004124                _ZN10ADCManagerD0Ev
  .text._ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh
-                0x00000000000040a2       0x32 ./ADCManager.o
-                0x00000000000040a2                _ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh
+                0x0000000000004128       0x32 ./ADCManager.o
+                0x0000000000004128                _ZN10ADCManager9StartReadEP27ADCManagerCallbackInterfaceh
  .text._ZN10ADCManager12ADCAvailableEv
-                0x00000000000040d4       0x12 ./ADCManager.o
-                0x00000000000040d4                _ZN10ADCManager12ADCAvailableEv
+                0x000000000000415a       0x12 ./ADCManager.o
+                0x000000000000415a                _ZN10ADCManager12ADCAvailableEv
  .text._ZN10ADCManager15INT_ADCFinishedEv
-                0x00000000000040e6       0x58 ./ADCManager.o
-                0x00000000000040e6                _ZN10ADCManager15INT_ADCFinishedEv
+                0x000000000000416c       0x58 ./ADCManager.o
+                0x000000000000416c                _ZN10ADCManager15INT_ADCFinishedEv
  .text._ZN6CANRaw14GetNextFreeMobEv
-                0x000000000000413e       0x9c ./CANLib.o
-                0x000000000000413e                _ZN6CANRaw14GetNextFreeMobEv
+                0x00000000000041c4       0x9c ./CANLib.o
+                0x00000000000041c4                _ZN6CANRaw14GetNextFreeMobEv
  .text._ZN6CANRaw4InitENS_12CAN_BAUDRATEE
-                0x00000000000041da      0x32c ./CANLib.o
-                0x00000000000041da                _ZN6CANRaw4InitENS_12CAN_BAUDRATEE
+                0x0000000000004260      0x32c ./CANLib.o
+                0x0000000000004260                _ZN6CANRaw4InitENS_12CAN_BAUDRATEE
  .text._ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
-                0x0000000000004506       0x28 ./CANLib.o
-                0x0000000000004506                _ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
+                0x000000000000458c       0x28 ./CANLib.o
+                0x000000000000458c                _ZN6CANRaw12BindListenerEP11CANListenerNS_7CAN_MOBEb
  .text._ZN6CANRaw11INTS_TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
-                0x000000000000452e       0x88 ./CANLib.o
-                0x000000000000452e                _ZN6CANRaw11INTS_TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
+                0x00000000000045b4       0x88 ./CANLib.o
+                0x00000000000045b4                _ZN6CANRaw11INTS_TxDataERKNS_8CAN_DATAENS_7CAN_MOBE
  .text._ZN6CANRaw8ConfigRxERKNS_16CAN_FRAME_HEADERERKNS_14CAN_FRAME_MASKENS_7CAN_MOBE
-                0x00000000000045b6      0x36c ./CANLib.o
-                0x00000000000045b6                _ZN6CANRaw8ConfigRxERKNS_16CAN_FRAME_HEADERERKNS_14CAN_FRAME_MASKENS_7CAN_MOBE
+                0x000000000000463c      0x36c ./CANLib.o
+                0x000000000000463c                _ZN6CANRaw8ConfigRxERKNS_16CAN_FRAME_HEADERERKNS_14CAN_FRAME_MASKENS_7CAN_MOBE
  .text._ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
-                0x0000000000004922      0x33e ./CANLib.o
-                0x0000000000004922                _ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
+                0x00000000000049a8      0x33e ./CANLib.o
+                0x00000000000049a8                _ZN6CANRaw8ConfigTxERKNS_16CAN_FRAME_HEADERENS_7CAN_MOBE
  .text._ZN6CANRaw9INT_CANITEv
-                0x0000000000004c60      0x614 ./CANLib.o
-                0x0000000000004c60                _ZN6CANRaw9INT_CANITEv
+                0x0000000000004ce6      0x614 ./CANLib.o
+                0x0000000000004ce6                _ZN6CANRaw9INT_CANITEv
  .text.__vector_18
-                0x0000000000005274       0x74 ./CANLib.o
-                0x0000000000005274                __vector_18
+                0x00000000000052fa       0x74 ./CANLib.o
+                0x00000000000052fa                __vector_18
  .text.startup._GLOBAL__sub_I__ZN16CPFERotarySwitch13positionCountE
-                0x00000000000052e8       0x8e ./CPFERotarySwitch.o
+                0x000000000000536e       0x8e ./CPFERotarySwitch.o
  .text._ZN5Input21INT_Call_ADC_FinishedERKjh
-                0x0000000000005376       0x22 ./Input.o
-                0x0000000000005376                _ZN5Input21INT_Call_ADC_FinishedERKjh
+                0x00000000000053fc       0x22 ./Input.o
+                0x00000000000053fc                _ZN5Input21INT_Call_ADC_FinishedERKjh
  .text._ZThn4_N5Input21INT_Call_ADC_FinishedERKjh
-                0x0000000000005398       0x24 ./Input.o
-                0x0000000000005398                _ZThn4_N5Input21INT_Call_ADC_FinishedERKjh
- .text.__tcf_0  0x00000000000053bc        0x2 ./Input.o
+                0x000000000000541e       0x24 ./Input.o
+                0x000000000000541e                _ZThn4_N5Input21INT_Call_ADC_FinishedERKjh
+ .text.__tcf_0  0x0000000000005442        0x2 ./Input.o
  .text._ZN5InputD2Ev
-                0x00000000000053be        0x4 ./Input.o
-                0x00000000000053be                _ZN5InputD2Ev
-                0x00000000000053be                _ZN5InputD1Ev
-                0x00000000000053c0                _ZThn4_N5InputD1Ev
+                0x0000000000005444        0x4 ./Input.o
+                0x0000000000005444                _ZN5InputD2Ev
+                0x0000000000005444                _ZN5InputD1Ev
+                0x0000000000005446                _ZThn4_N5InputD1Ev
  .text._ZN5InputD0Ev
-                0x00000000000053c2        0xa ./Input.o
-                0x00000000000053c2                _ZN5InputD0Ev
-                0x00000000000053c6                _ZThn4_N5InputD0Ev
+                0x0000000000005448        0xa ./Input.o
+                0x0000000000005448                _ZN5InputD0Ev
+                0x000000000000544c                _ZThn4_N5InputD0Ev
  .text._ZN5Input6UpdateEh
-                0x00000000000053cc      0x260 ./Input.o
-                0x00000000000053cc                _ZN5Input6UpdateEh
+                0x0000000000005452      0x260 ./Input.o
+                0x0000000000005452                _ZN5Input6UpdateEh
  .text._ZN5Input4InitEv
-                0x000000000000562c       0xf0 ./Input.o
-                0x000000000000562c                _ZN5Input4InitEv
+                0x00000000000056b2       0xf0 ./Input.o
+                0x00000000000056b2                _ZN5Input4InitEv
  .text._ZN5Input18BindOnChangeButtonERK8delegateNS_6BUTTONE
-                0x000000000000571c       0x44 ./Input.o
-                0x000000000000571c                _ZN5Input18BindOnChangeButtonERK8delegateNS_6BUTTONE
+                0x00000000000057a2       0x44 ./Input.o
+                0x00000000000057a2                _ZN5Input18BindOnChangeButtonERK8delegateNS_6BUTTONE
  .text._ZN5Input18BindOnChangeRotaryERK8delegateNS_6ROTARYE
-                0x0000000000005760       0x44 ./Input.o
-                0x0000000000005760                _ZN5Input18BindOnChangeRotaryERK8delegateNS_6ROTARYE
+                0x00000000000057e6       0x44 ./Input.o
+                0x00000000000057e6                _ZN5Input18BindOnChangeRotaryERK8delegateNS_6ROTARYE
  .text._ZN6Screen11OnNoCANDataEv
-                0x00000000000057a4        0x2 ./Screen.o
-                0x00000000000057a4                _ZN6Screen11OnNoCANDataEv
+                0x000000000000582a        0x2 ./Screen.o
+                0x000000000000582a                _ZN6Screen11OnNoCANDataEv
  .text._ZN6Screen20OnRotaryInputChange0Eh
-                0x00000000000057a6        0x2 ./Screen.o
-                0x00000000000057a6                _ZN6Screen20OnRotaryInputChange0Eh
+                0x000000000000582c        0x2 ./Screen.o
+                0x000000000000582c                _ZN6Screen20OnRotaryInputChange0Eh
  .text._ZN6Screen20OnRotaryInputChange1Eh
-                0x00000000000057a8        0x2 ./Screen.o
-                0x00000000000057a8                _ZN6Screen20OnRotaryInputChange1Eh
+                0x000000000000582e        0x2 ./Screen.o
+                0x000000000000582e                _ZN6Screen20OnRotaryInputChange1Eh
  .text._ZN6Screen20OnRotaryInputChange2Eh
-                0x00000000000057aa        0x2 ./Screen.o
-                0x00000000000057aa                _ZN6Screen20OnRotaryInputChange2Eh
+                0x0000000000005830        0x2 ./Screen.o
+                0x0000000000005830                _ZN6Screen20OnRotaryInputChange2Eh
  .text._ZN6Screen20OnButtonInputChange0Eh
-                0x00000000000057ac        0x2 ./Screen.o
-                0x00000000000057ac                _ZN6Screen20OnButtonInputChange0Eh
+                0x0000000000005832        0x2 ./Screen.o
+                0x0000000000005832                _ZN6Screen20OnButtonInputChange0Eh
  .text._ZN6Screen20OnButtonInputChange1Eh
-                0x00000000000057ae        0x2 ./Screen.o
-                0x00000000000057ae                _ZN6Screen20OnButtonInputChange1Eh
+                0x0000000000005834        0x2 ./Screen.o
+                0x0000000000005834                _ZN6Screen20OnButtonInputChange1Eh
  .text._ZN6Screen17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
-                0x00000000000057b0        0x8 ./Screen.o
-                0x00000000000057b0                _ZN6Screen17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
+                0x0000000000005836        0x8 ./Screen.o
+                0x0000000000005836                _ZN6Screen17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
  .text._ZThn4_N6Screen17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
-                0x00000000000057b8        0xa ./Screen.o
-                0x00000000000057b8                _ZThn4_N6Screen17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
- .text.__tcf_0  0x00000000000057c2        0x2 ./Screen.o
+                0x000000000000583e        0xa ./Screen.o
+                0x000000000000583e                _ZThn4_N6Screen17INT_Call_GotFrameERKN6CANRaw16CAN_FRAME_HEADERERKNS0_8CAN_DATAE
+ .text.__tcf_0  0x0000000000005848        0x2 ./Screen.o
  .text._ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnButtonInputChange0EhEEEEvPvh
-                0x00000000000057c4        0xe ./Screen.o
-                0x00000000000057c4                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnButtonInputChange0EhEEEEvPvh
+                0x000000000000584a        0xe ./Screen.o
+                0x000000000000584a                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnButtonInputChange0EhEEEEvPvh
  .text._ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnButtonInputChange1EhEEEEvPvh
-                0x00000000000057d2        0xe ./Screen.o
-                0x00000000000057d2                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnButtonInputChange1EhEEEEvPvh
+                0x0000000000005858        0xe ./Screen.o
+                0x0000000000005858                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnButtonInputChange1EhEEEEvPvh
  .text._ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange0EhEEEEvPvh
-                0x00000000000057e0        0xe ./Screen.o
-                0x00000000000057e0                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange0EhEEEEvPvh
+                0x0000000000005866        0xe ./Screen.o
+                0x0000000000005866                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange0EhEEEEvPvh
  .text._ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange1EhEEEEvPvh
-                0x00000000000057ee        0xe ./Screen.o
-                0x00000000000057ee                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange1EhEEEEvPvh
+                0x0000000000005874        0xe ./Screen.o
+                0x0000000000005874                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange1EhEEEEvPvh
  .text._ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange2EhEEEEvPvh
-                0x00000000000057fc        0xe ./Screen.o
-                0x00000000000057fc                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange2EhEEEEvPvh
+                0x0000000000005882        0xe ./Screen.o
+                0x0000000000005882                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_20OnRotaryInputChange2EhEEEEvPvh
  .text._ZN8delegate11method_stubI6ScreenXadL_ZNS1_19SendSwitchPositionsEhEEEEvPvh
-                0x000000000000580a      0x2f2 ./Screen.o
-                0x000000000000580a                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_19SendSwitchPositionsEhEEEEvPvh
+                0x0000000000005890      0x2f2 ./Screen.o
+                0x0000000000005890                _ZN8delegate11method_stubI6ScreenXadL_ZNS1_19SendSwitchPositionsEhEEEEvPvh
  .text._ZN6ScreenC2Ev
-                0x0000000000005afc       0x58 ./Screen.o
-                0x0000000000005afc                _ZN6ScreenC1Ev
-                0x0000000000005afc                _ZN6ScreenC2Ev
+                0x0000000000005b82       0x58 ./Screen.o
+                0x0000000000005b82                _ZN6ScreenC1Ev
+                0x0000000000005b82                _ZN6ScreenC2Ev
  .text._ZN6Screen17ForceStateRunningEv
-                0x0000000000005b54        0x8 ./Screen.o
-                0x0000000000005b54                _ZN6Screen17ForceStateRunningEv
+                0x0000000000005bda        0x8 ./Screen.o
+                0x0000000000005bda                _ZN6Screen17ForceStateRunningEv
  .text._ZN6Screen22uploadLogoToControllerEv
-                0x0000000000005b5c      0x184 ./Screen.o
-                0x0000000000005b5c                _ZN6Screen22uploadLogoToControllerEv
+                0x0000000000005be2      0x184 ./Screen.o
+                0x0000000000005be2                _ZN6Screen22uploadLogoToControllerEv
  .text._ZN6Screen21displayStartingScreenEv
-                0x0000000000005ce0      0x1f6 ./Screen.o
-                0x0000000000005ce0                _ZN6Screen21displayStartingScreenEv
+                0x0000000000005d66      0x1f6 ./Screen.o
+                0x0000000000005d66                _ZN6Screen21displayStartingScreenEv
  .text._ZN6Screen20displayWaitingScreenEv
-                0x0000000000005ed6      0x3f4 ./Screen.o
-                0x0000000000005ed6                _ZN6Screen20displayWaitingScreenEv
+                0x0000000000005f5c      0x3f4 ./Screen.o
+                0x0000000000005f5c                _ZN6Screen20displayWaitingScreenEv
  .text._ZN6Screen6UpdateEh
-                0x00000000000062ca       0xa4 ./Screen.o
-                0x00000000000062ca                _ZN6Screen6UpdateEh
+                0x0000000000006350       0xa4 ./Screen.o
+                0x0000000000006350                _ZN6Screen6UpdateEh
  .text._ZN5FT_GCI16FT_Transport_SPIE19ActiveInternalClockEv
-                0x000000000000636e      0x33e ./Screen.o
-                0x000000000000636e                _ZN5FT_GCI16FT_Transport_SPIE19ActiveInternalClockEv
+                0x00000000000063f4      0x33e ./Screen.o
+                0x00000000000063f4                _ZN5FT_GCI16FT_Transport_SPIE19ActiveInternalClockEv
  .text._ZN6Screen4InitEv
-                0x00000000000066ac      0x72a ./Screen.o
-                0x00000000000066ac                _ZN6Screen4InitEv
+                0x0000000000006732      0x72a ./Screen.o
+                0x0000000000006732                _ZN6Screen4InitEv
  .text._ZN9SubsystemD2Ev
-                0x0000000000006dd6        0x2 ./Subsystem.o
-                0x0000000000006dd6                _ZN9SubsystemD2Ev
-                0x0000000000006dd6                _ZN9SubsystemD1Ev
+                0x0000000000006e5c        0x2 ./Subsystem.o
+                0x0000000000006e5c                _ZN9SubsystemD2Ev
+                0x0000000000006e5c                _ZN9SubsystemD1Ev
  .text._ZN8delegate11method_stubI9SubsystemXadL_ZNS1_6UpdateEhEEEEvPvh
-                0x0000000000006dd8        0xe ./Subsystem.o
-                0x0000000000006dd8                _ZN8delegate11method_stubI9SubsystemXadL_ZNS1_6UpdateEhEEEEvPvh
+                0x0000000000006e5e        0xe ./Subsystem.o
+                0x0000000000006e5e                _ZN8delegate11method_stubI9SubsystemXadL_ZNS1_6UpdateEhEEEEvPvh
  .text._ZN9Subsystem4InitEv
-                0x0000000000006de6       0x12 ./Subsystem.o
-                0x0000000000006de6                _ZN9Subsystem4InitEv
+                0x0000000000006e6c       0x12 ./Subsystem.o
+                0x0000000000006e6c                _ZN9Subsystem4InitEv
  .text._ZN9SubsystemD0Ev
-                0x0000000000006df8        0x4 ./Subsystem.o
-                0x0000000000006df8                _ZN9SubsystemD0Ev
+                0x0000000000006e7e        0x4 ./Subsystem.o
+                0x0000000000006e7e                _ZN9SubsystemD0Ev
  .text._ZN16SubsystemControl8MainLoopEv
-                0x0000000000006dfc      0x284 ./Subsystem.o
-                0x0000000000006dfc                _ZN16SubsystemControl8MainLoopEv
+                0x0000000000006e82      0x284 ./Subsystem.o
+                0x0000000000006e82                _ZN16SubsystemControl8MainLoopEv
  .text._ZN16SubsystemControl18INT_CALL_TickAllTCEv
-                0x0000000000007080      0x3ac ./Subsystem.o
-                0x0000000000007080                _ZN16SubsystemControl18INT_CALL_TickAllTCEv
+                0x0000000000007106      0x3ac ./Subsystem.o
+                0x0000000000007106                _ZN16SubsystemControl18INT_CALL_TickAllTCEv
  .text._ZN16SubsystemControl13RegisterEventERK8delegatej
-                0x000000000000742c      0x144 ./Subsystem.o
-                0x000000000000742c                _ZN16SubsystemControl13RegisterEventERK8delegatej
+                0x00000000000074b2      0x144 ./Subsystem.o
+                0x00000000000074b2                _ZN16SubsystemControl13RegisterEventERK8delegatej
  .text._ZN16SubsystemControl14InitSubsystemsEv
-                0x0000000000007570       0xe0 ./Subsystem.o
-                0x0000000000007570                _ZN16SubsystemControl14InitSubsystemsEv
+                0x00000000000075f6       0xe0 ./Subsystem.o
+                0x00000000000075f6                _ZN16SubsystemControl14InitSubsystemsEv
  .text._ZN16SubsystemControl11StaticClassEv
-                0x0000000000007650       0x2c ./Subsystem.o
-                0x0000000000007650                _ZN16SubsystemControl11StaticClassEv
+                0x00000000000076d6       0x2c ./Subsystem.o
+                0x00000000000076d6                _ZN16SubsystemControl11StaticClassEv
  .text._ZN9SubsystemC2Eh
-                0x000000000000767c      0x2e6 ./Subsystem.o
-                0x000000000000767c                _ZN9SubsystemC1Eh
-                0x000000000000767c                _ZN9SubsystemC2Eh
- .text.__tcf_0  0x0000000000007962        0x2 ./main.o
- .text.__tcf_1  0x0000000000007964        0x2 ./main.o
- .text.__tcf_2  0x0000000000007966        0x2 ./main.o
+                0x0000000000007702      0x2e6 ./Subsystem.o
+                0x0000000000007702                _ZN9SubsystemC1Eh
+                0x0000000000007702                _ZN9SubsystemC2Eh
+ .text.__tcf_0  0x00000000000079e8        0x2 ./main.o
+ .text.__tcf_1  0x00000000000079ea        0x2 ./main.o
+ .text.__tcf_2  0x00000000000079ec        0x2 ./main.o
  .text.__vector_12
-                0x0000000000007968       0x50 ./main.o
-                0x0000000000007968                __vector_12
+                0x00000000000079ee       0x50 ./main.o
+                0x00000000000079ee                __vector_12
  .text.__vector_25
-                0x00000000000079b8       0x8e ./main.o
-                0x00000000000079b8                __vector_25
+                0x0000000000007a3e       0x8e ./main.o
+                0x0000000000007a3e                __vector_25
  .text.startup.main
-                0x0000000000007a46      0x228 ./main.o
-                0x0000000000007a46                main
+                0x0000000000007acc      0x228 ./main.o
+                0x0000000000007acc                main
  .text._ZN14HardwareSerialD2Ev
-                0x0000000000007c6e        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007c6e                _ZN14HardwareSerialD2Ev
-                0x0000000000007c6e                _ZN14HardwareSerialD1Ev
+                0x0000000000007cf4        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007cf4                _ZN14HardwareSerialD2Ev
+                0x0000000000007cf4                _ZN14HardwareSerialD1Ev
  .text._ZN14HardwareSerial4peekEv
-                0x0000000000007c70        0x6 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007c70                _ZN14HardwareSerial4peekEv
+                0x0000000000007cf6        0x6 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007cf6                _ZN14HardwareSerial4peekEv
  .text._ZN14HardwareSerial9availableEv
-                0x0000000000007c76       0x30 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007c76                _ZN14HardwareSerial9availableEv
+                0x0000000000007cfc       0x30 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007cfc                _ZN14HardwareSerial9availableEv
  .text._ZN14HardwareSerial4readEv
-                0x0000000000007ca6       0x56 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007ca6                _ZN14HardwareSerial4readEv
+                0x0000000000007d2c       0x56 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007d2c                _ZN14HardwareSerial4readEv
  .text._ZN14HardwareSerial5flushEv
-                0x0000000000007cfc       0x1c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007cfc                _ZN14HardwareSerial5flushEv
+                0x0000000000007d82       0x1c /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007d82                _ZN14HardwareSerial5flushEv
  .text._ZN14HardwareSerial5writeEh
-                0x0000000000007d18       0x3a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007d18                _ZN14HardwareSerial5writeEh
+                0x0000000000007d9e       0x3a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007d9e                _ZN14HardwareSerial5writeEh
  .text._ZN14HardwareSerialD0Ev
-                0x0000000000007d52        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007d52                _ZN14HardwareSerialD0Ev
+                0x0000000000007dd8        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007dd8                _ZN14HardwareSerialD0Ev
  .text.__vector_21
-                0x0000000000007d54       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007d54                __vector_21
+                0x0000000000007dda       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007dda                __vector_21
  .text.__vector_32
-                0x0000000000007dd4       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007dd4                __vector_32
+                0x0000000000007e5a       0x80 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007e5a                __vector_32
  .text._ZN14HardwareSerial5beginEl
-                0x0000000000007e54      0x1c0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000007e54                _ZN14HardwareSerial5beginEl
+                0x0000000000007eda      0x1c0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000007eda                _ZN14HardwareSerial5beginEl
  .text.startup._GLOBAL__sub_I_rx_buffer
-                0x0000000000008014       0xd8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x000000000000809a       0xd8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
  .text._ZN5Print5writeEPKhj
-                0x00000000000080ec       0x58 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x00000000000080ec                _ZN5Print5writeEPKhj
+                0x0000000000008172       0x58 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x0000000000008172                _ZN5Print5writeEPKhj
  .text._ZN5Print5printEPK19__FlashStringHelper
-                0x0000000000008144       0x52 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x0000000000008144                _ZN5Print5printEPK19__FlashStringHelper
+                0x00000000000081ca       0x52 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x00000000000081ca                _ZN5Print5printEPK19__FlashStringHelper
  .text._ZN5Print5printEPKc
-                0x0000000000008196       0x90 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x0000000000008196                _ZN5Print5printEPKc
+                0x000000000000821c       0x90 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x000000000000821c                _ZN5Print5printEPKc
  .text._ZN5Print5printEhi
-                0x0000000000008226      0x140 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x0000000000008226                _ZN5Print5printEhi
+                0x00000000000082ac      0x140 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x00000000000082ac                _ZN5Print5printEhi
  .text._ZN5Print5printEii
-                0x0000000000008366      0x2e6 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x0000000000008366                _ZN5Print5printEii
+                0x00000000000083ec      0x2e6 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x00000000000083ec                _ZN5Print5printEii
  .text._ZN5Print7printlnEPK19__FlashStringHelper
-                0x000000000000864c       0x78 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x000000000000864c                _ZN5Print7printlnEPK19__FlashStringHelper
+                0x00000000000086d2       0x78 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x00000000000086d2                _ZN5Print7printlnEPK19__FlashStringHelper
  .text._ZN5Print7printlnEPKc
-                0x00000000000086c4       0xb0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x00000000000086c4                _ZN5Print7printlnEPKc
+                0x000000000000874a       0xb0 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x000000000000874a                _ZN5Print7printlnEPKc
  .text._ZN5Print7printlnEhi
-                0x0000000000008774      0x178 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x0000000000008774                _ZN5Print7printlnEhi
+                0x00000000000087fa      0x178 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x00000000000087fa                _ZN5Print7printlnEhi
  .text._ZN5Print7printlnEii
-                0x00000000000088ec      0x330 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
-                0x00000000000088ec                _ZN5Print7printlnEii
- .text._Znwj    0x0000000000008c1c        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000008c1c                _Znwj
- .text._ZdlPv   0x0000000000008c1e        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000008c1e                _ZdlPv
+                0x0000000000008972      0x330 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
+                0x0000000000008972                _ZN5Print7printlnEii
+ .text._Znwj    0x0000000000008ca2        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x0000000000008ca2                _Znwj
+ .text._ZdlPv   0x0000000000008ca4        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x0000000000008ca4                _ZdlPv
  .text.__cxa_guard_acquire
-                0x0000000000008c20       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000008c20                __cxa_guard_acquire
+                0x0000000000008ca6       0x12 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x0000000000008ca6                __cxa_guard_acquire
  .text.__cxa_guard_release
-                0x0000000000008c32        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000008c32                __cxa_guard_release
+                0x0000000000008cb8        0x8 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x0000000000008cb8                __cxa_guard_release
  .text.__cxa_pure_virtual
-                0x0000000000008c3a        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
-                0x0000000000008c3a                __cxa_pure_virtual
+                0x0000000000008cc0        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(new.o)
+                0x0000000000008cc0                __cxa_pure_virtual
  .text.__vector_17
-                0x0000000000008c3c       0x94 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
-                0x0000000000008c3c                __vector_17
- .text.delay    0x0000000000008cd0       0x54 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
-                0x0000000000008cd0                delay
+                0x0000000000008cc2       0x94 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x0000000000008cc2                __vector_17
+ .text.delay    0x0000000000008d56       0x54 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x0000000000008d56                delay
  .text.delayMicroseconds
-                0x0000000000008d24       0x1a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
-                0x0000000000008d24                delayMicroseconds
- .text.init     0x0000000000008d3e       0x46 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
-                0x0000000000008d3e                init
+                0x0000000000008daa       0x1a /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x0000000000008daa                delayMicroseconds
+ .text.init     0x0000000000008dc4       0x46 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x0000000000008dc4                init
  .text.libgcc.div
-                0x0000000000008d84       0x44 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
-                0x0000000000008d84                __udivmodsi4
- .text.libgcc   0x0000000000008dc8       0x12 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
-                0x0000000000008dc8                __tablejump2__
+                0x0000000000008e0a       0x44 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_udivmodsi4.o)
+                0x0000000000008e0a                __udivmodsi4
+ .text.libgcc   0x0000000000008e4e       0x12 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_tablejump2.o)
+                0x0000000000008e4e                __tablejump2__
  .text.libgcc.mul
-                0x0000000000008dda       0x14 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
-                0x0000000000008dda                __muluhisi3
+                0x0000000000008e60       0x14 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_muluhisi3.o)
+                0x0000000000008e60                __muluhisi3
  .text.libgcc.mul
-                0x0000000000008dee       0x1e /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
-                0x0000000000008dee                __umulhisi3
+                0x0000000000008e74       0x1e /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_umulhisi3.o)
+                0x0000000000008e74                __umulhisi3
  .text.avr-libc.fplib
-                0x0000000000008e0c        0xa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3.o)
-                0x0000000000008e0c                __subsf3
-                0x0000000000008e0e                __addsf3
+                0x0000000000008e92        0xa /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3.o)
+                0x0000000000008e92                __subsf3
+                0x0000000000008e94                __addsf3
  .text.avr-libc.fplib
-                0x0000000000008e16       0xc0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3x.o)
-                0x0000000000008e30                __addsf3x
+                0x0000000000008e9c       0xc0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(addsf3x.o)
+                0x0000000000008eb6                __addsf3x
  .text.avr-libc.fplib
-                0x0000000000008ed6        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(cmpsf2.o)
-                0x0000000000008ed6                __lesf2
-                0x0000000000008ed6                __nesf2
-                0x0000000000008ed6                __eqsf2
-                0x0000000000008ed6                __cmpsf2
-                0x0000000000008ed6                __ltsf2
+                0x0000000000008f5c        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(cmpsf2.o)
+                0x0000000000008f5c                __lesf2
+                0x0000000000008f5c                __nesf2
+                0x0000000000008f5c                __eqsf2
+                0x0000000000008f5c                __cmpsf2
+                0x0000000000008f5c                __ltsf2
  .text.avr-libc.fplib
-                0x0000000000008ede        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
-                0x0000000000008ede                __divsf3
+                0x0000000000008f64        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3.o)
+                0x0000000000008f64                __divsf3
  .text.avr-libc.fplib
-                0x0000000000008ee2       0xcc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
-                0x0000000000008ef8                __divsf3x
-                0x0000000000008efc                __divsf3_pse
+                0x0000000000008f68       0xcc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(divsf3x.o)
+                0x0000000000008f7e                __divsf3x
+                0x0000000000008f82                __divsf3_pse
  .text.avr-libc.fplib
-                0x0000000000008fae       0x58 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixunssfsi.o)
-                0x0000000000008fae                __fixunssfsi
+                0x0000000000009034       0x58 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fixunssfsi.o)
+                0x0000000000009034                __fixunssfsi
  .text.avr-libc.fplib
-                0x0000000000009006       0x7a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(floatsisf.o)
-                0x0000000000009006                __floatunsisf
-                0x000000000000900a                __floatsisf
+                0x000000000000908c       0x7a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(floatsisf.o)
+                0x000000000000908c                __floatunsisf
+                0x0000000000009090                __floatsisf
  .text.avr-libc.fplib
-                0x0000000000009080       0x48 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_cmp.o)
-                0x0000000000009080                __fp_cmp
+                0x0000000000009106       0x48 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_cmp.o)
+                0x0000000000009106                __fp_cmp
  .text.avr-libc.fplib
-                0x00000000000090c8        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_inf.o)
-                0x00000000000090c8                __fp_inf
+                0x000000000000914e        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_inf.o)
+                0x000000000000914e                __fp_inf
  .text.avr-libc.fplib
-                0x00000000000090d4        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_nan.o)
-                0x00000000000090d4                __fp_nan
+                0x000000000000915a        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_nan.o)
+                0x000000000000915a                __fp_nan
  .text.avr-libc.fplib
-                0x00000000000090da        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscA.o)
-                0x00000000000090da                __fp_pscA
+                0x0000000000009160        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscA.o)
+                0x0000000000009160                __fp_pscA
  .text.avr-libc.fplib
-                0x00000000000090e8        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscB.o)
-                0x00000000000090e8                __fp_pscB
+                0x000000000000916e        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_pscB.o)
+                0x000000000000916e                __fp_pscB
  .text.avr-libc.fplib
-                0x00000000000090f6       0x22 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_round.o)
-                0x00000000000090f6                __fp_round
+                0x000000000000917c       0x22 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_round.o)
+                0x000000000000917c                __fp_round
  .text.avr-libc.fplib
-                0x0000000000009118       0x44 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_split3.o)
-                0x0000000000009118                __fp_split3
-                0x0000000000009128                __fp_splitA
+                0x000000000000919e       0x44 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_split3.o)
+                0x000000000000919e                __fp_split3
+                0x00000000000091ae                __fp_splitA
  .text.avr-libc.fplib
-                0x000000000000915c        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_zero.o)
-                0x000000000000915c                __fp_zero
-                0x000000000000915e                __fp_szero
+                0x00000000000091e2        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(fp_zero.o)
+                0x00000000000091e2                __fp_zero
+                0x00000000000091e4                __fp_szero
  .text.avr-libc.fplib
-                0x000000000000916a        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(gesf2.o)
-                0x000000000000916a                __gtsf2
-                0x000000000000916a                __gesf2
+                0x00000000000091f0        0x8 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libm.a(gesf2.o)
+                0x00000000000091f0                __gtsf2
+                0x00000000000091f0                __gesf2
  .text.avr-libc
-                0x0000000000009172      0x242 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
-                0x0000000000009172                malloc
-                0x00000000000092a2                free
+                0x00000000000091f8      0x242 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
+                0x00000000000091f8                malloc
+                0x0000000000009328                free
  .text.avr-libc
-                0x00000000000093b4      0x1b0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ftoa_engine.o)
-                0x00000000000093b4                __ftoa_engine
+                0x000000000000943a      0x1b0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ftoa_engine.o)
+                0x000000000000943a                __ftoa_engine
  .text.avr-libc
-                0x0000000000009564       0x1e /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strncpy_P.o)
-                0x0000000000009564                strncpy_P
+                0x00000000000095ea       0x1e /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strncpy_P.o)
+                0x00000000000095ea                strncpy_P
  .text.avr-libc
-                0x0000000000009582       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen_P.o)
-                0x0000000000009582                strnlen_P
+                0x0000000000009608       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen_P.o)
+                0x0000000000009608                strnlen_P
  .text.avr-libc
-                0x0000000000009598       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen.o)
-                0x0000000000009598                strnlen
+                0x000000000000961e       0x16 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(strnlen.o)
+                0x000000000000961e                strnlen
  .text.avr-libc
-                0x00000000000095ae       0x78 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(fputc.o)
-                0x00000000000095ae                fputc
+                0x0000000000009634       0x78 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(fputc.o)
+                0x0000000000009634                fputc
  .text.avr-libc
-                0x0000000000009626       0x72 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(vsnprintf.o)
-                0x0000000000009626                vsnprintf
+                0x00000000000096ac       0x72 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(vsnprintf.o)
+                0x00000000000096ac                vsnprintf
  .text.avr-libc
-                0x0000000000009698       0xbc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ultoa_invert.o)
-                0x0000000000009698                __ultoa_invert
-                0x0000000000009754                . = ALIGN (0x2)
+                0x000000000000971e       0xbc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(ultoa_invert.o)
+                0x000000000000971e                __ultoa_invert
+                0x00000000000097da                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000000000009754        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
-                0x0000000000009754                exit
-                0x0000000000009754                _exit
+ .fini9         0x00000000000097da        0x0 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+                0x00000000000097da                exit
+                0x00000000000097da                _exit
  *(.fini9)
  *(.fini8)
- .fini8         0x0000000000009754        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
+ .fini8         0x00000000000097da        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
  *(.fini8)
  *(.fini7)
  *(.fini7)
@@ -2056,11 +2039,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000000000009758        0x4 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
+ .fini0         0x00000000000097de        0x4 /usr/lib/gcc/avr/5.4.0/avr51/libgcc.a(_exit.o)
  *(.fini0)
-                0x000000000000975c                _etext = .
+                0x00000000000097e2                _etext = .
 
-.data           0x0000000000800100      0x248 load address 0x000000000000975c
+.data           0x0000000000800100      0x240 load address 0x00000000000097e2
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800100        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
@@ -2095,131 +2078,130 @@ END GROUP
                 0x00000000008001b8        0x2 ./DashPages/CC/CCDashStr.o
                 0x00000000008001b8                _ZN9CCDashStr20ERROR_MAX_MSG_LENGTHE
  .rodata.str1.1
-                0x00000000008001ba       0x39 ./DashPages/CC/Driving.o
-                                         0x3f (size before relaxing)
+                0x00000000008001ba       0x31 ./DashPages/CC/Driving.o
  .rodata._ZTV7Driving
-                0x00000000008001f3        0xc ./DashPages/CC/Driving.o
-                0x00000000008001f3                _ZTV7Driving
+                0x00000000008001eb        0xc ./DashPages/CC/Driving.o
+                0x00000000008001eb                _ZTV7Driving
  .rodata._ZN7Driving8GearTextE
-                0x00000000008001ff        0xe ./DashPages/CC/Driving.o
-                0x00000000008001ff                _ZN7Driving8GearTextE
+                0x00000000008001f7        0xe ./DashPages/CC/Driving.o
+                0x00000000008001f7                _ZN7Driving8GearTextE
  .rodata._ZTV10ADCManager
-                0x000000000080020d        0xc ./ADCManager.o
-                0x000000000080020d                _ZTV10ADCManager
+                0x0000000000800205        0xc ./ADCManager.o
+                0x0000000000800205                _ZTV10ADCManager
  .rodata.str1.1
-                0x0000000000800219       0x3e ./Input.o
+                0x0000000000800211       0x3e ./Input.o
  .rodata._ZTV5Input
-                0x0000000000800257       0x18 ./Input.o
-                0x0000000000800257                _ZTV5Input
+                0x000000000080024f       0x18 ./Input.o
+                0x000000000080024f                _ZTV5Input
  .rodata._ZN5Input9ACDINPUTSE
-                0x000000000080026f        0x3 ./Input.o
-                0x000000000080026f                _ZN5Input9ACDINPUTSE
+                0x0000000000800267        0x3 ./Input.o
+                0x0000000000800267                _ZN5Input9ACDINPUTSE
  .rodata._ZN5Input6INPUTSE
-                0x0000000000800272        0x6 ./Input.o
-                0x0000000000800272                _ZN5Input6INPUTSE
+                0x000000000080026a        0x6 ./Input.o
+                0x000000000080026a                _ZN5Input6INPUTSE
  .rodata.str1.1
-                0x0000000000800278       0x4d ./Screen.o
+                0x0000000000800270       0x4d ./Screen.o
  .rodata._ZTV6Screen
-                0x00000000008002c5       0x2a ./Screen.o
-                0x00000000008002c5                _ZTV6Screen
+                0x00000000008002bd       0x2a ./Screen.o
+                0x00000000008002bd                _ZTV6Screen
  .rodata._ZL15DashInputCANMsg
-                0x00000000008002ef        0x7 ./Screen.o
+                0x00000000008002e7        0x7 ./Screen.o
  .rodata.str1.1
-                0x00000000008002f6       0x31 ./Subsystem.o
+                0x00000000008002ee       0x31 ./Subsystem.o
  .rodata._ZTV9Subsystem
-                0x0000000000800327        0xc ./Subsystem.o
-                0x0000000000800327                _ZTV9Subsystem
+                0x000000000080031f        0xc ./Subsystem.o
+                0x000000000080031f                _ZTV9Subsystem
  .rodata._ZTV14HardwareSerial
-                0x0000000000800333       0x14 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x0000000000800333                _ZTV14HardwareSerial
+                0x000000000080032b       0x14 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x000000000080032b                _ZTV14HardwareSerial
  *(.gnu.linkonce.d*)
-                0x0000000000800348                . = ALIGN (0x2)
- *fill*         0x0000000000800347        0x1 
-                0x0000000000800348                _edata = .
-                0x0000000000800348                PROVIDE (__data_end, .)
+                0x0000000000800340                . = ALIGN (0x2)
+ *fill*         0x000000000080033f        0x1 
+                0x0000000000800340                _edata = .
+                0x0000000000800340                PROVIDE (__data_end, .)
 
-.bss            0x0000000000800348      0x378
-                0x0000000000800348                PROVIDE (__bss_start, .)
+.bss            0x0000000000800340      0x378
+                0x0000000000800340                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0000000000800348        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
+ .bss           0x0000000000800340        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(atexit.o)
  *(.bss*)
  .bss._ZN8SPIClass11initializedE
-                0x000000000080034a        0x1 ./FTDI _V1/libraries/FT_GC/FT_Transport_SPI/SPI.o
-                0x000000000080034a                _ZN8SPIClass11initializedE
+                0x0000000000800342        0x1 ./FTDI _V1/libraries/FT_GC/FT_Transport_SPI/SPI.o
+                0x0000000000800342                _ZN8SPIClass11initializedE
  .bss._ZGVZN6CANRaw11StaticClassEvE3CAN
-                0x000000000080034b        0x8 ./DashPages/FE/FEDash.o
-                0x000000000080034b                _ZGVZN6CANRaw11StaticClassEvE3CAN
+                0x0000000000800343        0x8 ./DashPages/FE/FEDash.o
+                0x0000000000800343                _ZGVZN6CANRaw11StaticClassEvE3CAN
  .bss._ZZN6CANRaw11StaticClassEvE3CAN
-                0x0000000000800353       0xf1 ./DashPages/FE/FEDash.o
-                0x0000000000800353                _ZZN6CANRaw11StaticClassEvE3CAN
+                0x000000000080034b       0xf1 ./DashPages/FE/FEDash.o
+                0x000000000080034b                _ZZN6CANRaw11StaticClassEvE3CAN
  .bss._ZN10ADCManager7channelE
-                0x0000000000800444        0x1 ./ADCManager.o
-                0x0000000000800444                _ZN10ADCManager7channelE
+                0x000000000080043c        0x1 ./ADCManager.o
+                0x000000000080043c                _ZN10ADCManager7channelE
  .bss._ZN10ADCManager19currentReadCallbackE
-                0x0000000000800445        0x2 ./ADCManager.o
-                0x0000000000800445                _ZN10ADCManager19currentReadCallbackE
+                0x000000000080043d        0x2 ./ADCManager.o
+                0x000000000080043d                _ZN10ADCManager19currentReadCallbackE
  .bss._ZN16CPFERotarySwitch10analogPinsE
-                0x0000000000800447        0xf ./CPFERotarySwitch.o
-                0x0000000000800447                _ZN16CPFERotarySwitch10analogPinsE
+                0x000000000080043f        0xf ./CPFERotarySwitch.o
+                0x000000000080043f                _ZN16CPFERotarySwitch10analogPinsE
  .bss._ZGVZN9Subsystem11StaticClassI10ADCManagerEERT_vE4inst
-                0x0000000000800456        0x8 ./Input.o
-                0x0000000000800456                _ZGVZN9Subsystem11StaticClassI10ADCManagerEERT_vE4inst
+                0x000000000080044e        0x8 ./Input.o
+                0x000000000080044e                _ZGVZN9Subsystem11StaticClassI10ADCManagerEERT_vE4inst
  .bss._ZZN9Subsystem11StaticClassI10ADCManagerEERT_vE4inst
-                0x000000000080045e        0x4 ./Input.o
-                0x000000000080045e                _ZZN9Subsystem11StaticClassI10ADCManagerEERT_vE4inst
+                0x0000000000800456        0x4 ./Input.o
+                0x0000000000800456                _ZZN9Subsystem11StaticClassI10ADCManagerEERT_vE4inst
  .bss._ZZN6Screen10checkNoCANEvE14CANNoRxCounter
-                0x0000000000800462        0x1 ./Screen.o
+                0x000000000080045a        0x1 ./Screen.o
  .bss._ZGVZN9Subsystem11StaticClassI5InputEERT_vE4inst
-                0x0000000000800463        0x8 ./Screen.o
-                0x0000000000800463                _ZGVZN9Subsystem11StaticClassI5InputEERT_vE4inst
+                0x000000000080045b        0x8 ./Screen.o
+                0x000000000080045b                _ZGVZN9Subsystem11StaticClassI5InputEERT_vE4inst
  .bss._ZZN9Subsystem11StaticClassI5InputEERT_vE4inst
-                0x000000000080046b       0x26 ./Screen.o
-                0x000000000080046b                _ZZN9Subsystem11StaticClassI5InputEERT_vE4inst
+                0x0000000000800463       0x26 ./Screen.o
+                0x0000000000800463                _ZZN9Subsystem11StaticClassI5InputEERT_vE4inst
  .bss._ZZN16SubsystemControl11StaticClassEvE2SC
-                0x0000000000800491       0x33 ./Subsystem.o
+                0x0000000000800489       0x33 ./Subsystem.o
  .bss._ZGVZN16SubsystemControl11StaticClassEvE2SC
-                0x00000000008004c4        0x8 ./Subsystem.o
+                0x00000000008004bc        0x8 ./Subsystem.o
  .bss._ZGVZN9Subsystem11StaticClassI6CCDashEERT_vE4inst
-                0x00000000008004cc        0x8 ./main.o
-                0x00000000008004cc                _ZGVZN9Subsystem11StaticClassI6CCDashEERT_vE4inst
+                0x00000000008004c4        0x8 ./main.o
+                0x00000000008004c4                _ZGVZN9Subsystem11StaticClassI6CCDashEERT_vE4inst
  .bss._ZZN9Subsystem11StaticClassI6CCDashEERT_vE4inst
-                0x00000000008004d4       0x9b ./main.o
-                0x00000000008004d4                _ZZN9Subsystem11StaticClassI6CCDashEERT_vE4inst
- .bss.Serial1   0x000000000080056f       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x000000000080056f                Serial1
- .bss.Serial    0x000000000080058c       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x000000000080058c                Serial
+                0x00000000008004cc       0x9b ./main.o
+                0x00000000008004cc                _ZZN9Subsystem11StaticClassI6CCDashEERT_vE4inst
+ .bss.Serial1   0x0000000000800567       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000800567                Serial1
+ .bss.Serial    0x0000000000800584       0x1d /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000800584                Serial
  .bss.rx_buffer1
-                0x00000000008005a9       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x00000000008005a9                rx_buffer1
+                0x00000000008005a1       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x00000000008005a1                rx_buffer1
  .bss.rx_buffer
-                0x000000000080062d       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
-                0x000000000080062d                rx_buffer
+                0x0000000000800625       0x84 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
+                0x0000000000800625                rx_buffer
  .bss.timer0_fract
-                0x00000000008006b1        0x1 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x00000000008006a9        0x1 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
  .bss.timer0_millis
-                0x00000000008006b2        0x4 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
-                0x00000000008006b2                timer0_millis
+                0x00000000008006aa        0x4 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x00000000008006aa                timer0_millis
  .bss.timer0_overflow_count
-                0x00000000008006b6        0x4 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
-                0x00000000008006b6                timer0_overflow_count
+                0x00000000008006ae        0x4 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(wiring.o)
+                0x00000000008006ae                timer0_overflow_count
  .bss._ZN13CPFEAVRAnalog17currentConversionE
-                0x00000000008006ba        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(CPFEAVRAnalog.o)
-                0x00000000008006ba                _ZN13CPFEAVRAnalog17currentConversionE
+                0x00000000008006b2        0x2 /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(CPFEAVRAnalog.o)
+                0x00000000008006b2                _ZN13CPFEAVRAnalog17currentConversionE
  *(COMMON)
- COMMON         0x00000000008006bc        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
-                0x00000000008006bc                __brkval
-                0x00000000008006be                __flp
-                0x00000000008006c0                PROVIDE (__bss_end, .)
-                0x000000000000975c                __data_load_start = LOADADDR (.data)
-                0x00000000000099a4                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00000000008006b4        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr51/libc.a(malloc.o)
+                0x00000000008006b4                __brkval
+                0x00000000008006b6                __flp
+                0x00000000008006b8                PROVIDE (__bss_end, .)
+                0x00000000000097e2                __data_load_start = LOADADDR (.data)
+                0x0000000000009a22                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00000000008006c0        0x0
+.noinit         0x00000000008006b8        0x0
                 [!provide]                        PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                        PROVIDE (__noinit_end, .)
-                0x00000000008006c0                _end = .
-                0x00000000008006c0                PROVIDE (__heap_start, .)
+                0x00000000008006b8                _end = .
+                0x00000000008006b8                PROVIDE (__heap_start, .)
 
 .eeprom         0x0000000000810000        0x0
  *(.eeprom*)
@@ -2380,7 +2362,6 @@ Serial                                            /root/share/Code/AVRLibrary/De
                                                   ./Screen.o
                                                   ./Input.o
                                                   ./DashPages/CC/CCDash.o
-                                                  ./DashPages/FE/FEDash.o
                                                   ./SerialPrint/Debug.o
 Serial1                                           /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(HardwareSerial.o)
 _Z25rotarySwitchResultHandlerjPv                  ./CPFERotarySwitch.o
@@ -2550,7 +2531,6 @@ _ZN5Print7printlnEPK19__FlashStringHelper         /root/share/Code/AVRLibrary/De
                                                   ./Subsystem.o
                                                   ./Input.o
                                                   ./DashPages/CC/CCDash.o
-                                                  ./DashPages/FE/FEDash.o
                                                   ./SerialPrint/Debug.o
 _ZN5Print7printlnEPKc                             /root/share/Code/AVRLibrary/Debug/libAVRLibrary.a(Print.o)
                                                   ./Subsystem.o

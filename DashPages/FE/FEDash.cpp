@@ -112,26 +112,26 @@ void FEDash::AddNextPage(DashPage* page)
 void FEDash::OnRotaryInputChange0( uint8_t pos )
 {
     Screen::OnRotaryInputChange0(pos);
-    Serial.println(FSTR("FEDash::OnRotaryInputChange0"));
+    //Serial.println(FSTR("FEDash::OnRotaryInputChange0"));
 }
 void FEDash::OnRotaryInputChange1( uint8_t pos )
 {
     Screen::OnRotaryInputChange1(pos);
-    Serial.println(FSTR("FEDash::OnRotaryInputChange1"));
+    //Serial.println(FSTR("FEDash::OnRotaryInputChange1"));
 }
 void FEDash::OnRotaryInputChange2( uint8_t pos )
 {
     Screen::OnRotaryInputChange2(pos);
-    Serial.println(FSTR("FEDash::OnRotaryInputChange2"));
+    //Serial.println(FSTR("FEDash::OnRotaryInputChange2"));
 }
 // buttons
 void FEDash::OnButtonInputChange0( uint8_t pos )
 {
     Screen::OnButtonInputChange0(pos);
-    Serial.println(FSTR("FEDash::OnButtonInputChange0"));
+    //Serial.println(FSTR("FEDash::OnButtonInputChange0"));
 }
 void FEDash::OnButtonInputChange1( uint8_t pos )
 {
     Screen::OnButtonInputChange1(pos);
-    Serial.println(FSTR("FEDash::OnButtonInputChange1"));
+    //Serial.println(FSTR("FEDash::OnButtonInputChange1"));
 }
